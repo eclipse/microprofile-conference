@@ -56,8 +56,8 @@
         <!--Compiler-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
         <!--Dependencies-->
         <version.javaee>7.0</version.javaee>
         <version.resteasy>3.0.18.Final</version.resteasy>
@@ -91,6 +91,7 @@
         <module>microservice-vote</module>
         <module>microservice-speaker</module>
         <module>microservice-schedule</module>
+        <module>web-application</module>
     </modules>
 
     <dependencyManagement>
@@ -98,6 +99,11 @@
             <!-- JAVA EE -->
             <dependency>
                 <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>${version.javaee}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomee</groupId>
                 <artifactId>javaee-api</artifactId>
                 <version>${version.javaee}</version>
             </dependency>
@@ -109,6 +115,18 @@
                 <version>${version.wildfly-swarm}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!--TOMEE-->
+            <dependency>
+                <groupId>org.apache.tomee</groupId>
+                <artifactId>tomee-jaxrs</artifactId>
+                <version>${version.tomee}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomee</groupId>
+                <artifactId>arquillian-tomee-embedded</artifactId>
+                <version>${version.tomee}</version>
             </dependency>
 
             <!-- OTHERS -->
@@ -240,6 +258,11 @@
                     <groupId>org.wildfly.swarm</groupId>
                     <artifactId>wildfly-swarm-plugin</artifactId>
                     <version>${version.wildfly-swarm}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.tomee.maven</groupId>
+                    <artifactId>tomee-maven-plugin</artifactId>
+                    <version>${version.tomee}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
