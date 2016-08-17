@@ -1,1 +1,11 @@
-= conference showcase
+= Microprofile Showcase Application
+
+This application is a collaborative demonstration application by:
+
+* Liberty Profile
+* London Java Community
+* Red Hat
+* Tomitribe
+* Payara
+
+The application consists of several Microservices and a Web-Application
