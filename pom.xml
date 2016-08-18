@@ -30,6 +30,13 @@
     <description>The Microprofile showcase application</description>
     <url>https://github.com/microprofile/microprofile-conference</url>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
     <developers>
         <developer>
             <name>Andy Gumbrecht</name>
@@ -38,6 +45,9 @@
         </developer>
         <developer>
             <name>Ken Finnigan</name>
+        </developer>
+        <developer>
+            <name>Martijn Verburg</name>
         </developer>
     </developers>
 
@@ -80,6 +90,7 @@
         <version.dependency.plugin>2.10</version.dependency.plugin>
         <version.failsafe.plugin>2.19.1</version.failsafe.plugin>
         <version.install.plugin>2.5.2</version.install.plugin>
+        <version.license.plugin>1.9</version.license.plugin>
         <version.jar.plugin>3.0.2</version.jar.plugin>
         <version.surefire.plugin>2.19.1</version.surefire.plugin>
         <version.war.plugin>2.6</version.war.plugin>
@@ -264,8 +275,41 @@
                     <artifactId>tomee-maven-plugin</artifactId>
                     <version>${version.tomee}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${version.license.plugin}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>first</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                        <configuration>
+                            <licenseName>apache_v2</licenseName>
+                            <excludes>
+                                <exclude>*.png</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-licenses</id>
+                        <goals>
+                            <goal>download-licenses</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <dependencies>
