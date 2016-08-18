@@ -29,6 +29,11 @@
     <name>Conference</name>
     <description>The Microprofile showcase application</description>
     <url>https://github.com/microprofile/microprofile-conference</url>
+    <inceptionYear>2016</inceptionYear>
+    <organization>
+        <name>Microprofile.io</name>
+        <url>http://www.microprofile.io</url>
+    </organization>
 
     <licenses>
         <license>
@@ -308,6 +313,10 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <licenseName>apache_v2</licenseName>
+                </configuration>
+
             </plugin>
         </plugins>
     </build>
