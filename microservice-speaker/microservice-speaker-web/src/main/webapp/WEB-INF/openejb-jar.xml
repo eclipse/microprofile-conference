@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
   ~ Copyright 2016 Microprofile.io
   ~
@@ -14,19 +14,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-    <modelVersion>4.0.0</modelVersion>
-
-    <parent>
-        <artifactId>microprofile-conference</artifactId>
-        <groupId>io.microprofile.showcase</groupId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
-
-    <artifactId>microservice-vote</artifactId>
-    <name>Conference :: Vote</name>
-
-</project>
+<openejb-jar xmlns="http://www.openejb.org/openejb-jar/1.1"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.openejb.org/openejb-jar/1.1">
+    <pojo-deployment class-name="jaxrs-application">
+        <properties>
+            cxf.jaxrs.providers = com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider
+        </properties>
+    </pojo-deployment>
+</openejb-jar>

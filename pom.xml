@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
--->
+  ~ Copyright 2016 Microprofile.io
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -71,8 +70,8 @@
         <!--Compiler-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <!--Dependencies-->
         <version.javaee>7.0</version.javaee>
         <version.resteasy>3.0.18.Final</version.resteasy>
@@ -83,12 +82,14 @@
         <version.arquillian>1.1.11.Final</version.arquillian>
         <version.arquillian.wildfly.remote>8.2.1.Final</version.arquillian.wildfly.remote>
         <version.arquillian.wildfly.managed>8.2.1.Final</version.arquillian.wildfly.managed>
-        <version.wildfly>10.0.0.Final</version.wildfly>
+        <version.bean-matchers>0.9</version.bean-matchers>
+        <version.commons-lang3>3.4</version.commons-lang3>
+        <version.el>2.2</version.el>
         <version.junit>4.12</version.junit>
         <version.jsonunit>1.12.1</version.jsonunit>
-        <version.jackson>2.3.1</version.jackson>
+        <version.jackson>2.8.1</version.jackson>
         <version.tomee>7.0.1</version.tomee>
-        <version.el>2.2</version.el>
+        <version.wildfly>10.0.0.Final</version.wildfly>
         <!-- Plugins -->
         <version.clean.plugin>3.0.0</version.clean.plugin>
         <version.compiler.plugin>3.5.1</version.compiler.plugin>
@@ -151,6 +152,21 @@
                 <artifactId>swagger-jaxrs</artifactId>
                 <version>${version.swagger}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>${version.jackson}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${version.commons-lang3}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${version.jackson}</version>
+            </dependency>
 
             <!-- TEST -->
             <dependency>
@@ -180,6 +196,12 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>${version.jackson}</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.code.bean-matchers</groupId>
+                <artifactId>bean-matchers</artifactId>
+                <version>${version.bean-matchers}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -288,45 +310,37 @@
             </plugins>
         </pluginManagement>
 
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>first</id>
-                        <goals>
-                            <goal>update-file-header</goal>
-                        </goals>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <licenseName>apache_v2</licenseName>
-                            <excludes>
-                                <exclude>*.png</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-licenses</id>
-                        <goals>
-                            <goal>download-licenses</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <licenseName>apache_v2</licenseName>
-                </configuration>
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>license-maven-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>first</id>-->
+                        <!--<goals>-->
+                            <!--<goal>update-file-header</goal>-->
+                        <!--</goals>-->
+                        <!--<phase>process-sources</phase>-->
+                        <!--<configuration>-->
+                            <!--<licenseName>apache_v2</licenseName>-->
+                            <!--<excludes>-->
+                                <!--<exclude>*.png</exclude>-->
+                            <!--</excludes>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>download-licenses</id>-->
+                        <!--<goals>-->
+                            <!--<goal>download-licenses</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+                <!--<configuration>-->
+                    <!--<licenseName>apache_v2</licenseName>-->
+                <!--</configuration>-->
 
-            </plugin>
-        </plugins>
+            <!--</plugin>-->
+        <!--</plugins>-->
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
 </project>

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2016 Microprofile.io
  *
@@ -14,9 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* app css stylesheet */
+package io.microprofile.showcase.speaker.rest;
 
-body {
-  padding-top: 20px;
+
+import javax.ws.rs.ApplicationPath;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Root REST application context
+ */
+@ApplicationPath("/speaker")
+public class Application extends javax.ws.rs.core.Application {
+
+    /**
+     * The REST application resource classes
+     *
+     * @return Set of classes
+     */
+    @Override
+    public Set<Class<?>> getClasses() {
+        return new HashSet<Class<?>>(Collections.singletonList(Resource.class));
+    }
 }
-
