@@ -1,0 +1,101 @@
+= Conference specifications
+Development
+:localdate:
+:doctype: book
+:imagesdir: images
+ifndef::ebook-format[:leveloffset: 1]
+:toc:
+
+= Introduction
+
+The application consists of several Microservices and a Web-Application managing a conference.
+
+= Architecture
+
+* Session service. Manage session descriptions.
+* Session voting service. Vote for the your favorite session
+* Speaker service. Manage speakers, Bios, etc
+* Schedule Service.  Service to manage session schedules
+* Front-end application
+
+image::architecture.png[title="Overall Architecture"]
+
+== Speaker Service
+
+   Speaker
+     - Id (generated)
+     - Name
+     - Title
+     - Organization
+     - Biography
+     - Picture
+     - Twitter handle
+
+   APIs
+     Speaker add(Speaker)
+     void remove(Id)
+     Speaker update(Speaker)
+     Speaker retrieve(Id)
+     List<Speaker> search(Speaker)
+
+== Session Service
+
+   Session
+     - Id (generated)
+     - Code
+     - Title
+     - Abstract
+     - Type (HOL/Session)
+
+   Session Speakers
+     - Session Id
+     - Speaker Id
+
+   APIs
+     Session add(Session)
+     Session update(Session)
+     Session retrieve(Id)
+     void remove(Id)
+     List<Session> search(Session)
+     List<Session> sessionsForSpeaker(Speaker Id)
+     List<Session> speakersForSession(Session Id)
+
+== Session Schedule Service
+
+   Schedule
+     - Id (generated)
+     - Session Id
+     - Venue
+     - Date
+     - Start Time
+     - Duration
+
+   APIs
+     Schedule add(Schedule)
+     Schedule update(Schedule)
+     Schedule retrieve(Id)
+     void remove(Id)
+     List<Schedule> allForVenue(venue)
+     List<Schedule> activeAtTime(time)
+     List<Schedule> allForDay(date)
+
+== Session Voting Service
+
+   Attendee
+     - Id
+     - Name
+
+   Session Rating
+     - Id
+     - Session Id
+     - Attendee Id
+     - Rating (1-10)
+
+   APIs
+     Attendee registerAttendee(Attendee)
+     Attendee updateAttendee(Attendee)
+     SessionRating rateSession(SessionRating)
+     SessionRating updateRating(SessionRating)
+     List<SessionRating> allSessionVotes(Session Id)
+     Double sessionRatingAverage(Session Id)
+     List<SessionRating> votesByAttendee(Attendee Id)

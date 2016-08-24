@@ -53,6 +53,10 @@
         <developer>
             <name>Martijn Verburg</name>
         </developer>
+        <developer>
+            <name>Andy Gumbrecht</name>
+            <url>http://www.antoniogoncalves.org/</url>
+        </developer>
     </developers>
 
     <scm>

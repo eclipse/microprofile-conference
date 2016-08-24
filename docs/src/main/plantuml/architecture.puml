@@ -1,0 +1,14 @@
+@startuml
+
+node [Session service] as ssession
+node [Session voting service] as svoting
+node [Speaker service] as sspeaker
+node [Schedule Service] as sschedule
+node [Front-end] as frontend
+
+[ssession] ..> frontend
+[svoting] ..> frontend
+[sspeaker] ..> frontend
+[sschedule] ..> frontend
+
+@enduml
