@@ -1,5 +1,34 @@
 = Microprofile Showcase Application
 
+== General information
+
+The application consists of several Microservices and a Web-Application managing a conference.
+
+== Technologies
+
+* Java
+* Micro Profile
+* JAX-RS 2.0 / JSON-P 1.0 / CDI 1.1
+
+== Setup
+
+* Build the project using Maven (`mvn clean install`)
+
+== Development
+
+
+== Tests
+
+
+== Common problems/bugs
+
+
+== Access to staging/beta/production
+
+* https://github.com/microprofile/microprofile-conference
+
+== Notes
+
 This application is a collaborative demonstration application by:
 
 * Liberty Profile
@@ -7,5 +36,3 @@ This application is a collaborative demonstration application by:
 * Red Hat
 * Tomitribe
 * Payara
-
-The application consists of several Microservices and a Web-Application
