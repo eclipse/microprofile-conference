@@ -23,11 +23,9 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Speaker Data Access Object
@@ -35,7 +33,7 @@ import java.util.UUID;
 @ApplicationScoped
 public class SpeakerDAO {
 
-    private final HashMap<String, HashSet<Speaker>> speakers = new HashMap<>();
+    private final HashMap<String, Set<Speaker>> speakers = new HashMap<>();
 
     @Inject
     @QVenue
@@ -43,25 +41,7 @@ public class SpeakerDAO {
 
     @PostConstruct
     private void postConstruct() {
-        this.speakers.put(this.venue.getName(), this.createSpeakers(this.venue.getName()));
-    }
-
-    private HashSet<Speaker> createSpeakers(final String venue) {
-        final HashSet<Speaker> speakers = new HashSet<>();
-        speakers.add(this.createSpeaker());
-        return speakers;
-    }
-
-    private Speaker createSpeaker() {
-        final Speaker s = new Speaker();
-        s.setId(UUID.randomUUID().toString());
-        s.setNameFirst("Sebastian");
-        s.setNameLast("Daschner");
-        s.setOrganization("Freelancer");
-        s.setBiography("Sebastian Daschner is a Java freelancer working as a consultant/software developer/architect. He is enthusiastic about programming and Java EE. He is participating in the JCP, serving in the JSR 370 Expert Group, and hacking on various open source projects on Github. He is a Java Champion and has been working with Java for more than six years. In addition to Java, Daschner is also a heavy user of Linux and container technologies such as Docker. He evangelizes computer science practices on blog.sebastian-daschner.com and on Twitter via @DaschnerS. When not working with Java, Daschner also loves to travel the world, either by plane or motorbike.");
-        s.setTwitterHandle("@DaschnerS");
-        s.setPicture("https://www.oracle.com/us/assets/cw16-sebastian-daschner-3102339.png");
-        return s;
+        this.speakers.put(this.venue.getName(), this.venue.getSpeakers());
     }
 
     public Optional<Set<Speaker>> getSpeakers() {
