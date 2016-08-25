@@ -25,6 +25,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Speaker Data Access Object
+ */
 @ApplicationScoped
 public class SpeakerDAO {
 
@@ -57,5 +60,25 @@ public class SpeakerDAO {
     public Optional<Set<Speaker>> getSpeakers(final String venue) {
 
         return Optional.ofNullable(this.speakers.get(venue));
+    }
+
+    public Speaker persist(final Speaker speaker) {
+        return null;
+    }
+
+    public void remove(final String id) {
+
+    }
+
+    public Speaker update(final Speaker speaker) {
+        return null;
+    }
+
+    public Optional<Speaker> getSpeaker(final String id) {
+        return null;
+    }
+
+    public Optional<HashSet<Speaker>> find(final Speaker speaker) {
+        return null;
     }
 }

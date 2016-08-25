@@ -34,6 +34,6 @@ public class Application extends javax.ws.rs.core.Application {
      */
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<Class<?>>(Collections.singletonList(Resource.class));
+        return new HashSet<>(Collections.singletonList(Resource.class));
     }
 }
