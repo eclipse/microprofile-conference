@@ -59,8 +59,18 @@
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-json-provider</artifactId>
-            <version>2.4.3</version>
         </dependency>
+
+        <!--3RD PARTY-->
+        <dependency>
+            <groupId>org.codehaus.swizzle</groupId>
+            <artifactId>swizzle-stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
 
         <!-- TEST -->
         <dependency>

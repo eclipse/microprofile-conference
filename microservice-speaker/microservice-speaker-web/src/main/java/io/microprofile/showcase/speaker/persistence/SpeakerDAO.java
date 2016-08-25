@@ -15,12 +15,16 @@
  */
 package io.microprofile.showcase.speaker.persistence;
 
+import io.microprofile.showcase.speaker.domain.QVenue;
+import io.microprofile.showcase.speaker.domain.Venue;
 import io.microprofile.showcase.speaker.model.Speaker;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -33,10 +37,13 @@ public class SpeakerDAO {
 
     private final HashMap<String, HashSet<Speaker>> speakers = new HashMap<>();
 
+    @Inject
+    @QVenue
+    private Venue venue;
+
     @PostConstruct
     private void postConstruct() {
-        final String venue = "JavaOne2016";
-        this.speakers.put(venue, this.createSpeakers("JavaOne2016"));
+        this.speakers.put(this.venue.getName(), this.createSpeakers(this.venue.getName()));
     }
 
     private HashSet<Speaker> createSpeakers(final String venue) {
@@ -57,9 +64,9 @@ public class SpeakerDAO {
         return s;
     }
 
-    public Optional<Set<Speaker>> getSpeakers(final String venue) {
+    public Optional<Set<Speaker>> getSpeakers() {
 
-        return Optional.ofNullable(this.speakers.get(venue));
+        return Optional.ofNullable(this.speakers.get(this.venue.getName()));
     }
 
     public Speaker persist(final Speaker speaker) {
@@ -71,6 +78,22 @@ public class SpeakerDAO {
     }
 
     public Speaker update(final Speaker speaker) {
+
+        final Iterator<Speaker> iterator = this.speakers.get(this.venue.getName()).iterator();
+        Speaker next = null;
+
+        while (iterator.hasNext()) {
+            next = iterator.next();
+            if (next.getId().equals(speaker.getId())) {
+                next.setPicture(speaker.getPicture());
+                next.setBiography(speaker.getBiography());
+                next.setOrganization(speaker.getOrganization());
+                next.setNameFirst(speaker.getNameFirst());
+                next.setNameLast(speaker.getNameLast());
+                next.setTwitterHandle(speaker.getTwitterHandle());
+                return next;
+            }
+        }
         return null;
     }
 
@@ -78,7 +101,7 @@ public class SpeakerDAO {
         return null;
     }
 
-    public Optional<HashSet<Speaker>> find(final Speaker speaker) {
+    public Optional<Set<Speaker>> find(final Speaker speaker) {
         return null;
     }
 }

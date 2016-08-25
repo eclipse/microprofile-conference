@@ -76,24 +76,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <!--Dependencies-->
-        <version.javaee>7.0</version.javaee>
-        <version.resteasy>3.0.18.Final</version.resteasy>
-        <version.swagger>1.5.9</version.swagger>
-        <!--Swarm-->
-        <version.wildfly-swarm>1.0.0.Final</version.wildfly-swarm>
-        <!-- Test -->
-        <version.arquillian>1.1.11.Final</version.arquillian>
-        <version.arquillian.wildfly.remote>8.2.1.Final</version.arquillian.wildfly.remote>
-        <version.arquillian.wildfly.managed>8.2.1.Final</version.arquillian.wildfly.managed>
-        <version.bean-matchers>0.9</version.bean-matchers>
-        <version.commons-lang3>3.4</version.commons-lang3>
-        <version.el>2.2</version.el>
-        <version.junit>4.12</version.junit>
-        <version.jsonunit>1.12.1</version.jsonunit>
-        <version.jackson>2.8.1</version.jackson>
-        <version.tomee>7.0.1</version.tomee>
-        <version.wildfly>10.0.0.Final</version.wildfly>
+
         <!-- Plugins -->
         <version.clean.plugin>3.0.0</version.clean.plugin>
         <version.compiler.plugin>3.5.1</version.compiler.plugin>
@@ -105,6 +88,28 @@
         <version.surefire.plugin>2.19.1</version.surefire.plugin>
         <version.war.plugin>2.6</version.war.plugin>
         <version.processor.plugin>3.1.0</version.processor.plugin>
+
+        <!-- Test -->
+        <version.arquillian>1.1.11.Final</version.arquillian>
+        <version.arquillian.wildfly.remote>8.2.1.Final</version.arquillian.wildfly.remote>
+        <version.arquillian.wildfly.managed>8.2.1.Final</version.arquillian.wildfly.managed>
+        <version.bean-matchers>0.9</version.bean-matchers>
+        <version.el>2.2</version.el>
+        <version.junit>4.12</version.junit>
+        <version.jsonunit>1.12.1</version.jsonunit>
+        <version.jackson>2.8.1</version.jackson>
+        <version.tomee>7.0.1</version.tomee>
+        <version.wildfly>10.0.0.Final</version.wildfly>
+
+        <!--Dependencies-->
+        <version.javaee>7.0</version.javaee>
+        <version.resteasy>3.0.18.Final</version.resteasy>
+        <version.swagger>1.5.9</version.swagger>
+        <version.wildfly-swarm>1.0.0.Final</version.wildfly-swarm>
+        <version.swizzle-stream>1.6.2</version.swizzle-stream>
+        <version.commons-io>2.5</version.commons-io>
+        <version.commons-lang3>3.4</version.commons-lang3>
+
     </properties>
 
     <modules>
@@ -170,6 +175,16 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
                 <version>${version.jackson}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.swizzle</groupId>
+                <artifactId>swizzle-stream</artifactId>
+                <version>${version.swizzle-stream}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${version.commons-io}</version>
             </dependency>
 
             <!-- TEST -->
@@ -315,35 +330,35 @@
         </pluginManagement>
 
         <!--<plugins>-->
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>license-maven-plugin</artifactId>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>first</id>-->
-                        <!--<goals>-->
-                            <!--<goal>update-file-header</goal>-->
-                        <!--</goals>-->
-                        <!--<phase>process-sources</phase>-->
-                        <!--<configuration>-->
-                            <!--<licenseName>apache_v2</licenseName>-->
-                            <!--<excludes>-->
-                                <!--<exclude>*.png</exclude>-->
-                            <!--</excludes>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                    <!--<execution>-->
-                        <!--<id>download-licenses</id>-->
-                        <!--<goals>-->
-                            <!--<goal>download-licenses</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-                <!--<configuration>-->
-                    <!--<licenseName>apache_v2</licenseName>-->
-                <!--</configuration>-->
+        <!--<plugin>-->
+        <!--<groupId>org.codehaus.mojo</groupId>-->
+        <!--<artifactId>license-maven-plugin</artifactId>-->
+        <!--<executions>-->
+        <!--<execution>-->
+        <!--<id>first</id>-->
+        <!--<goals>-->
+        <!--<goal>update-file-header</goal>-->
+        <!--</goals>-->
+        <!--<phase>process-sources</phase>-->
+        <!--<configuration>-->
+        <!--<licenseName>apache_v2</licenseName>-->
+        <!--<excludes>-->
+        <!--<exclude>*.png</exclude>-->
+        <!--</excludes>-->
+        <!--</configuration>-->
+        <!--</execution>-->
+        <!--<execution>-->
+        <!--<id>download-licenses</id>-->
+        <!--<goals>-->
+        <!--<goal>download-licenses</goal>-->
+        <!--</goals>-->
+        <!--</execution>-->
+        <!--</executions>-->
+        <!--<configuration>-->
+        <!--<licenseName>apache_v2</licenseName>-->
+        <!--</configuration>-->
 
-            <!--</plugin>-->
+        <!--</plugin>-->
         <!--</plugins>-->
     </build>
 

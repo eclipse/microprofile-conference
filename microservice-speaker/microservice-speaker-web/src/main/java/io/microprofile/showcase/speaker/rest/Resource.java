@@ -23,8 +23,12 @@ import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.Collections;
@@ -43,29 +47,38 @@ public class Resource {
     private SpeakerDAO speakerDAO;
 
     @GET
-    public Set<Speaker> getSpeakers(final String venue) {
-        return this.speakerDAO.getSpeakers(venue).orElse(Collections.emptyNavigableSet());
+    public Set<Speaker> retrieveAll() {
+        return this.speakerDAO.getSpeakers().orElse(Collections.emptyNavigableSet());
     }
 
+    @POST
     @Lock(LockType.WRITE)
+    @Path("/add")
     public Speaker add(final Speaker speaker) {
         return this.speakerDAO.persist(speaker);
     }
 
-    public void remove(final String id) {
+    @DELETE
+    @Path("/remove/{id}")
+    public void remove(@PathParam("id") final String id) {
         this.speakerDAO.remove(id);
     }
 
+    @PUT
     @Lock(LockType.WRITE)
+    @Path("/update")
     public Speaker update(final Speaker speaker) {
         return this.speakerDAO.update(speaker);
     }
 
-    public Speaker retrieve(final String id) {
+    @GET
+    @Path("/retrieve/{id}")
+    public Speaker retrieve(@PathParam("id") final String id) {
         return this.speakerDAO.getSpeaker(id).orElse(new Speaker());
     }
 
-
+    @GET
+    @Path("/search")
     public Set<Speaker> search(final Speaker speaker) {
         return this.speakerDAO.find(speaker).orElse(Collections.emptyNavigableSet());
     }
