@@ -19,9 +19,12 @@ package io.microprofile.showcase.speaker.rest;
 import io.microprofile.showcase.speaker.model.Speaker;
 import io.microprofile.showcase.speaker.persistence.SpeakerDAO;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -38,6 +41,7 @@ import java.util.Set;
  * The Speaker resource
  */
 @Singleton
+@Startup
 @Lock(LockType.READ)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/")

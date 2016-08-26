@@ -21,6 +21,7 @@ import io.microprofile.showcase.speaker.model.Speaker;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Iterator;

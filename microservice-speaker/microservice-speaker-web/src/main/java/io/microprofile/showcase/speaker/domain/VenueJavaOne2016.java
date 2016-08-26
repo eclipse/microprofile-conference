@@ -82,8 +82,6 @@ public class VenueJavaOne2016 extends Venue {
             }
         }
 
-        System.out.println("speakers = " + speakers.size());
-
         return speakers;
     }
 
