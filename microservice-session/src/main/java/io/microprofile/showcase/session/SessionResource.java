@@ -65,14 +65,14 @@ public class SessionResource {
     }
 
     @DELETE
-    @Path("/{sessionId")
+    @Path("/{sessionId}")
     public void deleteSession(@PathParam("sessionId") Long sessionId) throws Exception {
     }
 
     //TODO Add Search
 
     @GET
-    @Path("/{sessionId/speakers")
+    @Path("/{sessionId}/speakers")
     @Produces(MediaType.APPLICATION_JSON)
     public List<?> sessionSpeakers(@PathParam("sessionId") Long sessionId) throws Exception {
         return null;
