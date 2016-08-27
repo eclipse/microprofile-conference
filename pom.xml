@@ -49,6 +49,9 @@
         </developer>
         <developer>
             <name>Ken Finnigan</name>
+            <organization>Red Hat</organization>
+            <email>ken@kenfinnigan.me</email>
+            <url>https://www.redhat.com</url>
         </developer>
         <developer>
             <name>Martijn Verburg</name>
@@ -81,11 +84,9 @@
         <version.resteasy>3.0.18.Final</version.resteasy>
         <version.swagger>1.5.9</version.swagger>
         <!--Swarm-->
-        <version.wildfly-swarm>1.0.0.Final</version.wildfly-swarm>
+        <version.wildfly-swarm>2016.8.1</version.wildfly-swarm>
         <!-- Test -->
         <version.arquillian>1.1.11.Final</version.arquillian>
-        <version.arquillian.wildfly.remote>8.2.1.Final</version.arquillian.wildfly.remote>
-        <version.arquillian.wildfly.managed>8.2.1.Final</version.arquillian.wildfly.managed>
         <version.bean-matchers>0.9</version.bean-matchers>
         <version.commons-lang3>3.4</version.commons-lang3>
         <version.el>2.2</version.el>
@@ -132,7 +133,7 @@
             <!-- WILDFLY SWARM -->
             <dependency>
                 <groupId>org.wildfly.swarm</groupId>
-                <artifactId>bom</artifactId>
+                <artifactId>bom-all</artifactId>
                 <version>${version.wildfly-swarm}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -300,6 +301,13 @@
                     <groupId>org.wildfly.swarm</groupId>
                     <artifactId>wildfly-swarm-plugin</artifactId>
                     <version>${version.wildfly-swarm}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>package</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.tomee.maven</groupId>
