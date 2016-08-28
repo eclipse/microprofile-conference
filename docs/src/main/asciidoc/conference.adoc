@@ -32,11 +32,12 @@ image::architecture.png[title="Overall Architecture"]
      - Twitter handle
 
    APIs
-     Speaker add(Speaker)
-     void remove(Id)
-     Speaker update(Speaker)
-     Speaker retrieve(Id)
-     List<Speaker> search(Speaker)
+    Speaker add(Speaker)
+    void remove(Id)
+    Speaker update(Speaker)
+    Speaker retrieve(Id)
+    List<Speaker> retrieveAll()
+    List<Speaker> search(Speaker)
 
 == Session Service
 

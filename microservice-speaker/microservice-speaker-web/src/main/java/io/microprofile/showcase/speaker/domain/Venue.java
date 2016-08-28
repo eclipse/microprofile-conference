@@ -13,27 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.microprofile.showcase.speaker.rest;
+package io.microprofile.showcase.speaker.domain;
 
+import io.microprofile.showcase.speaker.model.Speaker;
 
-import javax.ws.rs.ApplicationPath;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Root REST application context
- */
-@ApplicationPath("/speaker")
-public class Application extends javax.ws.rs.core.Application {
+public abstract class Venue {
 
-    /**
-     * The REST application resource classes
-     *
-     * @return Set of classes
-     */
-    @Override
-    public Set<Class<?>> getClasses() {
-        return new HashSet<>(Collections.singletonList(ResourceSpeaker.class));
-    }
+    public abstract String getName();
+
+    public abstract Set<Speaker> getSpeakers();
 }

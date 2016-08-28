@@ -17,6 +17,7 @@ package io.microprofile.showcase.speaker.model;
 
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Speaker {
 
@@ -118,14 +119,14 @@ public class Speaker {
 
     @Override
     public String toString() {
-        return "Speaker{" +
-                "id='" + this.id + '\'' +
-                ", nameFirst='" + this.nameFirst + '\'' +
-                ", nameLast='" + this.nameLast + '\'' +
-                ", organization='" + this.organization + '\'' +
-                ", biography='" + this.biography + '\'' +
-                ", picture='" + this.picture + '\'' +
-                ", twitterHandle='" + this.twitterHandle + '\'' +
-                '}';
+        return new ToStringBuilder(this)
+                .append("id", this.id)
+                .append("nameFirst", this.nameFirst)
+                .append("nameLast", this.nameLast)
+                .append("organization", this.organization)
+                .append("biography", this.biography)
+                .append("picture", this.picture)
+                .append("twitterHandle", this.twitterHandle)
+                .toString();
     }
 }

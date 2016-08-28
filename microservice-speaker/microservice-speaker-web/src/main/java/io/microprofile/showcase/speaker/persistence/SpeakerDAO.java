@@ -15,47 +15,78 @@
  */
 package io.microprofile.showcase.speaker.persistence;
 
+import io.microprofile.showcase.speaker.domain.Venue;
 import io.microprofile.showcase.speaker.model.Speaker;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
+/**
+ * Speaker Data Access Object
+ */
 @ApplicationScoped
 public class SpeakerDAO {
 
-    private final HashMap<String, HashSet<Speaker>> speakers = new HashMap<>();
+    private final HashMap<String, Set<Speaker>> speakers = new HashMap<>();
+
+    @Inject
+    private List<Venue> venues;
 
     @PostConstruct
     private void postConstruct() {
-        final String venue = "JavaOne2016";
-        this.speakers.put(venue, this.createSpeakers("JavaOne2016"));
+
+        for (final Venue venue : this.venues) {
+            this.speakers.put(venue.getName(), venue.getSpeakers());
+        }
+
     }
 
-    private HashSet<Speaker> createSpeakers(final String venue) {
-        final HashSet<Speaker> speakers = new HashSet<>();
-        speakers.add(this.createSpeaker());
+    public Set<Speaker> getSpeakers() {
+
+        final Set<Speaker> speakers = new HashSet<>();
+
+        this.speakers.values().forEach(speakers::addAll);
+
         return speakers;
     }
 
-    private Speaker createSpeaker() {
-        final Speaker s = new Speaker();
-        s.setId(UUID.randomUUID().toString());
-        s.setNameFirst("Sebastian");
-        s.setNameLast("Daschner");
-        s.setOrganization("Freelancer");
-        s.setBiography("Sebastian Daschner is a Java freelancer working as a consultant/software developer/architect. He is enthusiastic about programming and Java EE. He is participating in the JCP, serving in the JSR 370 Expert Group, and hacking on various open source projects on Github. He is a Java Champion and has been working with Java for more than six years. In addition to Java, Daschner is also a heavy user of Linux and container technologies such as Docker. He evangelizes computer science practices on blog.sebastian-daschner.com and on Twitter via @DaschnerS. When not working with Java, Daschner also loves to travel the world, either by plane or motorbike.");
-        s.setTwitterHandle("@DaschnerS");
-        s.setPicture("https://www.oracle.com/us/assets/cw16-sebastian-daschner-3102339.png");
-        return s;
+    public Speaker persist(final Speaker speaker) {
+        return null;
     }
 
-    public Optional<Set<Speaker>> getSpeakers(final String venue) {
+    public void remove(final String id) {
 
-        return Optional.ofNullable(this.speakers.get(venue));
+    }
+
+    public Speaker update(final Speaker speaker) {
+
+        final Set<Speaker> speakers = this.getSpeakers();
+        for (final Speaker s : speakers) {
+            if (s.getId().equals(speaker.getId())) {
+                s.setPicture(speaker.getPicture());
+                s.setBiography(speaker.getBiography());
+                s.setOrganization(speaker.getOrganization());
+                s.setNameFirst(speaker.getNameFirst());
+                s.setNameLast(speaker.getNameLast());
+                s.setTwitterHandle(speaker.getTwitterHandle());
+                return s;
+            }
+        }
+
+        return null;
+    }
+
+    public Optional<Speaker> getSpeaker(final String id) {
+        return null;
+    }
+
+    public Optional<Set<Speaker>> find(final Speaker speaker) {
+        return null;
     }
 }
