@@ -48,10 +48,13 @@
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>microprofile</artifactId>
-            <scope>provided</scope>
-        </dependency>
+
+        <!--MISSING REPO?-->
+        <!--<dependency>-->
+            <!--<groupId>org.wildfly.swarm</groupId>-->
+            <!--<artifactId>microprofile</artifactId>-->
+            <!--<version>2016.9-SNAPSHOT</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
     </dependencies>
 </project>
