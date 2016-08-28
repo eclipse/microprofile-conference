@@ -15,6 +15,8 @@
  */
 package io.microprofile.showcase.session;
 
-
-public class DeleteMe {
+/**
+ * @author Ken Finnigan
+ */
+public class SessionSpeaker {
 }

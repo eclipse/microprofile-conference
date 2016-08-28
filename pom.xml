@@ -105,7 +105,7 @@
         <version.javaee>7.0</version.javaee>
         <version.resteasy>3.0.18.Final</version.resteasy>
         <version.swagger>1.5.9</version.swagger>
-        <version.wildfly-swarm>1.0.0.Final</version.wildfly-swarm>
+        <version.wildfly-swarm>2016.8.1</version.wildfly-swarm>
         <version.swizzle-stream>1.6.2</version.swizzle-stream>
         <version.commons-io>2.5</version.commons-io>
         <version.commons-lang3>3.4</version.commons-lang3>
