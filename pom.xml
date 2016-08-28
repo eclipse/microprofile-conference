@@ -103,7 +103,7 @@
 
         <!--Dependencies-->
         <version.javaee>7.0</version.javaee>
-        <version.resteasy>3.0.18.Final</version.resteasy>
+        <version.resteasy>3.0.19.Final</version.resteasy>
         <version.swagger>1.5.9</version.swagger>
         <version.wildfly-swarm>2016.8.1</version.wildfly-swarm>
         <version.swizzle-stream>1.6.2</version.swizzle-stream>
@@ -198,6 +198,11 @@
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-client</artifactId>
+                <version>${version.resteasy}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jackson-provider</artifactId>
                 <version>${version.resteasy}</version>
             </dependency>
             <dependency>

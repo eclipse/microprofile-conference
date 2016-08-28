@@ -63,6 +63,7 @@ public class ResourceSpeakerTest {
 
         final Client client = ClientBuilder.newBuilder().build();
         final WebTarget target = client.target(url.toExternalForm() + "speaker");
+
         final Set<Speaker> speakers = target.request().get(new GenericType<Set<Speaker>>() {
         });
 
