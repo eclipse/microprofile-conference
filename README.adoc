@@ -12,7 +12,7 @@ The application consists of several Microservices and a Web-Application managing
 
 == Setup
 
-* Build the project using Maven (`mvn clean install`)
+* Build the project using Maven (`mvn clean install`) or (`mvn -fn clean install`) to skip over failed tests.
 
 == Development
 
