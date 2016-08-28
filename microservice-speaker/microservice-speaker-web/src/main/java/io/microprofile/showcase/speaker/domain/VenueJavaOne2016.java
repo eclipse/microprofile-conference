@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 
 public class VenueJavaOne2016 extends Venue {
 
-    private static final String JAVA_ONE_2016 = "JavaOne2016";
     private final Logger log = Logger.getLogger(VenueJavaOne2016.class.getName());
 
     private final URL url = URI.create("https://www.oracle.com/javaone/speakers.html").toURL();
@@ -51,7 +50,7 @@ public class VenueJavaOne2016 extends Venue {
 
     @Override
     public String getName() {
-        return JAVA_ONE_2016;
+        return "JavaOne2016";
     }
 
     public Set<Speaker> getSpeakers() {

@@ -15,16 +15,15 @@
  */
 package io.microprofile.showcase.speaker.persistence;
 
-import io.microprofile.showcase.speaker.domain.QVenue;
 import io.microprofile.showcase.speaker.domain.Venue;
 import io.microprofile.showcase.speaker.model.Speaker;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -37,17 +36,24 @@ public class SpeakerDAO {
     private final HashMap<String, Set<Speaker>> speakers = new HashMap<>();
 
     @Inject
-    @QVenue
-    private Venue venue;
+    private List<Venue> venues;
 
     @PostConstruct
     private void postConstruct() {
-        this.speakers.put(this.venue.getName(), this.venue.getSpeakers());
+
+        for (final Venue venue : this.venues) {
+            this.speakers.put(venue.getName(), venue.getSpeakers());
+        }
+
     }
 
-    public Optional<Set<Speaker>> getSpeakers() {
+    public Set<Speaker> getSpeakers() {
 
-        return Optional.ofNullable(this.speakers.get(this.venue.getName()));
+        final Set<Speaker> speakers = new HashSet<>();
+
+        this.speakers.values().forEach(speakers::addAll);
+
+        return speakers;
     }
 
     public Speaker persist(final Speaker speaker) {
@@ -60,21 +66,19 @@ public class SpeakerDAO {
 
     public Speaker update(final Speaker speaker) {
 
-        final Iterator<Speaker> iterator = this.speakers.get(this.venue.getName()).iterator();
-        Speaker next = null;
-
-        while (iterator.hasNext()) {
-            next = iterator.next();
-            if (next.getId().equals(speaker.getId())) {
-                next.setPicture(speaker.getPicture());
-                next.setBiography(speaker.getBiography());
-                next.setOrganization(speaker.getOrganization());
-                next.setNameFirst(speaker.getNameFirst());
-                next.setNameLast(speaker.getNameLast());
-                next.setTwitterHandle(speaker.getTwitterHandle());
-                return next;
+        final Set<Speaker> speakers = this.getSpeakers();
+        for (final Speaker s : speakers) {
+            if (s.getId().equals(speaker.getId())) {
+                s.setPicture(speaker.getPicture());
+                s.setBiography(speaker.getBiography());
+                s.setOrganization(speaker.getOrganization());
+                s.setNameFirst(speaker.getNameFirst());
+                s.setNameLast(speaker.getNameLast());
+                s.setTwitterHandle(speaker.getTwitterHandle());
+                return s;
             }
         }
+
         return null;
     }
 

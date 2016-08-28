@@ -45,14 +45,14 @@ import java.util.Set;
 @Lock(LockType.READ)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/")
-public class Resource {
+public class ResourceSpeaker {
 
     @Inject
     private SpeakerDAO speakerDAO;
 
     @GET
     public Set<Speaker> retrieveAll() {
-        return this.speakerDAO.getSpeakers().orElse(Collections.emptyNavigableSet());
+        return this.speakerDAO.getSpeakers();
     }
 
     @POST

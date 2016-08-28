@@ -18,6 +18,8 @@ package io.microprofile.showcase.speaker.domain;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -28,14 +30,16 @@ public class ProducerVenue {
 
     @Produces
     @ApplicationScoped
-    @QVenue
-    public Venue produceVenue() {
+    public List<Venue> produceVenues() {
+
+        final List<Venue> venues = new ArrayList<>();
+
         try {
-            return new VenueJavaOne2016();
+            venues.add(new VenueJavaOne2016());
         } catch (final MalformedURLException e) {
             this.log.log(Level.SEVERE, "Failed to produce a Venue", e);
         }
 
-        return null;
+        return venues;
     }
 }

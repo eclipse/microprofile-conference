@@ -38,16 +38,16 @@ import java.net.URL;
 import java.util.Set;
 
 @RunWith(Arquillian.class)
-public class ResourceTest {
+public class ResourceSpeakerTest {
 
     @Deployment(testable = false)
     public static WebArchive deploy() {
 
         return ShrinkWrap.create(WebArchive.class
-                , ResourceTest.class.getName() + ".war")
+                , ResourceSpeakerTest.class.getName() + ".war")
                 .addClasses(
                         SpeakerDAO.class,
-                        Resource.class,
+                        ResourceSpeaker.class,
                         Application.class,
                         Venue.class,
                         VenueJavaOne2016.class,
