@@ -12,3 +12,4 @@ target/
 .factorypath
 .externalToolBuilders
 rebuild.sh
+derby.log
