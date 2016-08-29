@@ -49,6 +49,9 @@
         </developer>
         <developer>
             <name>Ken Finnigan</name>
+            <organization>Red Hat</organization>
+            <url>https://www.redhat.com</url>
+            <email>ken@kenfinnigan.me</email>
         </developer>
         <developer>
             <name>Martijn Verburg</name>
@@ -137,7 +140,7 @@
             <!-- WILDFLY SWARM -->
             <dependency>
                 <groupId>org.wildfly.swarm</groupId>
-                <artifactId>bom</artifactId>
+                <artifactId>bom-all</artifactId>
                 <version>${version.wildfly-swarm}</version>
                 <type>pom</type>
                 <scope>import</scope>
