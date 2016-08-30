@@ -19,8 +19,13 @@ package io.microprofile.showcase.speaker.model;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Speaker {
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+public class Speaker implements Serializable {
+
+    private static final long serialVersionUID = -8693770048623415961L;
     private String id;
     private String nameFirst;
     private String nameLast;
@@ -28,6 +33,7 @@ public class Speaker {
     private String biography;
     private String picture;
     private String twitterHandle;
+    private Set<String> venues;
 
     public String getId() {
         return this.id;
@@ -83,6 +89,19 @@ public class Speaker {
 
     public void setTwitterHandle(final String twitterHandle) {
         this.twitterHandle = twitterHandle;
+    }
+
+    public Set<String> getVenues() {
+
+        if (null == this.venues) {
+            this.venues = new HashSet<>();
+        }
+
+        return this.venues;
+    }
+
+    public void setVenues(final Set<String> venues) {
+        this.getVenues().addAll(venues);
     }
 
     @Override
