@@ -13,8 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.microprofile.showcase.schedule;
+package io.microprofile.showcase.schedule.model.adapters;
 
-public class DeleteMeTest {
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import java.time.LocalDate;
 
+public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
+
+    @Override
+    public LocalDate unmarshal(String v) throws Exception {
+        return LocalDate.parse(v);
+    }
+
+    @Override
+    public String marshal(LocalDate v) throws Exception {
+        return v.toString();
+    }
 }
