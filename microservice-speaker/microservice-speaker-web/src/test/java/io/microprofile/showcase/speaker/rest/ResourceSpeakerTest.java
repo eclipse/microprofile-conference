@@ -34,6 +34,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import java.net.URL;
 import java.util.Set;
 
@@ -64,7 +65,7 @@ public class ResourceSpeakerTest {
         final Client client = ClientBuilder.newBuilder().build();
         final WebTarget target = client.target(url.toExternalForm() + "speaker");
 
-        final Set<Speaker> speakers = target.request().get(new GenericType<Set<Speaker>>() {
+        final Set<Speaker> speakers = target.request(MediaType.APPLICATION_JSON_TYPE).get(new GenericType<Set<Speaker>>() {
         });
 
         for (final Speaker speaker : speakers) {

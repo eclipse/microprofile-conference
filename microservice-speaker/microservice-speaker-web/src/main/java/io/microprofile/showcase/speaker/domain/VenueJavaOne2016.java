@@ -25,37 +25,67 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class VenueJavaOne2016 extends Venue {
 
+    private final String name = "JavaOne2016";
     private final Logger log = Logger.getLogger(VenueJavaOne2016.class.getName());
 
-    private final URL url = URI.create("https://www.oracle.com/javaone/speakers.html").toURL();
+    private final URL url = URI.create(System.getProperty("venue.url" + this.name, "https://www.oracle.com/javaone/speakers.html")).toURL();
 
     VenueJavaOne2016() throws MalformedURLException {
     }
 
-    public static void main(final String[] args) {
-        try {
-            new VenueJavaOne2016().getSpeakers();
-        } catch (final MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public String getName() {
-        return "JavaOne2016";
+        return this.name;
     }
 
     public Set<Speaker> getSpeakers() {
 
-        final Set<Speaker> speakers = new HashSet<>();
+        final Set<Speaker> speakers = new TreeSet<>((left, that) -> {
+
+            if (left.getNameFirst().compareTo(that.getNameFirst()) < 0) {
+                return -1;
+            } else if (left.getNameFirst().compareTo(that.getNameFirst()) > 0) {
+                return 1;
+            }
+
+            if (left.getNameLast().compareTo(that.getNameLast()) < 0) {
+                return -1;
+            } else if (left.getNameLast().compareTo(that.getNameLast()) > 0) {
+                return 1;
+            }
+
+            if (null != left.getOrganization()) {
+                if (left.getOrganization().compareTo(that.getOrganization()) < 0) {
+                    return -1;
+                } else if (left.getOrganization().compareTo(that.getOrganization()) > 0) {
+                    return 1;
+                }
+            }
+
+            if (null != left.getTwitterHandle()) {
+                if (left.getTwitterHandle().compareTo(that.getTwitterHandle()) < 0) {
+                    return -1;
+                } else if (left.getTwitterHandle().compareTo(that.getTwitterHandle()) > 0) {
+                    return 1;
+                }
+            }
+
+            if (left.getId().compareTo(that.getId()) < 0) {
+                return -1;
+            } else if (left.getId().compareTo(that.getId()) > 0) {
+                return 1;
+            }
+            return 0;
+        });
 
         InputStream is = null;
 

@@ -19,12 +19,10 @@ package io.microprofile.showcase.speaker.rest;
 import io.microprofile.showcase.speaker.model.Speaker;
 import io.microprofile.showcase.speaker.persistence.SpeakerDAO;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -43,7 +41,7 @@ import java.util.Set;
 @Singleton
 @Startup
 @Lock(LockType.READ)
-@Produces(MediaType.APPLICATION_JSON)
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Path("/")
 public class ResourceSpeaker {
 
