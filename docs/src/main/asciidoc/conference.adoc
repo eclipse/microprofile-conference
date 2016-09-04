@@ -63,6 +63,8 @@ image::architecture.png[title="Overall Architecture"]
 
 == Session Schedule Service
 
+image::schedule.png[title="Schedule diagram"]
+
    Schedule
      - Id (generated)
      - Session Id
