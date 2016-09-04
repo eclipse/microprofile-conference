@@ -40,12 +40,11 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.5.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>fish.payara.extras</groupId>
                         <artifactId>payara-micro</artifactId>
-                        <version>4.1.1.163</version>
+                        <version>${version.payara}</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -62,7 +61,7 @@
                                <argument>--autoBindHttp</argument>
                                <argument>--deploy</argument>
                                <argument>${basedir}/target/${project.build.finalName}.war</argument>
-                               <argument>--outputUberJar</argument>                                                  
+                               <argument>--outputUberJar</argument>
                                <argument>${basedir}/target/${project.build.finalName}.jar</argument>
                             </arguments>
                             <includeProjectDependencies>false</includeProjectDependencies>
@@ -82,13 +81,12 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <profiles>
         <profile>
-            <id>arquillian-glassfish</id>
+            <id>arquillian-glassfish-embedded</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -96,7 +94,6 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.14.1</version>
                         <configuration>
                             <systemPropertyVariables>
                                 <arquillian.launch>arquillian-glassfish-embedded</arquillian.launch>
@@ -109,13 +106,10 @@
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
                     <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
-                    <version>1.0.0.Final</version>
-                    <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>fish.payara.extras</groupId>
                     <artifactId>payara-embedded-all</artifactId>
-                    <version>4.1.1.163.0.1</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
