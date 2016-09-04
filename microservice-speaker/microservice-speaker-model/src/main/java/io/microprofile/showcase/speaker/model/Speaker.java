@@ -33,7 +33,6 @@ public class Speaker implements Serializable {
     private String biography;
     private String picture;
     private String twitterHandle;
-    private Set<String> venues;
 
     public String getId() {
         return this.id;
@@ -89,19 +88,6 @@ public class Speaker implements Serializable {
 
     public void setTwitterHandle(final String twitterHandle) {
         this.twitterHandle = twitterHandle;
-    }
-
-    public Set<String> getVenues() {
-
-        if (null == this.venues) {
-            this.venues = new HashSet<>();
-        }
-
-        return this.venues;
-    }
-
-    public void setVenues(final Set<String> venues) {
-        this.getVenues().addAll(venues);
     }
 
     @Override
