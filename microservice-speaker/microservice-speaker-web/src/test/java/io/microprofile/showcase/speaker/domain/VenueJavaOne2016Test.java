@@ -20,21 +20,22 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class VenueJavaOne2016Test {
 
+    private final Logger log = Logger.getLogger(VenueJavaOne2016Test.class.getName());
+
     @Test
-    public void test() throws Exception {
+    public void testGetSpeakers() throws Exception {
 
         final Set<Speaker> speakers = new VenueJavaOne2016().getSpeakers();
 
-        Assert.assertFalse("Faile to get speakers", speakers.isEmpty());
+        Assert.assertFalse("Failed to get any speakers", speakers.isEmpty());
 
         for (final Speaker speaker : speakers) {
             Assert.assertNotNull(speaker.getNameLast());
-
-            System.out.println(speaker.getNameFirst() + " " + speaker.getNameLast());
+            this.log.info(speaker.getNameFirst() + " " + speaker.getNameLast());
         }
     }
-
 }
