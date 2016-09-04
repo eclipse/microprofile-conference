@@ -2,7 +2,12 @@
 
 == General information
 
-The application consists of several Microservices and a Web-Application managing a conference.
+The application consists of several Microservices and a Web-Application managing a conference :
+
+* `microservice-schedule` : schedule of the conference
+* `microservice-session` : sessions of the conference
+* `microservice-speaker` : speakers of the conference
+* `microservice-vote` : votes for each session
 
 == Technologies
 
@@ -12,7 +17,8 @@ The application consists of several Microservices and a Web-Application managing
 
 == Setup
 
-* Build the project using Maven (`mvn clean install`) or (`mvn -fn clean install`) to skip over failed tests.
+* Build the projects using Maven (`mvn clean install`) or (`mvn -fn clean install`) to skip over failed tests.
+* To get the technical documentation, just `mvn clean generate-resources` under the `docs` directory. You will get a PDF and HTML version of the documentation under `docs/target/generated-docs`
 
 == Development
 
