@@ -13,8 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.microprofile.showcase.schedule;
+package io.microprofile.showcase.schedule.model.adapters;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import java.time.Duration;
 
-public class DeleteMe {
+public class DurationAdapter extends XmlAdapter<String, Duration> {
+
+    @Override
+    public Duration unmarshal(String v) throws Exception {
+        return Duration.parse(v);
+    }
+
+    @Override
+    public String marshal(Duration v) throws Exception {
+        return v.toString();
+    }
 }

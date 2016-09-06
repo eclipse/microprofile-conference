@@ -1,0 +1,15 @@
+@startuml
+
+class Schedule
+class Session
+class Venue
+
+class ScheduleDAO
+class ScheduleResource
+
+ScheduleResource ..> ScheduleDAO
+ScheduleDAO ..> Schedule
+Schedule --> Session
+Schedule --> Venue
+
+@enduml
