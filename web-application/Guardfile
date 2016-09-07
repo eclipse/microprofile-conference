@@ -1,0 +1,10 @@
+require 'erb'
+
+guard :copy, :from => 'src/main/webapp', :to => 'target/apache-tomee/webapps/registry', :mkpath => 'true' do
+  watch(%r{^.+\.(jsp|css|js|html)$})
+end
+
+guard 'livereload' do
+  watch(%r{^.+\.(jsp|css|js|html)$})
+end
+
