@@ -20,6 +20,7 @@
 *.json          text
 *.jsp           text
 *.jspf          text
+*.js.map        text
 *.md            text
 *.properties    text
 *.sbt           text
@@ -29,6 +30,7 @@
 *.svg           text
 *.template      text
 *.tld           text
+*.ts            text
 *.txt           text
 *.vm            text
 *.wadl          text
