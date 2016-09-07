@@ -30,11 +30,14 @@ var KarmaServer = require('karma').Server;
 var angularTemplateCache = require('gulp-angular-templatecache');
 
 gulp.task('css', gulpsync.sync(['images', 'css-build', 'css-third-party', 'css-third-party-resources']));
+
 gulp.task('images', function () {
     return gulp.src('./assets/**/*.{gif,jpg,png,svg}')
         .pipe(gulp.dest('../../../target/static-resources/app/'));
 });
+
 gulp.task('css-build', gulpsync.sync(['sass', 'autoprefixer', 'css-concat']));
+
 gulp.task('css-third-party', function () {
     return gulp.src([
         './bower_components/lato/css/lato.min.css',
@@ -46,6 +49,7 @@ gulp.task('css-third-party', function () {
         './bower_components/nvd3/build/nv.d3.min.css'
     ]).pipe(concat('_.css')).pipe(gulp.dest('../../../target/static-resources/app/third-party/styles/'));
 });
+
 gulp.task('css-third-party-resources', function () {
     var font = gulp.src([
         './bower_components/lato/font/**/*'
@@ -60,6 +64,7 @@ gulp.task('css-third-party-resources', function () {
     ]).pipe(gulp.dest('../../../target/static-resources/components'));
     return es.concat(font, fonts, foundationTemplates);
 });
+
 gulp.task('sass', function () {
     return gulp.src('./assets/**/*.sass')
         .pipe(sass({
@@ -67,6 +72,7 @@ gulp.task('sass', function () {
         }).on('error', sass.logError))
         .pipe(gulp.dest('../../../target/static-resources/app/'));
 });
+
 gulp.task('autoprefixer', function () {
     return gulp.src('../../../target/static-resources/app/styles/app.css')
         .pipe(autoprefixer({
@@ -74,6 +80,7 @@ gulp.task('autoprefixer', function () {
         }))
         .pipe(gulp.dest('../../../target/static-resources/app/styles/'));
 });
+
 gulp.task('css-concat', function () {
     return gulp.src(['../../../target/static-resources/app/styles/sprite.css', '../../../target/static-resources/app/styles/app.css'])
         .pipe(concat('_.css'))
@@ -81,6 +88,7 @@ gulp.task('css-concat', function () {
 });
 
 gulp.task('html', gulpsync.sync(['jade', 'html-to-js', 'copy-templates']));
+
 gulp.task('jade', function () {
     return gulp.src('./assets/**/*.jade')
         .pipe(jade({
@@ -88,6 +96,7 @@ gulp.task('jade', function () {
         }))
         .pipe(gulp.dest('../../../target/static-templates/html'))
 });
+
 gulp.task('html-to-js', function () {
     return gulp.src('../../../target/static-templates/html/*/*.html')
         .pipe(angularTemplateCache({
@@ -97,17 +106,20 @@ gulp.task('html-to-js', function () {
         }))
         .pipe(gulp.dest('../../../target/static-templates/'))
 });
+
 gulp.task('copy-templates', function () {
     return gulp.src('../../../target/static-templates/_templates.js')
         .pipe(gulp.dest('../../../target/static-resources/app/scripts/'));
 });
 
 gulp.task('js', gulpsync.sync(['compile-ts', 'copy-ts', 'js-third-party']));
+
 gulp.task('lint-ts', function () {
     return gulp.src('./assets/**/*.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose'));
 });
+
 gulp.task('compile-ts', function () {
     return gulp.src('./assets/**/*.ts')
         .pipe(sourcemaps.init())
@@ -122,6 +134,7 @@ gulp.task('compile-ts', function () {
         .pipe(sourcemaps.write({includeContent: false}))
         .pipe(gulp.dest('../../../target/static-resources/app/scripts/'));
 });
+
 gulp.task('copy-ts', function () {
     return gulp.src('./assets/**/*.ts')
         .pipe(gulp.dest('../../../target/static-resources/app/'));
@@ -133,10 +146,12 @@ gulp.task('js-third-party', function () {
         './bower_components/jquery/dist/jquery.min.js',
         './bower_components/js-base64/base64.min.js'
     ]).pipe(concat('_1.js')).pipe(gulp.dest('../../../target/static-resources/app/third-party/'));
+
     var _2 = gulp.src([
         './bower_components/angular/angular.min.js',
         './bower_components/angular-route/angular-route.min.js'
     ]).pipe(concat('_2.js')).pipe(gulp.dest('../../../target/static-resources/app/third-party/'));
+
     var _3 = gulp.src([
         './bower_components/foundation-apps/dist/js/foundation-apps.min.js',
         './bower_components/ngstorage/ngStorage.min.js',
@@ -148,6 +163,7 @@ gulp.task('js-third-party', function () {
         './bower_components/marked/lib/marked.js',
         './bower_components/angular-marked/dist/angular-marked.min.js'
     ]).pipe(concat('_3.js')).pipe(gulp.dest('../../../target/static-resources/app/third-party/'));
+
     // internet explorer has a file size limit of around 280kb (Yeah... no idea why)
     return es.concat(_1, _2, _3);
 });
