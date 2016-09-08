@@ -84,7 +84,6 @@
         <version.clean.plugin>3.0.0</version.clean.plugin>
         <version.compiler.plugin>3.5.1</version.compiler.plugin>
         <version.dependency.plugin>2.10</version.dependency.plugin>
-        <version.dependency.plugin>1.5.0</version.dependency.plugin>
         <version.failsafe.plugin>2.19.1</version.failsafe.plugin>
         <version.install.plugin>2.5.2</version.install.plugin>
         <version.license.plugin>1.9</version.license.plugin>
