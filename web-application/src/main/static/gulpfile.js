@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var webapp = 'microprofile-conference-web';
+var webapp = 'ROOT';
 var resources = 'static-resources';
 var target = '../../../target';
 var gulp = require('gulp');
@@ -50,10 +50,10 @@ gulp.task('css-third-party', function () {
     ]).pipe(gulp.dest(target + '/' + resources + '/assets/css/'));
 });
 
-gulp.task('js', gulpsync.sync(['compile-ts', 'js-third-party']));
+gulp.task('js', gulpsync.sync(['compile-ts', 'js-third-party', 'js-bundles']));
 
 gulp.task('lint-ts', function () {
-    return gulp.src('./assets/**/*.ts')
+    return gulp.src('./app/**/*.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose'));
 });
@@ -62,7 +62,12 @@ gulp.task('compile-ts', function () {
     return gulp.src('./app/**/*.ts')
         .pipe(sourcemaps.init())
         .pipe(ts({
+            'noImplicitAny': false,
+            'experimentalDecorators': true,
             'target': 'es5',
+            'allowJs': true,
+            'suppressImplicitAnyIndexErrors': true,
+            'emitDecoratorMetadata': true,
             'sourceMap': true
         }))
         .pipe(uglify({
@@ -73,11 +78,48 @@ gulp.task('compile-ts', function () {
 });
 
 gulp.task('js-third-party', function () {
-    return gulp.src([
+
+    var scripts = [
+        './systemjs.config.js',
+        './node_modules/core-js/client/shim.min.js',
         './node_modules/zone.js/dist/zone.js',
         './node_modules/reflect-metadata/Reflect.js',
-        './node_modules/systemjs/dist/system.src.js'
-    ]).pipe(gulp.dest(target + '/' + resources + '/assets/js/'));
+        './node_modules/systemjs/dist/system.src.js',
+        // angular2
+        './node_modules/@angular/core/bundles/core.umd.js',
+        './node_modules/@angular/common/bundles/common.umd.js',
+        './node_modules/@angular/compiler/bundles/compiler.umd.js',
+        './node_modules/@angular/platform-browser/bundles/platform-browser.umd.js',
+        './node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+        './node_modules/@angular/http/bundles/http.umd.js',
+        './node_modules/@angular/router/bundles/router.umd.js',
+        './node_modules/@angular/forms/bundles/forms.umd.js'
+    ];
+
+    var tasks = [];
+    var s;
+    for (s in scripts) {
+        tasks.push(buildTask(scripts[s]));
+    }
+
+    return es.concat(tasks);
+});
+
+function buildTask(/*String*/path) {
+    console.log("" + path);
+    return gulp.src(path).pipe(gulp.dest(target + '/' + resources + '/assets/js/' + path.substr(0, path.lastIndexOf('/')) + '/'));
+}
+
+gulp.task('js-bundles', function () {
+
+    var rxjs = gulp.src([
+        './node_modules/rxjs/**/*.js'
+    ], {base: './node_modules/rxjs/'}).pipe(gulp.dest(target + '/' + resources + '/assets/js/node_modules/rxjs'));
+
+    var wapi = gulp.src([
+        './node_modules/angular2-in-memory-web-api/**/*.js'
+    ], {base: './node_modules/angular2-in-memory-web-api/'}).pipe(gulp.dest(target + '/' + resources + '/assets/js/node_modules/angular2-in-memory-web-api'));
+    return es.concat(rxjs, wapi);
 });
 
 gulp.task('test', function (done) {

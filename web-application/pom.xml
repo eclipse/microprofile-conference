@@ -60,7 +60,7 @@
     </dependencies>
 
     <build>
-        <finalName>microprofile-conference-web</finalName>
+        <finalName>ROOT</finalName>
         <plugins>
 
             <plugin>
@@ -100,7 +100,7 @@
                         </goals>
                         <configuration>
                             <nodeVersion>v6.5.0</nodeVersion>
-                            <npmVersion>3.10.6</npmVersion>
+                            <npmVersion>3.10.7</npmVersion>
                         </configuration>
                     </execution>
                     <execution>
