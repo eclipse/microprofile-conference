@@ -15,8 +15,7 @@
 
     <dependencies>
         <dependency>
-            <!-- groupId>com.ibm.ws.microprofile.sample.conference</groupId -->
-            <groupId>myGroupId</groupId>
+            <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
             <artifactId>${warName}</artifactId>
             <version>${warVersion}</version>
             <type>war</type>
