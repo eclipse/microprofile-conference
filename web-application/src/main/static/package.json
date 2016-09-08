@@ -2,14 +2,6 @@
   "name": "microprofile-conference",
   "description": "Microprofile conference web application",
   "version": "1.0.0",
-  "scripts": {
-    "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
-    "lite": "lite-server",
-    "postinstall": "typings install",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
-    "typings": "typings"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/microprofile/microprofile-conference.git"
@@ -57,8 +49,8 @@
     "gulp-tslint": "^6.1.1",
     "gulp-typescript": "^2.13.6",
     "gulp-uglify": "^2.0.0",
-    "jasmine": "^2.5.0",
-    "jasmine-core": "^2.5.0",
+    "jasmine": "^2.5.1",
+    "jasmine-core": "^2.5.1",
     "karma": "^1.2.0",
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.2",
@@ -67,5 +59,13 @@
     "tslint": "^3.15.1",
     "typescript": "^2.0.2",
     "underscore.string": "^3.3.4"
+  },
+  "scripts": {
+    "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
+    "lite": "lite-server",
+    "postinstall": "typings install",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "typings": "typings"
   }
 }

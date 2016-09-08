@@ -15,7 +15,7 @@
  */
 
 /**
- * System configuration for Angular 2 samples
+ * System configuration for Microprofile Conference
  * Adjust as necessary for your application needs.
  */
 (function (global) {

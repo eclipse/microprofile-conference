@@ -1,0 +1,17 @@
+= Microprofile Conference
+:url-openapi-spec: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
+
+== Development
+
+To build and run the application in its own TomEE instance:
+
+----
+$ mvn package tomee:run -pl :web-application -DskipTests
+----
+
+To make TomEE pick up changes to any static resources, typescript files, templates or style sheets:
+
+----
+$ cd web-application
+$ mvn frontend:gulp
+----

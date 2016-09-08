@@ -1,6 +1,6 @@
 require 'erb'
 
-guard :copy, :from => 'src/main/webapp', :to => 'target/apache-tomee/webapps/registry', :mkpath => 'true' do
+guard :copy, :from => 'src/main/webapp', :to => 'target/apache-tomee/webapps/microprofile-conference-web', :mkpath => 'true' do
   watch(%r{^.+\.(jsp|css|js|html)$})
 end
 
