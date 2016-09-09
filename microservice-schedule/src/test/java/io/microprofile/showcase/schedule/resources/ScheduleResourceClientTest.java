@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.client.ClientBuilder;
@@ -39,6 +40,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -46,6 +48,7 @@ import java.time.LocalTime;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 @RunAsClient
@@ -69,10 +72,7 @@ public class ScheduleResourceClientTest {
     @Test
     @InSequence(1)
     public void shouldCreateSchedule() throws Exception {
-        URL url = new URL(base, "schedule");
-        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
-        Schedule schedule = new Schedule(TEST_SESSION, TEST_VENUE, LocalDate.now(), LocalTime.now(), Duration.ofHours(1L));
-        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(schedule, MediaType.APPLICATION_JSON_TYPE));
+        Response response = createScheduledSession(TEST_SESSION, TEST_VENUE, LocalDate.now(), LocalTime.now());
         assertEquals(201, response.getStatus());
         String location = response.getHeaderString("location");
         assertNotNull(location);
@@ -92,10 +92,56 @@ public class ScheduleResourceClientTest {
         assertEquals(TEST_VENUE.getName(), jsonObject.getJsonObject("venue").getString("name"));
     }
 
+    @Test
+    @InSequence(3)
+    public void shouldGetScheduledSessionsForVenue() throws Exception {
+        Session microprofile = new Session("Microprofile explained", "David Blevins");
+        Session javaeeNext = new Session("Java EE next", "Bill Shannon");
+        Session payaraMicro = new Session("Payara Micro", "Steve Millidge");
+        Venue moscone = new Venue("Moscone");
+        Venue hilton = new Venue("Hilton");
+        createScheduledSession(microprofile, hilton, LocalDate.now(), LocalTime.now());
+        createScheduledSession(javaeeNext, moscone, LocalDate.now(), LocalTime.now());
+        createScheduledSession(payaraMicro, hilton, LocalDate.now(), LocalTime.now());
+
+        URL url = new URL(base, "schedule?venue=Hilton");
+        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+        assertEquals(200, response.getStatus());
+        JsonArray jsonArray = readJsonArray(response);
+        assertEquals(2, jsonArray.size());
+        assertTrue(isSessionTitlePresent(jsonArray, "Microprofile explained"));
+        assertTrue(isSessionTitlePresent(jsonArray, "Payara Micro"));
+    }
+
+    private boolean isSessionTitlePresent(JsonArray jsonArray, String title) {
+        return jsonArray.stream()
+                .map(scheduleJsonValue -> ((JsonObject) scheduleJsonValue).getJsonObject("session"))
+                .filter(session -> session.getString("title").equals(title))
+                .findAny()
+                .isPresent();
+    }
+
     private static JsonObject readJsonContent(Response response) {
+        JsonReader jsonReader = readJsonStringFromResponse(response);
+        return jsonReader.readObject();
+    }
+
+    private static JsonArray readJsonArray(Response response) {
+        JsonReader jsonReader = readJsonStringFromResponse(response);
+        return jsonReader.readArray();
+    }
+
+    private static JsonReader readJsonStringFromResponse(Response response) {
         String competitionJson = response.readEntity(String.class);
         StringReader stringReader = new StringReader(competitionJson);
-        JsonReader jsonReader = Json.createReader(stringReader);
-        return jsonReader.readObject();
+        return Json.createReader(stringReader);
+    }
+
+    private Response createScheduledSession(Session session, Venue venue, LocalDate date, LocalTime time) throws MalformedURLException {
+        URL url = new URL(base, "schedule");
+        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        Schedule schedule = new Schedule(session, venue, date, time, Duration.ofHours(1L));
+        return target.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(schedule, MediaType.APPLICATION_JSON_TYPE));
     }
 }

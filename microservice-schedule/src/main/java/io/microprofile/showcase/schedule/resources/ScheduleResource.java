@@ -21,8 +21,10 @@ import io.microprofile.showcase.schedule.persistence.ScheduleDAO;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.List;
 
 @Path("/")
 @RequestScoped
@@ -50,4 +52,24 @@ public class ScheduleResource {
             .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
 
+    @GET
+    @Produces("application/json")
+    public Response allForVenue(@QueryParam("venue") String venue) {
+        List<Schedule> schedulesByVenue = scheduleDAO.findByVenue(venue);
+        GenericEntity<List<Schedule>> entity = buildEntity(schedulesByVenue);
+        return Response.ok(entity).build();
+    }
+
+//    public Response activeAtDate(@QueryParam("time") String dateTime) {
+
+//    }
+//
+//    public Response allForDay(@QueryParam("day") String date) {
+//
+//    }
+//
+
+    private GenericEntity<List<Schedule>> buildEntity(final List<Schedule> scheduleList) {
+        return new GenericEntity<List<Schedule>>(scheduleList) {};
+    }
 }
