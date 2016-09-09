@@ -17,3 +17,4 @@ node_modules/
 rebuild.sh
 derby.log
 npm-debug.log
+/update.fork.bat
