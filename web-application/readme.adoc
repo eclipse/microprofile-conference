@@ -3,6 +3,8 @@
 
 == Development
 
+NOTE: The first build will be slow due to the installation of NPM in your user directory under .microprofile
+
 To build and run the application in its own TomEE instance:
 
 ----
