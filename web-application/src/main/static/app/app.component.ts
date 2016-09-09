@@ -1,31 +1,46 @@
 import {Component, enableProdMode} from "@angular/core";
 import {Speaker} from "./speaker/speaker";
+import { SpeakerService } from './speaker/speaker.service';
+import {ScheduleService} from "./schedule/schedule.service";
+import {SessionService} from "./session/session.service";
+import {VoteService} from "./vote/vote.service";
 
 enableProdMode();
 
 @Component({
     selector: 'microprofile-conference',
-    template: `
-  <h1>{{title}}</h1>
-  <h2>Speakers</h2>
-  <ul class="speakers">
-    <li *ngFor="let speaker of speakers"
+    providers: [SpeakerService, ScheduleService, SessionService, VoteService],
+    template: `  
+  <h3>{{title}}</h3>
+  <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action" 
+      *ngFor="let speaker of speakers"
       [class.selected]="speaker === selectedSpeaker"
       (click)="onSelect(speaker)">
       <span class="badge">{{speaker.id}}</span> {{speaker.nameLast}}
-    </li>
-  </ul>
+    </a>
+  </div>
   <speaker [speaker]="selectedSpeaker"></speaker>
 `,
 })
 
 export class AppComponent {
-    title = 'Microprofile Conference';
-    speakers = SPEAKERS;
+    title = 'Speakers';
+    speakers: Speaker[];
+    selectedSpeaker: Speaker;
+
+    constructor(private speakerService: SpeakerService) { }
+
+    getHeroes(): void {
+        this.speakerService.getSpeakers().then(speakers => this.speakers = speakers);
+    }
+
+    ngOnInit(): void {
+        this.getHeroes();
+    }
+
+    onSelect(speaker: Speaker): void {
+        this.selectedSpeaker = speaker;
+    }
 }
 
-const SPEAKERS: Speaker[] = [
-    { id: 'a', nameLast: 'Mr. A', nameFirst: '', organization: '', twitterHandle: '', picture: '', biography: ''},
-    { id: 'b', nameLast: 'Mr. B', nameFirst: '', organization: '', twitterHandle: '', picture: '', biography: ''},
-    { id: 'c', nameLast: 'Mr. C', nameFirst: '', organization: '', twitterHandle: '', picture: '', biography: ''},
-];

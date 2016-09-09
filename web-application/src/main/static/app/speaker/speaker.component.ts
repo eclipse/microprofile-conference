@@ -14,7 +14,7 @@ enableProdMode();
   </div>
   <div>
     <label>Surname: </label>
-    <input [(ngModel)]="speaker.nameLast" placeholder="nameLast">
+    <input type="text" [(ngModel)]="speaker.nameLast" placeholder="nameLast">
   </div>
 </div>  
   `

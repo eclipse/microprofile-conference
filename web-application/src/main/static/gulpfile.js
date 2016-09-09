@@ -88,7 +88,8 @@ gulp.task('js-third-party', function () {
         './node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
         './node_modules/@angular/http/bundles/http.umd.js',
         './node_modules/@angular/router/bundles/router.umd.js',
-        './node_modules/@angular/forms/bundles/forms.umd.js'
+        './node_modules/@angular/forms/bundles/forms.umd.js',
+        './node_modules/es6-promise/dist/es6-promise.min.js'
     ];
 
     var tasks = [];
