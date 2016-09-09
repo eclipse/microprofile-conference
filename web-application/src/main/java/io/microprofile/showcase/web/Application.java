@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2016 Microprofile.io
  *
@@ -14,9 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* app css stylesheet */
+package io.microprofile.showcase.web;
 
-body {
-  padding-top: 20px;
+import javax.ws.rs.ApplicationPath;
+
+@ApplicationPath("/rest")
+public class Application  extends javax.ws.rs.core.Application{
+
+    @Override
+    public String toString() {
+        return "Microprofile Conference";
+    }
 }
-

@@ -15,17 +15,19 @@
  */
 package io.microprofile.showcase.speaker.domain;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.microprofile.showcase.speaker.model.Speaker;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.swizzle.stream.IncludeFilterInputStream;
 import org.codehaus.swizzle.stream.StreamLexer;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -116,7 +118,22 @@ public class VenueJavaOne2016 extends Venue {
             }
         }
 
+        if (speakers.isEmpty()) {
+            try {
+                speakers.addAll(this.getFallback());
+            } catch (final IOException e) {
+                this.log.log(Level.SEVERE, "Failed to read fallback json: " + this.url, e);
+            }
+        }
+
         return speakers;
+    }
+
+    private Set<Speaker> getFallback() throws IOException {
+        final ObjectMapper om = new ObjectMapper();
+        final InputStream is = this.getClass().getResourceAsStream("/JavaOne2016.json");
+        return om.readValue(is, new TypeReference<Set<Speaker>>() {
+        });
     }
 
     private Speaker processSpeakerToken(final String token) {
