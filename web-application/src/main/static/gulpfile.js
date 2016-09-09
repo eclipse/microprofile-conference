@@ -31,6 +31,9 @@ var autoprefixer = require('gulp-autoprefixer');
 var KarmaServer = require('karma').Server;
 var angularTemplateCache = require('gulp-angular-templatecache');
 
+const tscConfig = require('./tsconfig.json');
+const tsProject = ts.createProject('tsconfig.json');
+
 /**
  * Run all css & image tasks
  */
@@ -59,21 +62,11 @@ gulp.task('lint-ts', function () {
 });
 
 gulp.task('compile-ts', function () {
-    return gulp.src('./app/**/*.ts')
+    return tsProject.src()
         .pipe(sourcemaps.init())
-        .pipe(ts({
-            'noImplicitAny': false,
-            'experimentalDecorators': true,
-            'target': 'es5',
-            'allowJs': false,
-            'suppressImplicitAnyIndexErrors': true,
-            'emitDecoratorMetadata': true,
-            'forceConsistentCasingInFileNames': true,
-            'listFiles': true,
-            'sourceMap': true
-        }))
+        .pipe(ts(tscConfig.compilerOptions))
         .pipe(uglify({
-            mangle: false // otherwhise the sourcemap/debugger does not work properly.
+            mangle: false
         }))
         .pipe(sourcemaps.write({includeContent: false}))
         .pipe(gulp.dest(target + '/' + resources + '/app/'));
@@ -124,6 +117,18 @@ gulp.task('js-bundles', function () {
     return es.concat(rxjs, wapi);
 });
 
+gulp.task('jsp', function () {
+    var app = gulp.src([
+        './app/**/*.jsp'
+    ], {base: '.app/'}).pipe(gulp.dest(target + '/' + resources + '/app'));
+
+    var idx = gulp.src([
+        './*.jsp'
+    ]).pipe(gulp.dest(target + '/' + resources + '/'));
+
+    return es.concat(app, idx);
+});
+
 gulp.task('test', function (done) {
     new KarmaServer({
         configFile: __dirname + '/karma.conf.js'
@@ -132,6 +137,7 @@ gulp.task('test', function (done) {
 
 gulp.task('copy-all', function () {
     return gulp.src([
+        target + '/' + resources + '/**/*.jsp',
         target + '/' + resources + '/**/*.css',
         target + '/' + resources + '/**/*.js',
         target + '/' + resources + '/assets'
@@ -148,7 +154,7 @@ gulp.task('clean', function (callback) {
     }, callback);
 });
 
-gulp.task('build', gulpsync.sync(['clean', 'js', 'css', 'copy-all']));
+gulp.task('build', gulpsync.sync(['clean', 'js', 'css', 'jsp', 'copy-all']));
 //gulp.task('build-with-tests', gulpsync.sync(['build', 'test']));
 
 gulp.task('default', gulpsync.sync(['build']), function () {
