@@ -6,7 +6,7 @@
 To build and run the application in its own TomEE instance:
 
 ----
-$ mvn package tomee:run -pl :web-application -DskipTests
+$ mvn clean package tomee:run -pl :web-application -DskipTests
 ----
 
 To make TomEE pick up changes to any static resources, typescript files, templates or style sheets:
@@ -15,3 +15,5 @@ To make TomEE pick up changes to any static resources, typescript files, templat
 $ cd web-application
 $ mvn frontend:gulp
 ----
+
+Hint: Create a run configuration in your IDE for each of the above.

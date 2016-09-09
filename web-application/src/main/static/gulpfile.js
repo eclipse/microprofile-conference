@@ -65,9 +65,11 @@ gulp.task('compile-ts', function () {
             'noImplicitAny': false,
             'experimentalDecorators': true,
             'target': 'es5',
-            'allowJs': true,
+            'allowJs': false,
             'suppressImplicitAnyIndexErrors': true,
             'emitDecoratorMetadata': true,
+            'forceConsistentCasingInFileNames': true,
+            'listFiles': true,
             'sourceMap': true
         }))
         .pipe(uglify({
