@@ -39,6 +39,15 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--SERVICES-->
+        <!--These are here simply to enforce the build order-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>microservice-speaker</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!--3RD PARTY-->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -62,6 +71,21 @@
     <build>
         <finalName>ROOT</finalName>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <attachClasses>true</attachClasses>
+                    <webResources>
+                        <resource>
+                            <directory>target/static-resources</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.tomee.maven</groupId>
                 <artifactId>tomee-maven-plugin</artifactId>
@@ -70,6 +94,62 @@
                     <tomeeClassifier>plus</tomeeClassifier>
                 </configuration>
             </plugin>
+
+            <!--Deals with npm, bower and gulp-->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>install-node-and-npm</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>v6.5.0</nodeVersion>
+                            <npmVersion>3.10.7</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-install</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <!--<execution>-->
+                    <!--<id>bower-install</id>-->
+                    <!--<phase>generate-resources</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>bower</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<arguments>install</arguments>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
+                    <execution>
+                        <id>gulp-build</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <configuration>
+                            <!--<arguments>build-with-tests</arguments>-->
+                            <arguments>build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <installDirectory>${user.home}/.microprofile/node-installation-dir</installDirectory>
+                    <workingDirectory>src/main/static</workingDirectory>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

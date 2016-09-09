@@ -4,10 +4,11 @@
 
 The application consists of several Microservices and a Web-Application managing a conference :
 
-* `microservice-schedule` : schedule of the conference
-* `microservice-session` : sessions of the conference
-* `microservice-speaker` : speakers of the conference
-* `microservice-vote` : votes for each session
+* `microservice-schedule` : Schedule of the conference
+* `microservice-session` : Sessions of the conference
+* `microservice-speaker` : Speakers of the conference
+* `microservice-vote` : Votes for each session
+* `web-application` : Frontend Angular2 | Bootstrap4 | EE7 web application
 
 == Technologies
 
@@ -22,9 +23,33 @@ The application consists of several Microservices and a Web-Application managing
 
 == Development
 
+----
+mvn clean install -DskipTests
+----
+
+=== Run Services
+
+* `microservice-schedule`: TBC
+* `microservice-session` : TBC
+* `microservice-speaker` : TBC
+* `microservice-vote` : TBC
+
+=== Run UI
+
+.Console 1
+----
+mvn clean package tomee:run -pl :web-application -DskipTests
+----
+
+.Console 2
+----
+$ cd web-application
+$ mvn frontend:gulp
+----
 
 == Tests
 
+mvn clean test
 
 == Common problems/bugs
 

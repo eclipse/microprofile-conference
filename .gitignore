@@ -3,6 +3,9 @@
 .settings
 .DS_Store
 target/
+typings/
+bower_components/
+node_modules/
 *.iml
 *.ipr
 *.iws
@@ -13,3 +16,5 @@ target/
 .externalToolBuilders
 rebuild.sh
 derby.log
+npm-debug.log
+/update.fork.bat

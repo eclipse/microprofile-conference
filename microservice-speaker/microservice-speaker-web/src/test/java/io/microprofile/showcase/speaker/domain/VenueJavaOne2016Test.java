@@ -15,10 +15,13 @@
  */
 package io.microprofile.showcase.speaker.domain;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.microprofile.showcase.speaker.model.Speaker;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.InputStream;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -30,6 +33,21 @@ public class VenueJavaOne2016Test {
     public void testGetSpeakers() throws Exception {
 
         final Set<Speaker> speakers = new VenueJavaOne2016().getSpeakers();
+
+        Assert.assertFalse("Failed to get any speakers", speakers.isEmpty());
+
+        for (final Speaker speaker : speakers) {
+            Assert.assertNotNull(speaker.getNameLast());
+            this.log.info(speaker.getNameFirst() + " " + speaker.getNameLast());
+        }
+    }
+
+    @Test
+    public void readSpeakers() throws Exception {
+        final ObjectMapper om = new ObjectMapper();
+        final InputStream is = this.getClass().getResourceAsStream("/speakers.json");
+        final Set<Speaker> speakers = om.readValue(is, new TypeReference<Set<Speaker>>() {
+        });
 
         Assert.assertFalse("Failed to get any speakers", speakers.isEmpty());
 

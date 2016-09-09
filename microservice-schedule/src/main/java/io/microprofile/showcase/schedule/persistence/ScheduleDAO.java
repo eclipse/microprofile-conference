@@ -19,6 +19,7 @@ import io.microprofile.showcase.schedule.model.Schedule;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class ScheduleDAO {
@@ -66,5 +67,12 @@ public class ScheduleDAO {
         if (schedule != null && schedule.getId() != null) {
             scheduleMap.remove(schedule.getId());
         }
+    }
+
+    public List<Schedule> findByVenue(String venue) {
+        return scheduleMap.values()
+                .stream()
+                .filter(schedule -> schedule.getVenue().getName().equals(venue))
+                .collect(Collectors.toList());
     }
 }
