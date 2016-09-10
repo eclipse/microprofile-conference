@@ -45,6 +45,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>microservice-speaker</artifactId>
             <version>${project.version}</version>
+            <type>pom</type>
             <scope>provided</scope>
         </dependency>
 
