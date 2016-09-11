@@ -1,0 +1,23 @@
+<server description="new server">
+
+    <!-- Enable features -->
+
+    <featureManager>
+        <feature>localConnector-1.0</feature>
+	<!--
+        <feature>servlet-3.1</feature>
+        <feature>jaxrs-2.0</feature>
+        <feature>jsonp-1.0</feature>
+	-->
+    </featureManager>
+
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <!-- httpEndpoint httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/-->
+
+	<!-- Automatically expand WAR files and EAR files -->
+	<applicationManager autoExpand="true"/>
+
+    <applicationMonitor updateTrigger="mbean"/>
+
+    <!-- webApplication id="microservice-vote" location="microservice-vote.war" name="microservice-vote"/ -->
+</server>
