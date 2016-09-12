@@ -25,21 +25,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
+import com.ibm.ws.microprofile.sample.conference.vote.store.AttendeeStore;
 
 @Path("/session")
 public class SessionVote {
 
-	private AtomicLong nextAttendeeId = new AtomicLong(0);
-	private Map<Long,Attendee> attendees = new HashMap<Long,Attendee>();
-
+	@Inject
+	AttendeeStore store;
+	
 	private AtomicLong nextSessionId = new AtomicLong(0);
 	private Map<Long,SessionRating> allRatings = new HashMap<Long,SessionRating>();
 
@@ -52,9 +56,7 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
         @Consumes(APPLICATION_JSON)
 	public Attendee registerAttendee(String name) {
-		Long id = nextAttendeeId.incrementAndGet();
-		Attendee attendee = new Attendee(id, name);
-		attendees.put(id, attendee);
+		Attendee attendee = store.createNewAttendee(name);
 		return attendee;  
 	}
 	
@@ -63,10 +65,24 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public Attendee updateAttendee(Attendee attendee) {
-		attendees.put(attendee.getId(), attendee);
-		return attendee;
+		Attendee updated = store.updateAttendee(attendee);
+		return updated;
 	}
 
+	@GET
+	@Path("/attendee")
+	@Produces(APPLICATION_JSON)
+	public Collection<Attendee> listAttendees() {
+		return store.getAllAttendees();
+	}
+	
+	@GET
+	@Path("/attendee/{id}")
+	@Produces(APPLICATION_JSON)
+	public Attendee listAttendees(@PathParam("id") Long id) {
+		return store.getAttendee(id);
+	}
+	
 	@PUT
 	@Path("/rate")
 	@Produces(APPLICATION_JSON)
@@ -153,7 +169,7 @@ public class SessionVote {
 	///////////////////////////////////////////////////////////////////////////////
 	// The following methods are intended for testing only - not part of the API //
 	Collection<Attendee> getAllRegisteredAttendees() {
-		return attendees.values();
+		return store.getAllAttendees();
 	}
 
 	Collection<SessionRating> getAllSessionRatings() {
@@ -161,7 +177,7 @@ public class SessionVote {
 	}
 
 	void clearAllAttendees() {
-		attendees.clear();
+		store.clearAllAttendees();
 	}
 
 	void clearAllRatings() {
