@@ -23,6 +23,7 @@ import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -38,9 +39,7 @@ import java.util.Set;
 /**
  * The Speaker resource
  */
-@Singleton
-@Startup
-@Lock(LockType.READ)
+@ApplicationScoped
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Path("/")
 public class ResourceSpeaker {
@@ -79,7 +78,7 @@ public class ResourceSpeaker {
         return this.speakerDAO.getSpeaker(id).orElse(new Speaker());
     }
 
-    @GET
+    @PUT
     @Path("/search")
     public Set<Speaker> search(final Speaker speaker) {
         return this.speakerDAO.find(speaker).orElse(Collections.emptyNavigableSet());

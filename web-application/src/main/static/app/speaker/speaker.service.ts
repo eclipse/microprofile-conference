@@ -4,7 +4,9 @@ import { Speaker } from './speaker';
 @Injectable()
 export class SpeakerService {
 
+    //noinspection TypeScriptUnresolvedVariable
     getSpeakers(): Promise<Speaker[]> {
+        //noinspection TypeScriptUnresolvedVariable
         return Promise.resolve(SPEAKERS);
     }
 }

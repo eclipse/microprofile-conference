@@ -20,8 +20,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Speaker implements Serializable {
 
