@@ -40,7 +40,7 @@
         <testServerHttpPort>9080</testServerHttpPort>
         <testServerHttpsPort>9443</testServerHttpsPort>
         <warName>vote-service-application</warName>
-        <warVersion>1.0-SNAPSHOT</warVersion>
+        <warVersion>1.0.0-SNAPSHOT</warVersion>
         <!--This is set in the ibm-web-ext.xml file -->
         <warContext>vote</warContext>
         <package.file>${project.build.directory}/${app.name}.zip</package.file>
