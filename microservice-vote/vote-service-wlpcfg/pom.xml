@@ -1,23 +1,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+        <groupId>microprofile-conference</groupId>
         <artifactId>microservice-vote</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
     <artifactId>vote-service-wlpcfg</artifactId>
-    <packaging>pom</packaging>
+    <packaging>liberty-assembly</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>vote-service-application</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+            <artifactId>${warName}</artifactId>
+            <version>${warVersion}</version>
             <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
@@ -26,106 +33,90 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>vote-service-application</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+            <artifactId>${warName}</artifactId>
+            <version>${warVersion}</version>
             <classifier>classes</classifier>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>liberty-profile-tests</id>
-
-            <activation>
-                <property>
-                    <name>!skipTests</name>
-                </property>
-            </activation>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-server-files</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>copy-dependencies</goal>
-                                </goals>
-                            </execution>
-                        </executions>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-server-files</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includeArtifactIds>server-snippet</includeArtifactIds>
+                    <prependGroupId>true</prependGroupId>
+                    <outputDirectory>${project.build.directory}/wlp/usr/servers/${wlpServerName}/configDropins/defaults</outputDirectory>
+                </configuration>
+            </plugin>
+            <!-- Enable liberty-maven plugin -->
+            <plugin>
+                <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <configuration>
+                    <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
+                    <configFile>${basedir}/servers/${wlpServerName}/server.xml</configFile>
+                    <packageFile>${package.file}</packageFile>
+                    <include>${packaging.type}</include>
+                    <bootstrapProperties>
+                        <default.http.port>${testServerHttpPort}</default.http.port>
+                        <default.https.port>${testServerHttpsPort}</default.https.port>
+                    </bootstrapProperties>
+                    <install />
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-server</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start-server</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-server</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop-server</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <!-- Plugin to run functional tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
                         <configuration>
-                            <includeArtifactIds>server-snippet</includeArtifactIds>
-                            <prependGroupId>true</prependGroupId>
-                            <outputDirectory>
-                                ${project.build.directory}/wlp/usr/servers/${wlpServerName}/configDropins/defaults
-                            </outputDirectory>
+                            <includes>
+                                <include>**/it/**</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <liberty.test.port>${testServerHttpPort}</liberty.test.port>
+                                <war.name>${warContext}</war.name>
+                            </systemPropertyVariables>
                         </configuration>
-                    </plugin>
-                    <!-- Enable liberty-maven plugin -->
-                    <plugin>
-                        <groupId>net.wasdev.wlp.maven.plugins</groupId>
-                        <artifactId>liberty-maven-plugin</artifactId>
-                        <version>1.2.1</version>
-                        <configuration>
-                            <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
-                            <configFile>${basedir}/servers/${wlpServerName}/server.xml</configFile>
-                            <packageFile>${package.file}</packageFile>
-                            <include>${packaging.type}</include>
-                            <bootstrapProperties>
-                                <default.http.port>${testServerHttpPort}</default.http.port>
-                                <default.https.port>${testServerHttpsPort}</default.https.port>
-                            </bootstrapProperties>
-                            <install/>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>start-server</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start-server</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>stop-server</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop-server</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                    </plugin>
-                    <!-- Plugin to run functional tests -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>integration-test</id>
-                                <configuration>
-                                    <includes>
-                                        <include>**/it/**</include>
-                                    </includes>
-                                    <systemPropertyVariables>
-                                        <liberty.test.port>${testServerHttpPort}</liberty.test.port>
-                                        <war.name>${warContext}</war.name>
-                                    </systemPropertyVariables>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-
-        </profile>
-    </profiles>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
