@@ -30,6 +30,7 @@
     <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
     <artifactId>microservice-vote</artifactId>
     <name>Conference :: Vote</name>
+    <packaging>pom</packaging>
 
     <properties>
 
