@@ -14,78 +14,202 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>microprofile-conference</groupId>
-        <artifactId>microservice-vote</artifactId>
+        <artifactId>microprofile-conference</artifactId>
+        <groupId>io.microprofile.showcase</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
-    <artifactId>vote-service-application</artifactId>
-    <packaging>war</packaging>
+    <groupId>microprofile-conference</groupId>    
+    <artifactId>microservice-vote</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
     
+    <name>Conference :: Vote</name>
+
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties> 
+        <!-- Liberty server properties -->
+        <wlpServerName>VoteServer</wlpServerName>
+        <testServerHttpPort>9080</testServerHttpPort>
+        <testServerHttpsPort>9443</testServerHttpsPort>
+        <warName>vote-service-application</warName>
+        <warVersion>1.0.0-SNAPSHOT</warVersion>
+        <!--This is set in the ibm-web-ext.xml file -->
+        <warContext>vote</warContext>
+        <package.file>${project.build.directory}/${app.name}.zip</package.file>
+        <packaging.type>usr</packaging.type>
+        
+        <!-- Cloud Foundry/Bluemix properties -->
+        <cf.context>eu-gb.mybluemix.net</cf.context>
+        <cf.target>https://api.eu-gb.bluemix.net</cf.target>
+        <cf.space>dev</cf.space>
+        <cf.context.root>${cf.host}.${cf.context}/${warContext}</cf.context.root>
+        
+        <!-- The Cloud Foundry or Bluemix organization, username and password can be 
+            entered here. -->
+        <!-- <cf.org></cf.org> -->
+        <!-- <cf.username></cf.username> -->
+        <!-- <cf.password></cf.password> -->
+        <!-- This is the host for your app in Bluemix and what it will be called in the dashboard. -->
+        <cf.host>${app.name}</cf.host>
+        
+    <app.name>libertyProject</app.name>
+    </properties>
+    
+    <repositories>
+        <repository>
+            <id>liberty-starter-maven-repo</id>
+            <name>liberty-starter-maven-repo</name>
+        <url>http://liberty-app-accelerator.wasdev.developer.ibm.com/start/api/v1/repo</url>
+        </repository>
+    </repositories>
+
+    <modules>
+        <module>vote-service-application</module>
+        <module>vote-service-wlpcfg</module>
+        <module>vote-service-deploy</module>
+    </modules>
+    
+    
+    <profiles>
+        <profile>
+            <id>localServer</id>
+            <modules>
+                <module>vote-service-deploy/vote-service-localServer</module>
+            </modules>
+        <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>bluemix</id>
+            <modules>
+                <module>vote-service-deploy/vote-service-bluemix</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>runnable</id>
+            <properties>
+                <package.file>${project.build.directory}/${app.name}.jar</package.file>
+                <packaging.type>runnable</packaging.type>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.0.1</version>
+    <dependency>
+            <groupId>net.wasdev.wlp.starters.microprofile</groupId>
+            <artifactId>provided-pom</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>pom</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax.json</groupId>
-            <artifactId>javax.json-api</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
+            <groupId>net.wasdev.wlp.starters.microprofile</groupId>
+            <artifactId>runtime-pom</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <version>1.2</version>
-            <scope>provided</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
         </dependency>
-        
-
-        
-        
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>
-            <!-- Plugin to run unit tests -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <id>default-test</id>
-                        <configuration>
-                            <reportsDirectory>${project.build.directory}/test-reports/unit</reportsDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.1-beta-1</version>
-                <configuration>
-                    <attachClasses>true</attachClasses>
-                </configuration>
-            </plugin -->
-        </plugins>
-    </build>
     
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.6</version>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        <packagingExcludes>pom.xml</packagingExcludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.3</version>
+                    <executions>
+                        <execution>
+                            <id>compile-test</id>
+                            <goals>
+                                <goal>testCompile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.18.1</version>
+                </plugin>
+                <!-- Plugin to run functional tests -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.18.1</version>
+                    <executions>
+                        <execution>
+                            <phase>integration-test</phase>
+                            <id>integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>verify-results</id>
+                            <goals>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <summaryFile>${project.build.directory}/test-reports/fvt/failsafe-summary.xml</summaryFile>
+                        <reportsDirectory>${project.build.directory}/test-reports/fvt</reportsDirectory>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                    <artifactId>liberty-maven-plugin</artifactId>
+                    <version>1.2</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                            <serverName>${wlpServerName}</serverName>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugins</artifactId>
+                    <version>1.4.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.10</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.cloudfoundry</groupId>
+                    <artifactId>cf-maven-plugin</artifactId>
+                    <version>1.1.3</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
