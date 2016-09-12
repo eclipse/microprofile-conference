@@ -1,11 +1,11 @@
 @startuml
 
-class Schedule
-class Session
-class Venue
+class Schedule << Model >>
+class Session << Model >>
+class Venue << Model >>
 
-class ScheduleDAO
-class ScheduleResource
+class ScheduleDAO << DAO >>
+class ScheduleResource << REST Endpoint >>
 
 ScheduleResource ..> ScheduleDAO
 ScheduleDAO ..> Schedule

@@ -17,6 +17,7 @@ package io.microprofile.showcase.schedule.resources;
 
 import io.microprofile.showcase.schedule.model.Schedule;
 import io.microprofile.showcase.schedule.persistence.ScheduleDAO;
+import io.swagger.annotations.Api;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -27,6 +28,7 @@ import java.net.URI;
 import java.util.List;
 
 @Path("/")
+@Api(description = "Schedule REST Endpoint")
 @RequestScoped
 public class ScheduleResource {
 
@@ -39,8 +41,8 @@ public class ScheduleResource {
     public Response add(Schedule schedule) {
         Schedule created = scheduleDAO.addSchedule(schedule);
         return Response.created(URI.create("/" + created.getId()))
-                        .entity(created)
-                        .build();
+            .entity(created)
+            .build();
     }
 
     @GET
@@ -50,6 +52,15 @@ public class ScheduleResource {
         return scheduleDAO.findById(id)
             .map(schedule -> Response.ok(schedule).build())
             .orElse(Response.status(Response.Status.NOT_FOUND).build());
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("/all")
+    public Response allSchedules() {
+        List<Schedule> allSchedules = scheduleDAO.getAllSchedules();
+        GenericEntity<List<Schedule>> entity = buildEntity(allSchedules);
+        return Response.ok(entity).build();
     }
 
     @GET
