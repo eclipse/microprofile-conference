@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
-        <artifactId>vote-service</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>microprofile-conference</groupId>
+        <artifactId>microservice-vote</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     
     <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
