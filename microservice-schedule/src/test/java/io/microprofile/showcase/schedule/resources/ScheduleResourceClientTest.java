@@ -44,11 +44,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
 @RunAsClient
@@ -74,9 +73,7 @@ public class ScheduleResourceClientTest {
     public void shouldCreateSchedule() throws Exception {
         Response response = createScheduledSession(TEST_SESSION, TEST_VENUE, LocalDate.now(), LocalTime.now());
         assertEquals(201, response.getStatus());
-        String location = response.getHeaderString("location");
-        assertNotNull(location);
-        scheduleId = Long.parseLong(location.substring(location.lastIndexOf("/") + 1));
+        scheduleId = getScheduleId(response);
     }
 
     @Test
@@ -100,11 +97,12 @@ public class ScheduleResourceClientTest {
         Session payaraMicro = new Session("Payara Micro", "Steve Millidge");
         Venue moscone = new Venue("Moscone");
         Venue hilton = new Venue("Hilton");
+
         createScheduledSession(microprofile, hilton, LocalDate.now(), LocalTime.now());
         createScheduledSession(javaeeNext, moscone, LocalDate.now(), LocalTime.now());
         createScheduledSession(payaraMicro, hilton, LocalDate.now(), LocalTime.now());
 
-        URL url = new URL(base, "schedule?venue=Hilton");
+        URL url = new URL(base, "schedule/venue/Hilton");
         WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
         Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
         assertEquals(200, response.getStatus());
@@ -112,6 +110,64 @@ public class ScheduleResourceClientTest {
         assertEquals(2, jsonArray.size());
         assertTrue(isSessionTitlePresent(jsonArray, "Microprofile explained"));
         assertTrue(isSessionTitlePresent(jsonArray, "Payara Micro"));
+    }
+
+    @Test
+    @InSequence(4)
+    public void shouldGetActiveScheduledSessions() throws Exception {
+        Session webServices = new Session("Webservices explained", "Forrest Gump");
+        Session designPatterns = new Session("Design Patterns by the Book", "GoF");
+        Session java = new Session("Hello Java", "James Gosling");
+        Venue moscone = new Venue("Moscone");
+
+        createScheduledSession(webServices, moscone, LocalDate.of(1995, 9, 20), LocalTime.of(16, 0));
+        createScheduledSession(designPatterns, moscone, LocalDate.of(1995, 9, 20), LocalTime.of(17, 0));
+        createScheduledSession(java, moscone, LocalDate.of(1995, 9, 21), LocalTime.of(16, 0));
+
+        URL url = new URL(base, "schedule/active/" + LocalDateTime.of(1995, 9, 20, 17, 34, 29));
+        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+        assertEquals(200, response.getStatus());
+        JsonArray jsonArray = readJsonArray(response);
+        assertEquals(1, jsonArray.size());
+        assertTrue(isSessionTitlePresent(jsonArray, "Design Patterns by the Book"));
+    }
+
+    @Test
+    @InSequence(5)
+    public void shouldGetScheduledSessionsByDate() throws Exception {
+        URL url = new URL(base, "schedule/all/" + LocalDate.of(1995, 9, 20));
+        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+        assertEquals(200, response.getStatus());
+        JsonArray jsonArray = readJsonArray(response);
+        assertEquals(2, jsonArray.size());
+        assertTrue(isSessionTitlePresent(jsonArray, "Webservices explained"));
+        assertTrue(isSessionTitlePresent(jsonArray, "Design Patterns by the Book"));
+    }
+
+    @Test
+    @InSequence(6)
+    public void shouldRemoveSchedule() throws Exception {
+        Session removeMe = new Session("Java EE is dead", "Awkward author");
+        Venue notOurConf = new Venue("Far far away");
+        Response createResponse = createScheduledSession(removeMe, notOurConf, LocalDate.now(), LocalTime.now());
+        Long removeId = getScheduleId(createResponse);
+
+        URL url = new URL(base, "schedule/" + removeId);
+        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        Response deleteResponse = target.request(MediaType.APPLICATION_JSON_TYPE).delete();
+        assertEquals(204, deleteResponse.getStatus());
+
+        URL checkUrl = new URL(base, "schedule/" + removeId);
+        WebTarget checkTarget = ClientBuilder.newClient().target(checkUrl.toExternalForm());
+        Response checkResponse = checkTarget.request(MediaType.APPLICATION_JSON_TYPE).get();
+        assertEquals(404, checkResponse.getStatus());
+    }
+
+    private long getScheduleId(Response response) {
+        String location = response.getHeaderString("location");
+        return Long.parseLong(location.substring(location.lastIndexOf("/") + 1));
     }
 
     private boolean isSessionTitlePresent(JsonArray jsonArray, String title) {
