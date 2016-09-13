@@ -82,9 +82,9 @@ public class ScheduleDAO {
         return schedule;
     }
 
-    public void deleteSchedule(Schedule schedule) {
-        if (schedule != null && schedule.getId() != null) {
-            scheduleMap.remove(schedule.getId());
+    public void deleteSchedule(Long scheduleId) {
+        if (scheduleId != null) {
+            scheduleMap.remove(scheduleId);
         }
     }
 
@@ -93,5 +93,12 @@ public class ScheduleDAO {
             .stream()
             .filter(schedule -> schedule.getVenue().getName().equals(venue))
             .collect(Collectors.toList());
+    }
+
+    public List<Schedule> findByDate(LocalDate date) {
+        return scheduleMap.values()
+                .stream()
+                .filter(schedule -> schedule.getDate().equals(date))
+                .collect(Collectors.toList());
     }
 }
