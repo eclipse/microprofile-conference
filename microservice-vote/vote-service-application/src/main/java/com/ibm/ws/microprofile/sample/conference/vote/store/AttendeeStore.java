@@ -32,4 +32,6 @@ public interface AttendeeStore {
 
 	Attendee getAttendee(Long id);
 
+	Attendee deleteAttendee(Long id);
+
 }

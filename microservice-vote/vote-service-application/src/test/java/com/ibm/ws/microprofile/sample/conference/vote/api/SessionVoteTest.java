@@ -30,6 +30,7 @@ import org.junit.Test;
 import com.ibm.ws.microprofile.sample.conference.vote.api.SessionVote;
 import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
+import com.ibm.ws.microprofile.sample.conference.vote.store.HashMapAttendeeStore;
 
 public class SessionVoteTest {
 
@@ -38,6 +39,8 @@ public class SessionVoteTest {
 	@BeforeClass
 	public static void beforeClass() {
 		sessionVote = new SessionVote();
+		//Fake the CDI Injection
+		sessionVote.store = new HashMapAttendeeStore();
 	}
 	
 	@Before
@@ -70,7 +73,7 @@ public class SessionVoteTest {
 		Attendee jonDoe = new Attendee(id, "Jon Doe");
 		
 		// API method under test:
-		Attendee attendee = sessionVote.updateAttendee(jonDoe);
+		Attendee attendee = sessionVote.updateAttendee(id, jonDoe);
 		assertEquals("Attendee's name was not updated as expected", "Jon Doe", attendee.getName());
 		assertEquals("Attendee's ID was updated when it was expected to stay the same", id, attendee.getId());
 
@@ -78,6 +81,41 @@ public class SessionVoteTest {
 		Collection<Attendee> attendees = sessionVote.getAllRegisteredAttendees();
 		assertEquals("An unexpected number of attendees have been registered", 1, attendees.size());
 		assertTrue("The session vote service is missing the updated attendee", attendees.contains(jonDoe));
+	}
+	
+	@Test
+	public void testGetAttendee() {
+		Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
+		long id = jonathanDoe.getId();
+		
+		// API method under test:
+		Attendee attendee = sessionVote.getAttendee(id);
+		assertEquals("Attendee's name was not retrieved as expected", "Jonathan Doe", attendee.getName());
+		assertEquals("Attendee's ID was not retrieved as expected", id, attendee.getId());
+
+		// Now verify that there is only one attendee in the system, and that it is the correct one:
+		Collection<Attendee> attendees = sessionVote.getAllRegisteredAttendees();
+		assertEquals("An unexpected number of attendees have been registered", 1, attendees.size());
+		assertTrue("The session vote service is missing the updated attendee", attendees.contains(jonathanDoe));
+	}
+	
+	@Test
+	public void testDeleteAttendee() {
+		Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
+		long id = jonathanDoe.getId();
+		
+		Attendee attendee = sessionVote.getAttendee(id);
+		assertEquals("Attendee's name was not retrieved as expected", "Jonathan Doe", attendee.getName());
+		assertEquals("Attendee's ID was not retrieved as expected", id, attendee.getId());
+		
+		// API method under test:
+		Attendee deleted = sessionVote.deleteAttendee(id);
+		assertEquals("Attendee's name was not retrieved as expected", "Jonathan Doe", deleted.getName());
+		assertEquals("Attendee's ID was not retrieved as expected", id, deleted.getId());
+
+		// Now verify that there are no attendees in the system
+		Collection<Attendee> attendees = sessionVote.getAllRegisteredAttendees();
+		assertEquals("An unexpected number of attendees have been registered", 0, attendees.size());
 	}
 
 	@Test

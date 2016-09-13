@@ -61,4 +61,9 @@ public class HashMapAttendeeStore implements AttendeeStore {
 		return attendees.get(id);
 	}
 
+	@Override
+	public Attendee deleteAttendee(Long id) {
+		return attendees.remove(id);
+	}
+
 }
