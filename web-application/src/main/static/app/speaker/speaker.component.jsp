@@ -1,4 +1,3 @@
-<h1>SPEAKER</h1>
 <div *ngIf="speaker">
     <h1>{{title}}</h1>
     <h2>{{speaker.nameLast}} details!</h2>
