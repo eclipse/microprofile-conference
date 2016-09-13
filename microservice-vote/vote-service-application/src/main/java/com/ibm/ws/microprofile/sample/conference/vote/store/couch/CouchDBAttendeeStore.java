@@ -14,51 +14,54 @@
  * limitations under the License.
  */
 
-package com.ibm.ws.microprofile.sample.conference.vote.store;
+package com.ibm.ws.microprofile.sample.conference.vote.store.couch;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
+import com.ibm.ws.microprofile.sample.conference.vote.store.AttendeeStore;
+import com.ibm.ws.microprofile.sample.conference.vote.store.Persistent;
 
 @ApplicationScoped
 @Persistent
 public class CouchDBAttendeeStore implements AttendeeStore {
 
-	private AtomicLong nextAttendeeId = new AtomicLong(0);
-	private Map<Long,Attendee> attendees = new HashMap<Long,Attendee>();
-	
 	@Override
 	public Attendee createNewAttendee(String name) {
-		Long id = nextAttendeeId.incrementAndGet();
-		Attendee attendee = new Attendee(id, name);
-		attendees.put(id, attendee);
-		return attendee;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public Attendee updateAttendee(Attendee attendee) {
-		attendees.put(attendee.getId(), attendee);
-		return attendee;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public Collection<Attendee> getAllAttendees() {
-		return attendees.values();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public void clearAllAttendees() {
-		attendees.clear();
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public Attendee getAttendee(Long id) {
-		return attendees.get(id);
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Attendee deleteAttendee(Long id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

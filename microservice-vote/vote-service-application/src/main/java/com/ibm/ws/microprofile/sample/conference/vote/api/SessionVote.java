@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -37,11 +38,13 @@ import javax.ws.rs.Produces;
 import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
 import com.ibm.ws.microprofile.sample.conference.vote.store.AttendeeStore;
+import com.ibm.ws.microprofile.sample.conference.vote.store.NonPersistent;
 
 @Path("/session")
 public class SessionVote {
 
 	@Inject
+	@NonPersistent
 	AttendeeStore store;
 	
 	private AtomicLong nextSessionId = new AtomicLong(0);
@@ -51,7 +54,7 @@ public class SessionVote {
 
 	private Map<Long,List<Long>> ratingIdsByAttendee = new HashMap<Long,List<Long>>();
 
-	@PUT
+	@POST
 	@Path("/attendee")
 	@Produces(APPLICATION_JSON)
         @Consumes(APPLICATION_JSON)
@@ -60,11 +63,11 @@ public class SessionVote {
 		return attendee;  
 	}
 	
-	@POST
-	@Path("/attendee")
+	@PUT
+	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-	public Attendee updateAttendee(Attendee attendee) {
+	public Attendee updateAttendee(@PathParam("id") Long id, Attendee attendee) {
 		Attendee updated = store.updateAttendee(attendee);
 		return updated;
 	}
@@ -79,8 +82,15 @@ public class SessionVote {
 	@GET
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
-	public Attendee listAttendees(@PathParam("id") Long id) {
+	public Attendee getAttendee(@PathParam("id") Long id) {
 		return store.getAttendee(id);
+	}
+	
+	@DELETE
+	@Path("/attendee/{id}")
+	@Produces(APPLICATION_JSON)
+	public Attendee deleteAttendee(@PathParam("id") Long id) {
+		return store.deleteAttendee(id);
 	}
 	
 	@PUT
