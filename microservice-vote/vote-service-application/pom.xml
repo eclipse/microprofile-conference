@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+        <groupId>microprofile-conference</groupId>
         <artifactId>microservice-vote</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -18,28 +18,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties> 
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>
-            <!-- Plugin to run unit tests -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <id>default-test</id>
-                        <configuration>
-                            <reportsDirectory>${project.build.directory}/test-reports/unit</reportsDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
     <dependencies>
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -66,4 +44,35 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+            <!-- Plugin to run unit tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <id>default-test</id>
+                        <configuration>
+                            <reportsDirectory>${project.build.directory}/test-reports/unit</reportsDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1-beta-1</version>
+                <configuration>
+                    <attachClasses>true</attachClasses>
+                </configuration>
+            </plugin -->
+        </plugins>
+    </build>
+    
 </project>
