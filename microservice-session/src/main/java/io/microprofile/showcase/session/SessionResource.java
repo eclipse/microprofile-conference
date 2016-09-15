@@ -15,10 +15,12 @@
  */
 package io.microprofile.showcase.session;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -36,10 +38,13 @@ import javax.ws.rs.core.MediaType;
 @ApplicationScoped
 public class SessionResource {
 
+    @Inject
+    private Schedule schedule;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Session> allSessions() throws Exception {
-        return Collections.EMPTY_LIST;
+    public Collection<Session> allSessions() throws Exception {
+        return schedule.getSessions();
     }
 
     @POST
@@ -89,4 +94,6 @@ public class SessionResource {
     @Path("/{sessionId}/speakers/{speakerId}")
     public void removeSessionSpeaker(@PathParam("sessionId") Long sessionId, @PathParam("speakerId") Long speakerId) throws Exception {
     }
+
+
 }
