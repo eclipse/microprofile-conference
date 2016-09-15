@@ -18,13 +18,10 @@ package com.ibm.ws.microprofile.sample.conference.vote.api;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -37,29 +34,47 @@ import javax.ws.rs.Produces;
 
 import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
-import com.ibm.ws.microprofile.sample.conference.vote.store.AttendeeStore;
-import com.ibm.ws.microprofile.sample.conference.vote.store.NonPersistent;
-
+import com.ibm.ws.microprofile.sample.conference.vote.persistence.AttendeeDAO;
+import com.ibm.ws.microprofile.sample.conference.vote.persistence.NonPersistent;
+import com.ibm.ws.microprofile.sample.conference.vote.persistence.Persistent;
+import com.ibm.ws.microprofile.sample.conference.vote.persistence.SessionRatingDAO;
+@ApplicationScoped
 @Path("/session")
 public class SessionVote {
 
-	@Inject
-	@NonPersistent
-	AttendeeStore store;
+	private @Inject @Persistent AttendeeDAO hashMapAttendeeDAO;
+	private @Inject @NonPersistent AttendeeDAO couchDBAttendeeDAO;
 	
-	private AtomicLong nextSessionId = new AtomicLong(0);
-	private Map<Long,SessionRating> allRatings = new HashMap<Long,SessionRating>();
-
-	private Map<String,List<Long>> ratingIdsBySession = new HashMap<String,List<Long>>();
-
-	private Map<Long,List<Long>> ratingIdsByAttendee = new HashMap<Long,List<Long>>();
-
+	private @Inject @NonPersistent SessionRatingDAO hashMapSessionRatingDAO;
+	private @Inject @Persistent SessionRatingDAO couchDBSessionRatingDAO;
+	
+	private AttendeeDAO selectedAttendeeDAO;
+	private SessionRatingDAO selectedSessionRatingDAO;
+	
+	@PostConstruct
+	private void setAttendeeSessionRating()
+	{
+		if (couchDBAttendeeDAO.isAccessible()) {
+			selectedAttendeeDAO = 	couchDBAttendeeDAO;
+			selectedSessionRatingDAO = couchDBSessionRatingDAO;
+		} else {
+			selectedAttendeeDAO = 	hashMapAttendeeDAO;
+			selectedSessionRatingDAO = hashMapSessionRatingDAO;
+		}
+	}
+	
+	public void setAttendeeSessionRating(AttendeeDAO attendee, SessionRatingDAO rating) {
+		this.selectedAttendeeDAO = attendee;
+		this.selectedSessionRatingDAO = rating;
+	}
+	
 	@POST
 	@Path("/attendee")
 	@Produces(APPLICATION_JSON)
-        @Consumes(APPLICATION_JSON)
+    @Consumes(APPLICATION_JSON)
 	public Attendee registerAttendee(String name) {
-		Attendee attendee = store.createNewAttendee(name);
+		
+		Attendee attendee = selectedAttendeeDAO.createNewAttendee(name);		
 		return attendee;  
 	}
 	
@@ -67,8 +82,8 @@ public class SessionVote {
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-	public Attendee updateAttendee(@PathParam("id") Long id, Attendee attendee) {
-		Attendee updated = store.updateAttendee(attendee);
+	public Attendee updateAttendee(@PathParam("id") String id, Attendee attendee) {
+		Attendee updated = selectedAttendeeDAO.updateAttendee(attendee);
 		return updated;
 	}
 
@@ -76,84 +91,65 @@ public class SessionVote {
 	@Path("/attendee")
 	@Produces(APPLICATION_JSON)
 	public Collection<Attendee> listAttendees() {
-		return store.getAllAttendees();
+		return selectedAttendeeDAO.getAllAttendees();
 	}
 	
 	@GET
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
-	public Attendee getAttendee(@PathParam("id") Long id) {
-		return store.getAttendee(id);
+	public Attendee getAttendee(@PathParam("id") String id) {
+		
+		return selectedAttendeeDAO.getAttendee(id);
 	}
 	
 	@DELETE
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
-	public Attendee deleteAttendee(@PathParam("id") Long id) {
-		return store.deleteAttendee(id);
+	public void deleteAttendee(@PathParam("id") String id) {
+		 selectedAttendeeDAO.deleteAttendee(String.valueOf(id));
 	}
 	
-	@PUT
+	@POST
 	@Path("/rate")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public SessionRating rateSession(SessionRating sessionRating) {
-		long id = nextSessionId.incrementAndGet();
-		String session = sessionRating.getSession();
-		long attendeeId = sessionRating.getAttendeeId();
-		int rating = sessionRating.getRating();
-		SessionRating sr = new SessionRating(id, session, attendeeId, rating);
-		allRatings.put(id, sr);
-
-		List<Long> sessionRatings = ratingIdsByAttendee.get(attendeeId);
-		if (sessionRatings == null) {
-			sessionRatings = new ArrayList<Long>();
-			ratingIdsByAttendee.put(attendeeId, sessionRatings);
-		}
-		sessionRatings.add(id);
-
-		sessionRatings = ratingIdsBySession.get(session);
-		if (sessionRatings == null) {
-			sessionRatings = new ArrayList<Long>();
-			ratingIdsBySession.put(session, sessionRatings);
-		}
-		sessionRatings.add(id);
-
-		return sr;
+		
+		SessionRating rating = selectedSessionRatingDAO.rateSession(sessionRating);
+		return rating;
+		
 	}
 
-	@POST
-	@Path("/rate")
+	@PUT
+	@Path("/rate/{id}")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-	public SessionRating updateRating(SessionRating newRating) {
-		allRatings.put(newRating.getId(), newRating);
+	public SessionRating updateRating(@PathParam("id") String id, SessionRating newRating) {
+		selectedSessionRatingDAO.updateRating(newRating);
+		
 		return newRating;
 	}
+	@DELETE
+	@Path("/rate/{id}")
+	@Produces(APPLICATION_JSON)
+	public void deleteRating(@PathParam("id") String id) {
+		selectedSessionRatingDAO.deleteRating(id);
+	}
 
-	@POST
+	@GET
 	@Path("/ratingsBySession")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-	public List<SessionRating> allSessionVotes(String sessionId) {
-		System.out.println("> allSessionVotes() " + sessionId);
-		for (Map.Entry<String, List<Long>> entry : ratingIdsBySession.entrySet()) {
-			System.out.println(entry.getKey() + " = " + entry.getValue());
-		}
-		List<SessionRating> allSessionVotes = new ArrayList<SessionRating>();
-		List<Long> ids = ratingIdsBySession.get(sessionId);
-		for (Long id : ids) {
-			allSessionVotes.add(allRatings.get(id));
-		}
-		return allSessionVotes;
+	public Collection<SessionRating> allSessionVotes(String sessionId) {
+		return selectedSessionRatingDAO.getRatingsBySession(sessionId);
 	}
 
-	@POST
+	@GET
 	@Path("/averageRatingBySession")
 	//@Produces(APPLICATION_JSON)
     //@Consumes(APPLICATION_JSON)
 	public double sessionRatingAverage(String sessionId) {
-		List<SessionRating> allSessionVotes = allSessionVotes(sessionId);
+		Collection<SessionRating> allSessionVotes = allSessionVotes(sessionId);
 		int denominator = allSessionVotes.size();
 		int numerator = 0;
 		for (SessionRating rating : allSessionVotes) {
@@ -162,37 +158,30 @@ public class SessionVote {
 		return ((double) numerator / denominator);
 	}
 
-	@POST
+	@GET
 	@Path("/ratingsByAttendee")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-	public List<SessionRating> votesByAttendee(Attendee attendee) {
-		List<SessionRating> allAttendeeVotes = new ArrayList<SessionRating>();
-		List<Long> ids = ratingIdsByAttendee.get(attendee.getId());
-		for (Long id : ids) {
-			allAttendeeVotes.add(allRatings.get(id));
-		}
-		return allAttendeeVotes;
+	public Collection<SessionRating> votesByAttendee(Attendee attendee) {
+		return selectedSessionRatingDAO.getRatingsByAttendee(attendee);
 	}
 	
 
 	///////////////////////////////////////////////////////////////////////////////
 	// The following methods are intended for testing only - not part of the API //
 	Collection<Attendee> getAllRegisteredAttendees() {
-		return store.getAllAttendees();
+		return selectedAttendeeDAO.getAllAttendees();
 	}
 
 	Collection<SessionRating> getAllSessionRatings() {
-		return allRatings.values();
+		return selectedSessionRatingDAO.getAllRatings();
 	}
-
+	
 	void clearAllAttendees() {
-		store.clearAllAttendees();
+		selectedAttendeeDAO.clearAllAttendees();
 	}
 
 	void clearAllRatings() {
-		allRatings.clear();
-		ratingIdsByAttendee.clear();
-		ratingIdsBySession.clear();
+		selectedSessionRatingDAO.clearAllRatings();
 	}
 }
