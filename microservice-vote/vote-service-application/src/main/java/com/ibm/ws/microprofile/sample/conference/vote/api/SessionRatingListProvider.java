@@ -69,15 +69,15 @@ public class SessionRatingListProvider implements MessageBodyReader<List<Session
 			for (int i = 0 ; i <arr.size(); i++) {
 				JsonObject sessionRatingJson = arr.getJsonObject(i);//rdr.readObject();
 				if (isDebugEnabled()) System.out.println(sessionRatingJson);
-				JsonNumber idJson = sessionRatingJson.getJsonNumber("id");
+				JsonString idJson = sessionRatingJson.getJsonString("id");
 				JsonString sessionJson = sessionRatingJson.getJsonString("session");
-				JsonNumber attendeeIdJson = sessionRatingJson.getJsonNumber("attendeeId");
+				JsonString attendeeIdJson = sessionRatingJson.getJsonString("attendeeId");
 				int rating = sessionRatingJson.getInt("rating");
 				SessionRating sessionRating;
 				if (idJson != null) {
-					sessionRating = new SessionRating(idJson.longValue(), sessionJson.getString(), attendeeIdJson.longValue(), rating);
+					sessionRating = new SessionRating(idJson.getString(), sessionJson.getString(), attendeeIdJson.getString(), rating);
 				} else {
-					sessionRating = new SessionRating(sessionJson.getString(), attendeeIdJson.longValue(), rating);
+					sessionRating = new SessionRating(sessionJson.getString(), attendeeIdJson.getString(), rating);
 				}
 				ratings.add(sessionRating);
 			}

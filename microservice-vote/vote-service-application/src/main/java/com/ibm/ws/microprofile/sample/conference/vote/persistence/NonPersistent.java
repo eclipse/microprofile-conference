@@ -13,25 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.ibm.ws.microprofile.sample.conference.vote.persistence;
 
-package com.ibm.ws.microprofile.sample.conference.vote.store;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.util.Collection;
+import javax.inject.Qualifier;
 
-import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
-
-public interface AttendeeStore {
-
-	Attendee createNewAttendee(String name);
-
-	Attendee updateAttendee(Attendee attendee);
-
-	Collection<Attendee> getAllAttendees();
-
-	void clearAllAttendees();
-
-	Attendee getAttendee(Long id);
-
-	Attendee deleteAttendee(Long id);
+@Qualifier
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE,ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PARAMETER})
+public @interface NonPersistent {
 
 }
