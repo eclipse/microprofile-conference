@@ -27,12 +27,12 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <artifactId>microservice-speaker</artifactId>
+    <name>Conference :: Speaker</name>
+
     <modules>
         <module>microservice-speaker-model</module>
         <module>microservice-speaker-web</module>
     </modules>
-
-    <artifactId>microservice-speaker</artifactId>
-    <name>Conference :: Speaker</name>
 
 </project>

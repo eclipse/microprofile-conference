@@ -5,18 +5,19 @@
 
     <parent>
         <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
-        <artifactId>vote-service</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>microservice-vote</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
     <artifactId>vote-service-application</artifactId>
     <packaging>war</packaging>
-    
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties> 
+
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -37,13 +38,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.1-beta-1</version>
-                <configuration>
-                    <attachClasses>true</attachClasses>
-                </configuration>
             </plugin>
         </plugins>
     </build>
