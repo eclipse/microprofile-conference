@@ -38,6 +38,7 @@ import com.ibm.ws.microprofile.sample.conference.vote.persistence.AttendeeDAO;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.NonPersistent;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.Persistent;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.SessionRatingDAO;
+
 @ApplicationScoped
 @Path("/session")
 public class SessionVote {
@@ -73,8 +74,7 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public Attendee registerAttendee(String name) {
-		
-		Attendee attendee = selectedAttendeeDAO.createNewAttendee(name);		
+		Attendee attendee = selectedAttendeeDAO.createNewAttendee(new Attendee(name));
 		return attendee;  
 	}
 	
@@ -83,6 +83,7 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public Attendee updateAttendee(@PathParam("id") String id, Attendee attendee) {
+		attendee.setID(id);
 		Attendee updated = selectedAttendeeDAO.updateAttendee(attendee);
 		return updated;
 	}
@@ -98,7 +99,6 @@ public class SessionVote {
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
 	public Attendee getAttendee(@PathParam("id") String id) {
-		
 		return selectedAttendeeDAO.getAttendee(id);
 	}
 	
@@ -106,7 +106,7 @@ public class SessionVote {
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
 	public void deleteAttendee(@PathParam("id") String id) {
-		 selectedAttendeeDAO.deleteAttendee(String.valueOf(id));
+		 selectedAttendeeDAO.deleteAttendee(id);
 	}
 	
 	@POST
@@ -114,10 +114,8 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public SessionRating rateSession(SessionRating sessionRating) {
-		
 		SessionRating rating = selectedSessionRatingDAO.rateSession(sessionRating);
 		return rating;
-		
 	}
 
 	@PUT
