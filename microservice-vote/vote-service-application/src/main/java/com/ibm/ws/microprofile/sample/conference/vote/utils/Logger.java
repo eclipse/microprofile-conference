@@ -22,13 +22,12 @@ import javax.annotation.Priority;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import javax.ws.rs.Priorities;
 
 @Log
 @Interceptor
-@Priority(Logger.LOG_INTERCEPTOR_PRIORITY)
+@Priority(Priorities.USER)
 public class Logger {
-
-	static final int LOG_INTERCEPTOR_PRIORITY = 100;
 	 
 	@AroundInvoke
 	public Object Log(InvocationContext context) throws Exception {
