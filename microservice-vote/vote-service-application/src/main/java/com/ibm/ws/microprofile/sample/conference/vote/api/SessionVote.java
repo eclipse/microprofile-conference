@@ -21,7 +21,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -38,7 +38,7 @@ import com.ibm.ws.microprofile.sample.conference.vote.persistence.AttendeeDAO;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.NonPersistent;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.Persistent;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.SessionRatingDAO;
-@RequestScoped
+@ApplicationScoped
 @Path("/session")
 public class SessionVote {
 

@@ -25,7 +25,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import javax.json.Json;
-import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonString;
@@ -60,9 +59,9 @@ public class AttendeeProvider implements MessageBodyReader<Attendee>, MessageBod
 		try {
 		     rdr = Json.createReader(is);
 		     JsonObject attendeeJson = rdr.readObject();
-		     JsonNumber idJson = attendeeJson.getJsonNumber("id");
+		     JsonString idJson = attendeeJson.getJsonString("id");
 		     JsonString nameJson = attendeeJson.getJsonString("name");
-		     Attendee attendee = new Attendee(String.valueOf(idJson.longValue()), nameJson.getString());
+		     Attendee attendee = new Attendee(idJson.toString(), nameJson.getString());
 		     return attendee;
 		} finally {
 			if (rdr != null) {
