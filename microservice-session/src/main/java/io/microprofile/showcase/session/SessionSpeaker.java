@@ -15,8 +15,36 @@
  */
 package io.microprofile.showcase.session;
 
+import javax.json.JsonObject;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @author Ken Finnigan
+ * @author Heiko Braun
  */
 public class SessionSpeaker {
+
+    private JsonObject underlying;
+
+    public SessionSpeaker(JsonObject underlying) {
+        this.underlying = underlying;
+    }
+
+    @JsonIgnore
+    public JsonObject getUnderlying() {
+        return underlying;
+    }
+
+    public String getFullName() {
+        return underlying.getString("fullName");
+    }
+
+    public String getJobTitle() {
+        return underlying.getString("jobTitle", "n/a");
+    }
+
+    public String getCompany() {
+        return underlying.getString("company", "n/a");
+    }
 }
