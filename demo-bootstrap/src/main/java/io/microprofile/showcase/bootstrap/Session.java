@@ -13,27 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.microprofile.showcase.session;
+package io.microprofile.showcase.bootstrap;
 
 import java.util.Collection;
 import java.util.Collections;
 
 import javax.json.JsonObject;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * @author Ken Finnigan
  * @author Heiko Braun
  */
-public class Session {
+public class Session extends JsonWrapper {
 
-    private JsonObject underlying;
+    private int schedule;
 
-    private Collection<SessionSpeaker> speakers = Collections.EMPTY_SET;
+    private Collection<Integer> speakers = Collections.EMPTY_SET;
 
     Session(JsonObject underlying) {
-        this.underlying = underlying;
+        super(underlying);
     }
 
     public String getAbstract() {
@@ -52,37 +50,25 @@ public class Session {
         return underlying.getString("type");
     }
 
-    public int getLength() {
-        return getTimes().getInt("length");
-    }
-
-    public String getDate() {
-        return getTimes().getString("date");
-    }
-
-    public String getStartTime() {
-        return getTimes().getString("startTime");
-    }
-
-    private JsonObject getTimes() {
-        return underlying.getJsonArray("times").getJsonObject(0);
-    }
-
-    @JsonIgnore
-    JsonObject getUnderlying() {
-        return underlying;
-    }
-
-    void setSpeakers(Collection<SessionSpeaker> speakers) {
+    void setSpeakers(Collection<Integer> speakers) {
         this.speakers = speakers;
     }
 
-    public Collection<SessionSpeaker> getSpeakers() {
+    public Collection<Integer> getSpeakers() {
         return speakers;
+    }
+
+    void setSchedule(int schedule) {
+        this.schedule = schedule;
+    }
+
+    public int getSchedule() {
+        return schedule;
     }
 
     @Override
     public String toString() {
-        return "Session { code="+getCode() + ", title="+getTitle()+"}";
+        return getId() + "::"+getCode();
     }
+
 }
