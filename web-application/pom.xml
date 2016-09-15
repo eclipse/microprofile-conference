@@ -115,6 +115,9 @@
 
                     <webapps>
                         <webapp>${project.groupId}:microservice-speaker-web:${project.version}</webapp>
+                        <webapp>${project.groupId}:microservice-session:${project.version}</webapp>
+                        <webapp>${project.groupId}:microservice-schedule:${project.version}</webapp>
+                        <webapp>com.ibm.ws.microprofile.sample.conference:vote-service-application:${project.version}</webapp>
                     </webapps>
                 </configuration>
             </plugin>
