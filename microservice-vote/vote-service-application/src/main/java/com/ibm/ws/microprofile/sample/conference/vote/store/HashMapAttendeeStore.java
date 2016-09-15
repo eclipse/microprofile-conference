@@ -30,12 +30,12 @@ import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 public class HashMapAttendeeStore implements AttendeeStore {
 
 	private AtomicLong nextAttendeeId = new AtomicLong(0);
-	private Map<Long,Attendee> attendees = new HashMap<Long,Attendee>();
+	private Map<String,Attendee> attendees = new HashMap<String,Attendee>();
 	
 	@Override
-	public Attendee createNewAttendee(String name) {
-		Long id = nextAttendeeId.incrementAndGet();
-		Attendee attendee = new Attendee(id, name);
+	public Attendee createNewAttendee(Attendee attendee) {
+		String id = ""+nextAttendeeId.incrementAndGet();
+		attendee = new Attendee(id, attendee.getName());
 		attendees.put(id, attendee);
 		return attendee;
 	}
@@ -57,12 +57,12 @@ public class HashMapAttendeeStore implements AttendeeStore {
 	}
 
 	@Override
-	public Attendee getAttendee(Long id) {
+	public Attendee getAttendee(String id) {
 		return attendees.get(id);
 	}
 
 	@Override
-	public Attendee deleteAttendee(Long id) {
+	public Attendee deleteAttendee(String id) {
 		return attendees.remove(id);
 	}
 

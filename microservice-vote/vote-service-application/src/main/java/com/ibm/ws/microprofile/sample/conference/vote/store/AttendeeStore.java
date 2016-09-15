@@ -22,7 +22,7 @@ import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 
 public interface AttendeeStore {
 
-	Attendee createNewAttendee(String name);
+	Attendee createNewAttendee(Attendee attendee);
 
 	Attendee updateAttendee(Attendee attendee);
 
@@ -30,8 +30,8 @@ public interface AttendeeStore {
 
 	void clearAllAttendees();
 
-	Attendee getAttendee(Long id);
+	Attendee getAttendee(String id);
 
-	Attendee deleteAttendee(Long id);
+	Attendee deleteAttendee(String id);
 
 }

@@ -69,7 +69,7 @@ public class SessionVoteTest {
 	@Test
 	public void testUpdateAttendee() {
 		Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
-		long id = jonathanDoe.getId();
+		String id = jonathanDoe.getId();
 		Attendee jonDoe = new Attendee(id, "Jon Doe");
 		
 		// API method under test:
@@ -86,7 +86,7 @@ public class SessionVoteTest {
 	@Test
 	public void testGetAttendee() {
 		Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
-		long id = jonathanDoe.getId();
+		String id = jonathanDoe.getId();
 		
 		// API method under test:
 		Attendee attendee = sessionVote.getAttendee(id);
@@ -102,7 +102,7 @@ public class SessionVoteTest {
 	@Test
 	public void testDeleteAttendee() {
 		Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
-		long id = jonathanDoe.getId();
+		String id = jonathanDoe.getId();
 		
 		Attendee attendee = sessionVote.getAttendee(id);
 		assertEquals("Attendee's name was not retrieved as expected", "Jonathan Doe", attendee.getName());
@@ -120,13 +120,13 @@ public class SessionVoteTest {
 
 	@Test
 	public void testRateSession() {
-		SessionRating sessionRating = new SessionRating("session1", 200, 5);
+		SessionRating sessionRating = new SessionRating("session1", "200", 5);
 		
 		// API method under test:
 		sessionRating = sessionVote.rateSession(sessionRating);
 
 		assertEquals("Returned SessionRating's session name does not match expected session name", "session1", sessionRating.getSession());
-		assertEquals("Returned SessionRating's attendee ID does not match expected attendee ID", 200, sessionRating.getAttendeeId());
+		assertEquals("Returned SessionRating's attendee ID does not match expected attendee ID", "200", sessionRating.getAttendeeId());
 		assertEquals("Returned SessionRating's rating value does not match expected value", 5, sessionRating.getRating());
 
 		// Now check that the SessionRating stored in the system matches what was returned
@@ -135,16 +135,16 @@ public class SessionVoteTest {
 
 	@Test
 	public void testUpdateRating() {
-		SessionRating originalRating = new SessionRating("session1", 200, 5);
+		SessionRating originalRating = new SessionRating("session1", "200", 5);
 		originalRating = sessionVote.rateSession(originalRating);
 
-		SessionRating updatedRating = new SessionRating(originalRating.getId(), "session2", 300, 7);
+		SessionRating updatedRating = new SessionRating(originalRating.getId(), "session2", "300", 7);
 
 		// API method under test
 		updatedRating = sessionVote.updateRating(updatedRating);
 
 		assertEquals("Unexpected session in updated rating", "session2", updatedRating.getSession());
-		assertEquals("Unexpected attendee ID in updated rating", 300, updatedRating.getAttendeeId());
+		assertEquals("Unexpected attendee ID in updated rating", "300", updatedRating.getAttendeeId());
 		assertEquals("Unexpected rating value in updated rating", 7, updatedRating.getRating());
 
 		// Now check that the SessionRating stored in the system matches the updated SessionRating that was returned
@@ -154,10 +154,10 @@ public class SessionVoteTest {
 	@Test
 	public void testAllSessionVotes() {
 		// submit 4 votes - 3 for session1, and 1 for session2
-		SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", 100, 3));
-		SessionRating sr2 = sessionVote.rateSession(new SessionRating("session1", 200, 4));
-		SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", 300, 8));
-		SessionRating sr4 = sessionVote.rateSession(new SessionRating("session1", 400, 9));
+		SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", "100", 3));
+		SessionRating sr2 = sessionVote.rateSession(new SessionRating("session1", "200", 4));
+		SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", "300", 8));
+		SessionRating sr4 = sessionVote.rateSession(new SessionRating("session1", "400", 9));
 
 		// API method under test
 		List<SessionRating> session1Ratings = sessionVote.allSessionVotes("session1");
@@ -171,10 +171,10 @@ public class SessionVoteTest {
 	@Test
 	public void testSessionRatingAverage() {
 		// submit 4 votes - 3 for session1, and 1 for session2
-		SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", 101, 3));
-		SessionRating sr2 = sessionVote.rateSession(new SessionRating("session1", 201, 8));
-		SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", 301, 8));
-		SessionRating sr4 = sessionVote.rateSession(new SessionRating("session1", 401, 10));
+		SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", "101", 3));
+		SessionRating sr2 = sessionVote.rateSession(new SessionRating("session1", "201", 8));
+		SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", "301", 8));
+		SessionRating sr4 = sessionVote.rateSession(new SessionRating("session1", "401", 10));
 
 		// API method under test
 		double avg = sessionVote.sessionRatingAverage("session1");

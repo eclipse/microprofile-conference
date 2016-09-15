@@ -38,28 +38,28 @@ import javax.ws.rs.Produces;
 import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
 import com.ibm.ws.microprofile.sample.conference.vote.store.AttendeeStore;
-import com.ibm.ws.microprofile.sample.conference.vote.store.NonPersistent;
+import com.ibm.ws.microprofile.sample.conference.vote.store.Persistent;
 
 @Path("/session")
 public class SessionVote {
 
 	@Inject
-	@NonPersistent
+	@Persistent
 	AttendeeStore store;
 	
 	private AtomicLong nextSessionId = new AtomicLong(0);
-	private Map<Long,SessionRating> allRatings = new HashMap<Long,SessionRating>();
+	private Map<String,SessionRating> allRatings = new HashMap<String,SessionRating>();
 
-	private Map<String,List<Long>> ratingIdsBySession = new HashMap<String,List<Long>>();
+	private Map<String,List<String>> ratingIdsBySession = new HashMap<String,List<String>>();
 
-	private Map<Long,List<Long>> ratingIdsByAttendee = new HashMap<Long,List<Long>>();
+	private Map<String,List<String>> ratingIdsByAttendee = new HashMap<String,List<String>>();
 
 	@POST
 	@Path("/attendee")
 	@Produces(APPLICATION_JSON)
         @Consumes(APPLICATION_JSON)
 	public Attendee registerAttendee(String name) {
-		Attendee attendee = store.createNewAttendee(name);
+		Attendee attendee = store.createNewAttendee(new Attendee(name));
 		return attendee;  
 	}
 	
@@ -67,7 +67,8 @@ public class SessionVote {
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-	public Attendee updateAttendee(@PathParam("id") Long id, Attendee attendee) {
+	public Attendee updateAttendee(@PathParam("id") String id, Attendee attendee) {
+		attendee.setID(id);
 		Attendee updated = store.updateAttendee(attendee);
 		return updated;
 	}
@@ -82,14 +83,14 @@ public class SessionVote {
 	@GET
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
-	public Attendee getAttendee(@PathParam("id") Long id) {
+	public Attendee getAttendee(@PathParam("id") String id) {
 		return store.getAttendee(id);
 	}
 	
 	@DELETE
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
-	public Attendee deleteAttendee(@PathParam("id") Long id) {
+	public Attendee deleteAttendee(@PathParam("id") String id) {
 		return store.deleteAttendee(id);
 	}
 	
@@ -98,23 +99,23 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public SessionRating rateSession(SessionRating sessionRating) {
-		long id = nextSessionId.incrementAndGet();
+		String id = ""+nextSessionId.incrementAndGet();
 		String session = sessionRating.getSession();
-		long attendeeId = sessionRating.getAttendeeId();
+		String attendeeId = sessionRating.getAttendeeId();
 		int rating = sessionRating.getRating();
 		SessionRating sr = new SessionRating(id, session, attendeeId, rating);
 		allRatings.put(id, sr);
 
-		List<Long> sessionRatings = ratingIdsByAttendee.get(attendeeId);
+		List<String> sessionRatings = ratingIdsByAttendee.get(attendeeId);
 		if (sessionRatings == null) {
-			sessionRatings = new ArrayList<Long>();
+			sessionRatings = new ArrayList<String>();
 			ratingIdsByAttendee.put(attendeeId, sessionRatings);
 		}
 		sessionRatings.add(id);
 
 		sessionRatings = ratingIdsBySession.get(session);
 		if (sessionRatings == null) {
-			sessionRatings = new ArrayList<Long>();
+			sessionRatings = new ArrayList<String>();
 			ratingIdsBySession.put(session, sessionRatings);
 		}
 		sessionRatings.add(id);
@@ -137,12 +138,12 @@ public class SessionVote {
     @Consumes(APPLICATION_JSON)
 	public List<SessionRating> allSessionVotes(String sessionId) {
 		System.out.println("> allSessionVotes() " + sessionId);
-		for (Map.Entry<String, List<Long>> entry : ratingIdsBySession.entrySet()) {
+		for (Map.Entry<String, List<String>> entry : ratingIdsBySession.entrySet()) {
 			System.out.println(entry.getKey() + " = " + entry.getValue());
 		}
 		List<SessionRating> allSessionVotes = new ArrayList<SessionRating>();
-		List<Long> ids = ratingIdsBySession.get(sessionId);
-		for (Long id : ids) {
+		List<String> ids = ratingIdsBySession.get(sessionId);
+		for (String id : ids) {
 			allSessionVotes.add(allRatings.get(id));
 		}
 		return allSessionVotes;
@@ -168,8 +169,8 @@ public class SessionVote {
     @Consumes(APPLICATION_JSON)
 	public List<SessionRating> votesByAttendee(Attendee attendee) {
 		List<SessionRating> allAttendeeVotes = new ArrayList<SessionRating>();
-		List<Long> ids = ratingIdsByAttendee.get(attendee.getId());
-		for (Long id : ids) {
+		List<String> ids = ratingIdsByAttendee.get(attendee.getId());
+		for (String id : ids) {
 			allAttendeeVotes.add(allRatings.get(id));
 		}
 		return allAttendeeVotes;
