@@ -18,15 +18,18 @@ package com.ibm.ws.microprofile.sample.conference.vote.utils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-
+import javax.annotation.Priority;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
 @Log
 @Interceptor
+@Priority(Logger.LOG_INTERCEPTOR_PRIORITY)
 public class Logger {
 
+	static final int LOG_INTERCEPTOR_PRIORITY = 100;
+	 
 	@AroundInvoke
 	public Object Log(InvocationContext context) throws Exception {
 	    Method method = context.getMethod();
