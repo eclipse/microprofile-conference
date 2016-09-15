@@ -30,7 +30,6 @@ import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
-import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonString;
@@ -44,13 +43,13 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
-import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
+import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.utils.TeeOutputStream;
 
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class SessionRatingListProvider implements MessageBodyReader<List<SessionRating>>, MessageBodyWriter<List<SessionRating>> {
+public class AttendeeListProvider implements MessageBodyReader<List<Attendee>>, MessageBodyWriter<List<Attendee>> {
 
 	
 	@Override
@@ -60,35 +59,26 @@ public class SessionRatingListProvider implements MessageBodyReader<List<Session
 			ParameterizedType paramType = (ParameterizedType) type;
 			Type[] actualTypes = paramType.getActualTypeArguments();
 			if(actualTypes.length == 1){
-				isReadable = actualTypes[0] == SessionRating.class;
+				isReadable = actualTypes[0] == Attendee.class;
 			}
 		}
-		if (isDebugEnabled()) System.out.println("SRLP.isReadable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(SessionRating.class));
+		if (isDebugEnabled()) System.out.println("SRLP.isReadable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(Attendee.class));
 		return isReadable;
 	}
 
 	@Override
-	public List<SessionRating> readFrom(Class<List<SessionRating>> clazz, Type type, Annotation[] annotations, MediaType mediaType,
+	public List<Attendee> readFrom(Class<List<Attendee>> clazz, Type type, Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, String> map, InputStream is) throws IOException, WebApplicationException {
 		JsonReader rdr = null; 
 		try {
-			List<SessionRating> ratings = new ArrayList<SessionRating>();
+			List<Attendee> ratings = new ArrayList<Attendee>();
 			rdr = Json.createReader(is);
 			JsonArray arr = rdr.readArray();
 			for (int i = 0 ; i <arr.size(); i++) {
-				JsonObject sessionRatingJson = arr.getJsonObject(i);//rdr.readObject();
-				if (isDebugEnabled()) System.out.println(sessionRatingJson);
-				JsonString idJson = sessionRatingJson.getJsonString("id");
-				JsonString sessionJson = sessionRatingJson.getJsonString("session");
-				JsonString attendeeIdJson = sessionRatingJson.getJsonString("attendeeId");
-				int rating = sessionRatingJson.getInt("rating");
-				SessionRating sessionRating;
-				if (idJson != null) {
-					sessionRating = new SessionRating(idJson.getString(), sessionJson.getString(), attendeeIdJson.getString(), rating);
-				} else {
-					sessionRating = new SessionRating(sessionJson.getString(), attendeeIdJson.getString(), rating);
-				}
-				ratings.add(sessionRating);
+				JsonObject attendeeJson = arr.getJsonObject(i);//rdr.readObject();
+				if (isDebugEnabled()) System.out.println(attendeeJson);
+				Attendee attendee = AttendeeProvider.fromJSON(attendeeJson);
+				ratings.add(attendee);
 			}
 			return ratings;
 		} finally {
@@ -100,8 +90,8 @@ public class SessionRatingListProvider implements MessageBodyReader<List<Session
 	}
 
 	@Override
-	public long getSize(List<SessionRating> sessionRating, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
-		if (isDebugEnabled()) System.out.println("SRLP.getSize() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType);
+	public long getSize(List<Attendee> Attendee, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
+		if (isDebugEnabled()) System.out.println("ALP.getSize() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType);
 		return 0;
 	}
 
@@ -112,26 +102,26 @@ public class SessionRatingListProvider implements MessageBodyReader<List<Session
 			ParameterizedType paramType = (ParameterizedType) type;
 			Type[] actualTypes = paramType.getActualTypeArguments();
 			if(actualTypes.length == 1){
-				isWriteable = actualTypes[0] == SessionRating.class;
+				isWriteable = actualTypes[0] == Attendee.class;
 			}
 		}
 		
-		if (isDebugEnabled()) System.out.println("SRLP.isWriteable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + isWriteable);
+		if (isDebugEnabled()) System.out.println("ALP.isWriteable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + isWriteable);
 		return isWriteable;
 	}
 
 	@Override
-	public void writeTo(List<SessionRating> sessionRatings, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
+	public void writeTo(List<Attendee> Attendees, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> map, OutputStream os) throws IOException, WebApplicationException {
 		
 //		JsonGenerator jsonGenerator = Json.createGenerator(new TeeOutputStream(os, System.out));
 //		jsonGenerator.writeStartArray();
-//		for (SessionRating sessionRating : sessionRatings) {
+//		for (Attendee Attendee : Attendees) {
 //			jsonGenerator.writeStartObject()
-//				.write("id", sessionRating.getId())
-//				.write("session", sessionRating.getSession())
-//				.write("attendeeId", sessionRating.getAttendeeId())
-//				.write("rating", sessionRating.getRating())
+//				.write("id", Attendee.getId())
+//				.write("session", Attendee.getSession())
+//				.write("attendeeId", Attendee.getAttendeeId())
+//				.write("rating", Attendee.getRating())
 //			.writeEnd();
 //		}
 //		jsonGenerator.writeEnd();
@@ -140,14 +130,9 @@ public class SessionRatingListProvider implements MessageBodyReader<List<Session
 		
 		JsonWriter writer = Json.createWriter(new TeeOutputStream(os, System.out));
 		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-		for (SessionRating sessionRating : sessionRatings) {
-			JsonObject sessionRatingJson = Json.createObjectBuilder()
-					.add("id", sessionRating.getId())
-				    .add("session", sessionRating.getSession())
-				    .add("attendeeId", sessionRating.getAttendeeId())
-				    .add("rating", sessionRating.getRating())
-				    .build();
-			arrayBuilder.add(sessionRatingJson);
+		for (Attendee attendee : Attendees) {
+			JsonObject attendeeJson = AttendeeProvider.toJSON(attendee);
+			arrayBuilder.add(attendeeJson);
 		}
 		writer.writeArray(arrayBuilder.build());
 		writer.close();

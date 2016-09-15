@@ -18,12 +18,21 @@ package com.ibm.ws.microprofile.sample.conference.vote.model;
 
 public class Attendee {
 
-	private final String id;
-	private String name;
+	private String id;
+	private final String revision;
+	private final String name;
 	
+	public Attendee(String name) {
+		this(null, null, name);
+	}
 
 	public Attendee(String id, String name) {
+		this(id, null, name);
+	}
+	
+	public Attendee(String id, String revision, String name) {
 		this.id = id;
+		this.revision = revision;
 		this.name = name;
 	}
 	
@@ -31,11 +40,15 @@ public class Attendee {
 		return id;
 	}
 	
-	public String getName() {
-		return name;
+	public void setID(String id) {
+		this.id = id;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public String getRevision() {
+		return revision;
+	}
+	
+	public String getName() {
+		return name;
 	}
 }

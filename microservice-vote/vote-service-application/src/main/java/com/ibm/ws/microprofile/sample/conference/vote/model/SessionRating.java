@@ -20,7 +20,8 @@ import java.util.UUID;
 
 public class SessionRating {
 	
-	private String id;
+	private final String id;
+	private final String revision;
 	private String session;
 	private String attendeeId;
 	private int rating;
@@ -39,6 +40,10 @@ public class SessionRating {
 
 	public String getId() {
 		return id;
+	}
+	
+	public String getRevision() {
+		return revision;
 	}
 
 	public String getSession() {

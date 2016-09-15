@@ -22,7 +22,7 @@ import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 
 public interface AttendeeDAO {
 
-	Attendee createNewAttendee(String name);
+	Attendee createNewAttendee(Attendee attendee);
 
 	Attendee updateAttendee(Attendee attendee);
 
