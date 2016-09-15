@@ -62,7 +62,7 @@ public class AttendeeProvider implements MessageBodyReader<Attendee>, MessageBod
 		     JsonObject attendeeJson = rdr.readObject();
 		     JsonNumber idJson = attendeeJson.getJsonNumber("id");
 		     JsonString nameJson = attendeeJson.getJsonString("name");
-		     Attendee attendee = new Attendee(idJson.longValue(), nameJson.getString());
+		     Attendee attendee = new Attendee(String.valueOf(idJson.longValue()), nameJson.getString());
 		     return attendee;
 		} finally {
 			if (rdr != null) {

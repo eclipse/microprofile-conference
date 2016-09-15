@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 
-package com.ibm.ws.microprofile.sample.conference.vote.model;
+package com.ibm.ws.microprofile.sample.conference.vote.persistence;
 
-public class Attendee {
+import java.util.Collection;
 
-	private final String id;
-	private String name;
-	
+import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 
-	public Attendee(String id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
+public interface AttendeeDAO {
+
+	Attendee createNewAttendee(String name);
+
+	Attendee updateAttendee(Attendee attendee);
+
+	Collection<Attendee> getAllAttendees();
+
+	void clearAllAttendees();
+
+	Attendee getAttendee(String id);
+
+	void deleteAttendee(String id);
+	boolean isAccessible();
+
 }

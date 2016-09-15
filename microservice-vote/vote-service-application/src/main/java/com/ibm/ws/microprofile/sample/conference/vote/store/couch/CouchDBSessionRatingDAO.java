@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ibm.ws.microprofile.sample.conference.vote.store.couch;
 
 import java.util.Collection;
@@ -21,53 +20,58 @@ import java.util.Collection;
 import javax.enterprise.context.ApplicationScoped;
 
 import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
-import com.ibm.ws.microprofile.sample.conference.vote.persistence.AttendeeDAO;
+import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.Persistent;
+import com.ibm.ws.microprofile.sample.conference.vote.persistence.SessionRatingDAO;
 
 @ApplicationScoped
 @Persistent
-public class CouchDBAttendeeStore implements AttendeeDAO {
+public class CouchDBSessionRatingDAO implements SessionRatingDAO{
 
 	@Override
-	public Attendee createNewAttendee(String name) {
+	public SessionRating rateSession(SessionRating sessionRating) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Attendee updateAttendee(Attendee attendee) {
+	public SessionRating updateRating(SessionRating sessionRating) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<Attendee> getAllAttendees() {
+	public void deleteRating(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public Collection<SessionRating> getRatingsBySession(String session) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public Collection<SessionRating> getRatingsByAttendee(Attendee attendee) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void clearAllAttendees() {
+	public Collection<SessionRating> getAllRatings() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void clearAllRatings() {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	@Override
-	public Attendee getAttendee(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void deleteAttendee(String id) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public boolean isAccessible() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }

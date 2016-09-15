@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.ibm.ws.microprofile.sample.conference.vote.store;
+package com.ibm.ws.microprofile.sample.conference.vote.persistence;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -27,22 +27,22 @@ import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 
 @ApplicationScoped
 @NonPersistent
-public class HashMapAttendeeStore implements AttendeeStore {
+public class HashMapAttendeeDAO implements AttendeeDAO {
 
-	private AtomicLong nextAttendeeId = new AtomicLong(0);
-	private Map<Long,Attendee> attendees = new HashMap<Long,Attendee>();
+	
+	private Map<String,Attendee> attendees = new HashMap<String,Attendee>();
 	
 	@Override
 	public Attendee createNewAttendee(String name) {
-		Long id = nextAttendeeId.incrementAndGet();
-		Attendee attendee = new Attendee(id, name);
-		attendees.put(id, attendee);
+		String attendeeId = UUID.randomUUID().toString();
+		Attendee attendee = new Attendee(attendeeId, name);
+		attendees.put(attendeeId, attendee);
 		return attendee;
 	}
 
 	@Override
 	public Attendee updateAttendee(Attendee attendee) {
-		attendees.put(attendee.getId(), attendee);
+		attendees.put(String.valueOf(attendee.getId()), attendee);
 		return attendee;
 	}
 
@@ -57,13 +57,19 @@ public class HashMapAttendeeStore implements AttendeeStore {
 	}
 
 	@Override
-	public Attendee getAttendee(Long id) {
+	public Attendee getAttendee(String id) {
 		return attendees.get(id);
 	}
 
 	@Override
-	public Attendee deleteAttendee(Long id) {
-		return attendees.remove(id);
+	public void deleteAttendee(String id) {
+		 attendees.remove(id);
+	}
+
+	@Override
+	public boolean isAccessible() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }
