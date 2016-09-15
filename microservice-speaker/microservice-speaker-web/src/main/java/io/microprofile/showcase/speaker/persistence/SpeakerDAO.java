@@ -16,13 +16,16 @@
 package io.microprofile.showcase.speaker.persistence;
 
 import io.microprofile.showcase.speaker.domain.Venue;
+import io.microprofile.showcase.speaker.domain.VenueList;
 import io.microprofile.showcase.speaker.model.Speaker;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Any;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,6 +45,8 @@ public class SpeakerDAO {
     private final HashMap<String, Set<Speaker>> speakers = new HashMap<>();
 
     @Inject
+    @VenueList
+    @Named(value = "venueList")
     private List<Venue> venues;
 
     @PostConstruct

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright 2016 Microprofile.io
   ~
@@ -14,12 +14,5 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<openejb-jar xmlns="http://www.openejb.org/openejb-jar/1.1"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://www.openejb.org/openejb-jar/1.1">
-    <pojo-deployment class-name="jaxrs-application">
-        <properties>
-            cxf.jaxrs.providers = com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider,com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider
-        </properties>
-    </pojo-deployment>
-</openejb-jar>
+
+<Context antiJARLocking="true" reloadable="true"/>

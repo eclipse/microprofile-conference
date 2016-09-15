@@ -60,9 +60,9 @@
                                <argument>--noCluster</argument>
                                <argument>--autoBindHttp</argument>
                                <argument>--deploy</argument>
-                               <argument>${basedir}/target/${project.build.finalName}.war</argument>
+                               <argument>${basedir}/target/${project.artifactId}.war</argument>
                                <argument>--outputUberJar</argument>
-                               <argument>${basedir}/target/${project.build.finalName}.jar</argument>
+                               <argument>${basedir}/target/${project.artifactId}.jar</argument>
                             </arguments>
                             <includeProjectDependencies>false</includeProjectDependencies>
                             <includePluginDependencies>true</includePluginDependencies>
