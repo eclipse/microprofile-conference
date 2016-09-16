@@ -1,1 +1,10 @@
-<h1>SESSION</h1>
+<div *ngIf="session">
+    <h2>{{session.nameLast}} details!</h2>
+    <div>
+        <label>ID: </label>{{session.id}}
+    </div>
+    <div>
+        <label>Surname: </label>
+        <input type="text" [(ngModel)]="session.nameLast" placeholder="nameLast">
+    </div>
+</div>

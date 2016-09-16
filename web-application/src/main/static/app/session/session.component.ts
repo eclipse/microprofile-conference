@@ -1,5 +1,5 @@
-import {Component, enableProdMode} from "@angular/core";
-import { Session } from './session';
+import {Component, Input, enableProdMode} from "@angular/core";
+import {Session} from "./session";
 
 enableProdMode();
 
@@ -9,5 +9,7 @@ enableProdMode();
 })
 
 export class SessionComponent {
+    title = 'Conference Session';
+    @Input()
     session: Session;
 }
