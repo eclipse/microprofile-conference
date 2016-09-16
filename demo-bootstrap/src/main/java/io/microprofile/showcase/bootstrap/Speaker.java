@@ -13,10 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.microprofile.showcase.session;
+package io.microprofile.showcase.bootstrap;
+
+import javax.json.JsonObject;
 
 /**
  * @author Ken Finnigan
+ * @author Heiko Braun
  */
-public class SessionSpeaker {
+public class Speaker extends JsonWrapper {
+
+    public Speaker(JsonObject underlying) {
+        super(underlying);
+    }
+
+    public String getFullName() {
+        return underlying.getString("fullName");
+    }
+
+    public String getJobTitle() {
+        return underlying.getString("jobTitle", "n/a");
+    }
+
+    public String getCompany() {
+        return underlying.getString("company", "n/a");
+    }
+
+    @Override
+    public String toString() {
+        return getId() + "::"+getFullName();
+    }
 }

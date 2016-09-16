@@ -123,6 +123,7 @@
     </properties>
 
     <modules>
+        <module>demo-bootstrap</module>
         <module>microservice-session</module>
         <module>microservice-vote</module>
         <module>microservice-speaker</module>
