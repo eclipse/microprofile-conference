@@ -39,7 +39,7 @@ The following sections describe vendor specifics:
 
 === Run Services in Liberty
 
-* `microservice-schedule`: TBC
+* `microservice-schedule`: `mvn package liberty:run-server -pl :microservice-schedule` available on http://localhost:8081/schedule
 * `microservice-session` : `mvn package liberty:run-server -pl :microservice-session` available on http://localhost:8080/sessions
 * `microservice-speaker` : TBC
 * `microservice-vote` : TBC
