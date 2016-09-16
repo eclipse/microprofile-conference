@@ -13,6 +13,11 @@
     <name>Conference :: Vote :: Config</name>
     <packaging>pom</packaging>
 
+    <properties>
+        <testServerHttpPort>9090</testServerHttpPort>
+        <testServerHttpsPort>9443</testServerHttpsPort>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
