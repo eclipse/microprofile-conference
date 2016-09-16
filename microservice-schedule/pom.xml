@@ -57,12 +57,12 @@
                         <configuration>
                             <mainClass>fish.payara.micro.PayaraMicro</mainClass>
                             <arguments>
-                               <argument>--noCluster</argument>
-                               <argument>--autoBindHttp</argument>
-                               <argument>--deploy</argument>
-                               <argument>${basedir}/target/${project.artifactId}.war</argument>
-                               <argument>--outputUberJar</argument>
-                               <argument>${basedir}/target/${project.artifactId}.jar</argument>
+                                <argument>--noCluster</argument>
+                                <argument>--autoBindHttp</argument>
+                                <argument>--deploy</argument>
+                                <argument>${basedir}/target/${project.artifactId}.war</argument>
+                                <argument>--outputUberJar</argument>
+                                <argument>${basedir}/target/${project.artifactId}.jar</argument>
                             </arguments>
                             <includeProjectDependencies>false</includeProjectDependencies>
                             <includePluginDependencies>true</includePluginDependencies>
@@ -85,6 +85,40 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-jaxrs</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.6.3</version>
         </dependency>
     </dependencies>
 
