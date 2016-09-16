@@ -4,7 +4,7 @@
        *ngFor="let schedule of schedules"
        [class.selected]="schedule === selectedSchedule"
        (click)="onSelect(schedule)">
-        <span class="badge">{{schedule.id}}</span> {{schedule.nameLast}}
+        <span class="badge">Session: {{schedule.sessionId}}</span>, Venue: {{schedule.venue}}, Date: {{schedule.date}}, StartTime: {{schedule.startTime}}
     </a>
 </div>
 <schedule [schedule]="selectedSchedule"></schedule>
