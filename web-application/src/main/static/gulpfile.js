@@ -142,14 +142,17 @@ gulp.task('test', function (done) {
     }, done).start();
 });
 
-gulp.task('copy-all', function () {
+//TODO - Create gulp tasks for all vendors
+
+//---------TOMEE BEGIN
+gulp.task('copy-tomee', function () {
     return gulp.src([
         target + '/' + resources + '/**/*.{html,htm,jsp,jspx,htm,css,js}',
         target + '/' + resources + '/assets'
     ]).pipe(gulp.dest(target + '/apache-tomee/webapps/' + webapp + '/'));
 });
 
-gulp.task('clean', function (callback) {
+gulp.task('clean-tomee', function (callback) {
     return del([
         target + '/' + resources + '/',
         target + '/apache-tomee/webapps/' + webapp + '/app/',
@@ -158,8 +161,9 @@ gulp.task('clean', function (callback) {
         force: true
     }, callback);
 });
+//---------TOMEE END
 
-gulp.task('build', gulpsync.sync(['clean', 'js', 'css', 'pages', 'copy-all']));
+gulp.task('build', gulpsync.sync(['clean-tomee', 'js', 'css', 'pages', 'copy-tomee']));
 //gulp.task('build-with-tests', gulpsync.sync(['build', 'test']));
 
 gulp.task('default', gulpsync.sync(['build']), function () {
