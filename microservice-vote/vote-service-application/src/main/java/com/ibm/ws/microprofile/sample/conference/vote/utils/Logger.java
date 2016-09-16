@@ -28,23 +28,23 @@ import javax.interceptor.InvocationContext;
 @Priority(Logger.PRIORITY)
 public class Logger {
 
-	static final int PRIORITY = 3000;
+    static final int PRIORITY = 3000;
 
-	@AroundInvoke
-	public Object Log(InvocationContext context) throws Exception {
-		Method method = context.getMethod();
-		String clazz = method.getDeclaringClass().getName();
-		String mthd = clazz + ":" + method.getName();
-		String parms = Arrays.toString(context.getParameters());
+    @AroundInvoke
+    public Object Log(InvocationContext context) throws Exception {
+        Method method = context.getMethod();
+        String clazz = method.getDeclaringClass().getName();
+        String mthd = clazz + ":" + method.getName();
+        String parms = Arrays.toString(context.getParameters());
 
-		try {
-			Object result = context.proceed();
-			System.out.println("Call to " + mthd + "(" + parms + ") returned " + result);
-			return result;
-		} catch (Exception e) {
-			System.out.println("Call to " + mthd + "(" + parms + ") threw " + e.toString());
-			throw e;
-		}
-	}
+        try {
+            Object result = context.proceed();
+            System.out.println("Call to " + mthd + "(" + parms + ") returned " + result);
+            return result;
+        } catch (Exception e) {
+            System.out.println("Call to " + mthd + "(" + parms + ") threw " + e.toString());
+            throw e;
+        }
+    }
 
 }
