@@ -4,7 +4,7 @@
        *ngFor="let vote of votes"
        [class.selected]="vote === selectedVote"
        (click)="onSelect(vote)">
-        <span class="badge">{{vote.id}}</span> {{vote.nameLast}}
+        <span class="badge">{{vote.nextAttendeeId}}</span> {{vote.nextAttendeeId}}
     </a>
 </div>
 <vote [vote]="selectedVote"></vote>
