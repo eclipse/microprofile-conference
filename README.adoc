@@ -42,7 +42,7 @@ The following sections describe vendor specifics:
 * `microservice-schedule`: `mvn package liberty:run-server -pl :microservice-schedule` available on http://localhost:8081/schedule
 * `microservice-session` : `mvn package liberty:run-server -pl :microservice-session` available on http://localhost:8080/sessions
 * `microservice-speaker` : TBC
-* `microservice-vote` : TBC
+* `microservice-vote` : `mvn install`, `liberty:run-server -pl :vote-service-wlpcfg` available on http://localhost:9080/vote/rest
 
 === Run the UI Web Application
 

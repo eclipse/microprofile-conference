@@ -179,7 +179,7 @@
 		                    <configFile>${basedir}/src/wlp/resources/server.xml</configFile>
 		                    <assemblyArtifact>
 		                        <groupId>com.ibm.websphere.appserver.runtime</groupId>
-		                        <artifactId>wlp-webProfile7</artifactId>
+		                        <artifactId>wlp-microProfile1</artifactId>
 		                        <version>${version.liberty}</version>
 		                        <type>zip</type>
 		                  </assemblyArtifact>
