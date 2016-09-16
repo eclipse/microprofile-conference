@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -155,9 +154,10 @@ public class SpeakerDAO {
      * @param speaker Speaker to find - may contain partial details
      * @return Optional matching speakers
      */
-    public Optional<Set<Speaker>> find(final Speaker speaker) {
+    public Set<Speaker> find(final Speaker speaker) {
 
         final ArrayList<Speaker> speakers = new ArrayList<>();
+        final Set<Speaker> result = new HashSet<>();
 
         for (final Map.Entry<String, Set<Speaker>> entry : this.speakers.entrySet()) {
             speakers.addAll(entry.getValue());
@@ -173,13 +173,10 @@ public class SpeakerDAO {
         });
 
         if (!speakers.isEmpty()) {
-            final Set<Speaker> result = new HashSet<>(speakers.size());
             result.addAll(speakers);
-            return Optional.of(result);
         }
 
-
-        return Optional.empty();
+        return result;
     }
 
     /**
