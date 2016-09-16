@@ -70,7 +70,7 @@ public class Session {
         return underlying.getString("type");
     }
 
-    void setSpeakers(Collection<Integer> speakers) {
+    public void setSpeakers(Collection<Integer> speakers) {
         this.speakers = speakers;
     }
 
@@ -78,7 +78,7 @@ public class Session {
         return speakers;
     }
 
-    void setSchedule(int schedule) {
+    public void setSchedule(int schedule) {
         this.schedule = schedule;
     }
 

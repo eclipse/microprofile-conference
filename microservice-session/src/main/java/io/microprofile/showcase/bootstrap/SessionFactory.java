@@ -10,6 +10,8 @@ public class SessionFactory {
 
     public static Session fromBootstrap(io.microprofile.showcase.bootstrap.Session bootstrapModel) {
         Session session = new Session(bootstrapModel.getId(), bootstrapModel.getUnderlying());
+        session.setSpeakers(bootstrapModel.getSpeakers());
+        session.setSchedule(bootstrapModel.getSchedule());
         return session;
     }
 }
