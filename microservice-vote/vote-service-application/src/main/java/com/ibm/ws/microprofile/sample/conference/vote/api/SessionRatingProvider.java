@@ -27,8 +27,10 @@ import java.lang.reflect.Type;
 import javax.json.Json;
 import javax.json.JsonNumber;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonString;
+import javax.json.JsonWriter;
 import javax.json.stream.JsonGenerator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -39,6 +41,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
 
 @Provider
@@ -46,30 +49,43 @@ import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
 @Consumes(MediaType.APPLICATION_JSON)
 public class SessionRatingProvider implements MessageBodyReader<SessionRating>, MessageBodyWriter<SessionRating> {
 
+	
 	@Override
 	public boolean isReadable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
-		if (isDebugEnabled()) System.out.println("SRP.isReadable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(SessionRating.class));
+		if (isDebugEnabled()) System.out.println("AP.isReadable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(SessionRating.class));
 		return clazz.equals(SessionRating.class);
 	}
 
 	@Override
 	public SessionRating readFrom(Class<SessionRating> clazz, Type type, Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, String> map, InputStream is) throws IOException, WebApplicationException {
+		return fromJSON(is);
+	}
+	
+	@Override
+	public long getSize(SessionRating sessionRating, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
+		if (isDebugEnabled()) System.out.println("AP.getSize() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType);
+		return 0;
+	}
+
+	@Override
+	public boolean isWriteable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
+		if (isDebugEnabled()) System.out.println("AP.isWriteable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(SessionRating.class));
+		return clazz.equals(SessionRating.class);
+	}
+
+	@Override
+	public void writeTo(SessionRating sessionRating, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
+			MultivaluedMap<String, Object> map, OutputStream os) throws IOException, WebApplicationException {
+		toJSON(os, sessionRating);
+	}
+	
+	public static SessionRating fromJSON(InputStream is) {
 		JsonReader rdr = null; 
 		try {
 		     rdr = Json.createReader(is);
 		     JsonObject sessionRatingJson = rdr.readObject();
-		     if (isDebugEnabled()) System.out.println(sessionRatingJson);
-		     JsonString idJson = sessionRatingJson.getJsonString("id");
-		     JsonString sessionJson = sessionRatingJson.getJsonString("session");
-		     JsonString attendeeIdJson = sessionRatingJson.getJsonString("attendeeId");
-		     int rating = sessionRatingJson.getInt("rating");
-		     SessionRating sessionRating;
-		     if (idJson != null) {
-		    	 sessionRating = new SessionRating(idJson.getString(), sessionJson.getString(), attendeeIdJson.getString(), rating);
-		     } else {
-		    	 sessionRating = new SessionRating(sessionJson.getString(), attendeeIdJson.getString(), rating);
-		     }
+		     SessionRating sessionRating = fromJSON(sessionRatingJson);
 		     return sessionRating;
 		} finally {
 			if (rdr != null) {
@@ -79,28 +95,39 @@ public class SessionRatingProvider implements MessageBodyReader<SessionRating>, 
 		
 	}
 	
-	@Override
-	public long getSize(SessionRating sessionRating, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
-		if (isDebugEnabled()) System.out.println("SRP.getSize() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType);
-		return 0;
+	public static SessionRating fromJSON(JsonObject sessionRatingJson) {
+	     JsonString idJson = sessionRatingJson.getJsonString("id");
+	     if(idJson == null){
+	    	 idJson = sessionRatingJson.getJsonString("_id");
+	     }
+	     JsonString revJson = sessionRatingJson.getJsonString("_rev");
+	     JsonString sessionJson = sessionRatingJson.getJsonString("session");
+	     JsonString attendeeIdJson = sessionRatingJson.getJsonString("attendeeId");
+	     JsonNumber ratingJson = sessionRatingJson.getJsonNumber("rating");
+	     SessionRating sessionRating = new SessionRating(idJson != null ? idJson.getString() : null,
+	    		 						revJson != null ? revJson.getString() : null,
+	    		 								sessionJson.getString(), attendeeIdJson.getString(), ratingJson.intValue());
+	     return sessionRating;
 	}
-
-	@Override
-	public boolean isWriteable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
-		if (isDebugEnabled()) System.out.println("SRP.isWriteable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(SessionRating.class));
-		return clazz.equals(SessionRating.class);
+	
+	public static void toJSON(OutputStream os, SessionRating sessionRating) {
+		JsonWriter jsonWriter = Json.createWriter(os);
+		jsonWriter.writeObject(toJSON(sessionRating));
+		jsonWriter.close();
 	}
-
-	@Override
-	public void writeTo(SessionRating sessionRating, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
-			MultivaluedMap<String, Object> map, OutputStream os) throws IOException, WebApplicationException {
-		JsonGenerator jsonGenerator = Json.createGenerator(os);
-		jsonGenerator.writeStartObject();
-		jsonGenerator.write("id", sessionRating.getId());
-		jsonGenerator.write("session", sessionRating.getSession());
-		jsonGenerator.write("attendeeId", sessionRating.getAttendeeId());
-		jsonGenerator.write("rating", sessionRating.getRating());
-		jsonGenerator.writeEnd();
-		jsonGenerator.close();
+	
+	public static JsonObject toJSON(SessionRating sessionRating) {
+		JsonObjectBuilder builder = Json.createObjectBuilder();
+		
+		if(sessionRating.getId() != null) builder = builder.add("id", sessionRating.getId());
+		builder = builder.add("session", sessionRating.getSession());
+		builder = builder.add("attendeeId", sessionRating.getAttendeeId());
+		builder = builder.add("rating", sessionRating.getRating());
+		JsonObject jsonObject = builder.build();
+		return jsonObject;
+	}
+	
+	public static String toJSONString(SessionRating sessionRating) {
+		return toJSON(sessionRating).toString();
 	}
 }

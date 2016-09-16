@@ -114,8 +114,6 @@ public class AttendeeProvider implements MessageBodyReader<Attendee>, MessageBod
 	public static JsonObject toJSON(Attendee attendee) {
 		JsonObjectBuilder builder = Json.createObjectBuilder();
 		
-		//if(id != null) builder = builder.add("_id", id);
-		//if(revision != null) builder = builder.add("_rev", revision);
 		if(attendee.getId() != null) builder = builder.add("id", attendee.getId());
 		builder = builder.add("name", attendee.getName());
 		JsonObject jsonObject = builder.build();

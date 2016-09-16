@@ -18,52 +18,32 @@ package com.ibm.ws.microprofile.sample.conference.vote.persistence.couch;
 
 import java.io.StringReader;
 
+import javax.enterprise.context.Dependent;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 
+@Dependent
 public class Credentials {
 
 	private String username;
 	private String password;
 	private String url;
 
-	public Credentials(String username, String password, String url, String vcapServices) {
-		if (username != null && password != null && url != null) {
-			this.url = url;
-			this.username = username;
-			this.password = password;
-		} else {
-			parseVcapServices(vcapServices);
-			if (this.username == null || this.password == null || this.url == null) {
-				throw new RuntimeException(
-						"Database cannot be accessed at this time, something is null. Passed in variables were "
-								+ "username=" + username + ", password="
-								+ ((password == null) ? "null" : "(non-null password)") + ", url=" + url
-								+ ". VCAP_SERVICES values were parsed out as " + "username=" + this.username
-								+ ", password=" + ((this.password == null) ? "null" : "(non null password)") + ", url="
-								+ this.url);
-			}
+	public Credentials(String username, String password, String url) {
+		this.url = url;
+		this.username = username;
+		this.password = password;
+		
+		if (this.username == null || this.password == null || this.url == null) {
+			throw new RuntimeException(
+					"Database cannot be accessed at this time, something is null. Passed in variables were "
+							+ "username=" + username + ", password="
+							+ ((password == null) ? "null" : "(non-null password)") + ", url=" + url);
 		}
 	}
-
-	private void parseVcapServices(String vcapServicesEnv) {
-		if (vcapServicesEnv == null) {
-			return;
-		}
-		JsonObject vcapServices = Json.createReader(new StringReader(vcapServicesEnv)).readObject();
-		JsonArray cloudantObjectArray = vcapServices.getJsonArray("cloudantNoSQLDB");
-		JsonObject cloudantObject = cloudantObjectArray.getJsonObject(0);
-		JsonObject cloudantCredentials = cloudantObject.getJsonObject("credentials");
-		JsonString cloudantUsername = cloudantCredentials.getJsonString("username");
-		username = cloudantUsername.getString();
-		JsonString cloudantPassword = cloudantCredentials.getJsonString("password");
-		password = cloudantPassword.getString();
-		JsonString cloudantUrl = cloudantCredentials.getJsonString("url");
-		url = cloudantUrl.getString();
-	}
-
+	
 	public String getUrl() {
 		return url;
 	}

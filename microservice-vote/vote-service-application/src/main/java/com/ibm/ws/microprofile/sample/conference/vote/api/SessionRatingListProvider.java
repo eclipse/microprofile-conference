@@ -44,6 +44,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
 import com.ibm.ws.microprofile.sample.conference.vote.utils.TeeOutputStream;
 
@@ -78,17 +79,8 @@ public class SessionRatingListProvider implements MessageBodyReader<List<Session
 			for (int i = 0 ; i <arr.size(); i++) {
 				JsonObject sessionRatingJson = arr.getJsonObject(i);//rdr.readObject();
 				if (isDebugEnabled()) System.out.println(sessionRatingJson);
-				JsonString idJson = sessionRatingJson.getJsonString("id");
-				JsonString sessionJson = sessionRatingJson.getJsonString("session");
-				JsonString attendeeIdJson = sessionRatingJson.getJsonString("attendeeId");
-				int rating = sessionRatingJson.getInt("rating");
-				SessionRating sessionRating;
-				if (idJson != null) {
-					sessionRating = new SessionRating(idJson.getString(), sessionJson.getString(), attendeeIdJson.getString(), rating);
-				} else {
-					sessionRating = new SessionRating(sessionJson.getString(), attendeeIdJson.getString(), rating);
-				}
-				ratings.add(sessionRating);
+				SessionRating attendee = SessionRatingProvider.fromJSON(sessionRatingJson);
+				ratings.add(attendee);
 			}
 			return ratings;
 		} finally {
@@ -124,29 +116,10 @@ public class SessionRatingListProvider implements MessageBodyReader<List<Session
 	public void writeTo(List<SessionRating> sessionRatings, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> map, OutputStream os) throws IOException, WebApplicationException {
 		
-//		JsonGenerator jsonGenerator = Json.createGenerator(new TeeOutputStream(os, System.out));
-//		jsonGenerator.writeStartArray();
-//		for (SessionRating sessionRating : sessionRatings) {
-//			jsonGenerator.writeStartObject()
-//				.write("id", sessionRating.getId())
-//				.write("session", sessionRating.getSession())
-//				.write("attendeeId", sessionRating.getAttendeeId())
-//				.write("rating", sessionRating.getRating())
-//			.writeEnd();
-//		}
-//		jsonGenerator.writeEnd();
-//		jsonGenerator.flush();
-//		jsonGenerator.close();
-		
 		JsonWriter writer = Json.createWriter(new TeeOutputStream(os, System.out));
 		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 		for (SessionRating sessionRating : sessionRatings) {
-			JsonObject sessionRatingJson = Json.createObjectBuilder()
-					.add("id", sessionRating.getId())
-				    .add("session", sessionRating.getSession())
-				    .add("attendeeId", sessionRating.getAttendeeId())
-				    .add("rating", sessionRating.getRating())
-				    .build();
+			JsonObject sessionRatingJson = SessionRatingProvider.toJSON(sessionRating);
 			arrayBuilder.add(sessionRatingJson);
 		}
 		writer.writeArray(arrayBuilder.build());

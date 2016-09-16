@@ -16,8 +16,6 @@
 
 package com.ibm.ws.microprofile.sample.conference.vote.model;
 
-import java.util.UUID;
-
 public class SessionRating {
 	
 	private String id;
@@ -26,20 +24,26 @@ public class SessionRating {
 	private String attendeeId;
 	private int rating;
 
-	public SessionRating(String id, String session, String attendeeId, int rating) {
-		this(session, attendeeId, rating);
-		this.id = id;
-	}
+	
 	
 	public SessionRating(String session, String attendeeId, int rating) {
+		this(null, null, session, attendeeId, rating);
+	}
+
+	public SessionRating(String id, String revision, String session, String attendeeId, int rating) {
+		this.id = id;
+		this.revision = revision;
 		this.session = session;
 		this.attendeeId = attendeeId;
 		this.rating = rating;
-		this.id = UUID.randomUUID().toString();
 	}
-
+	
 	public String getId() {
 		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	public String getRevision() {

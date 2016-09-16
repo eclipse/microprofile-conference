@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -38,6 +39,9 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO{
 	
 	@Override
 	public SessionRating rateSession(SessionRating sessionRating) {
+		
+		String ratingId = UUID.randomUUID().toString();
+		sessionRating = new SessionRating(ratingId, null, sessionRating.getSession(), sessionRating.getAttendeeId(), sessionRating.getRating());
 		
 		String session = sessionRating.getSession();
 		String attendeeId = sessionRating.getAttendeeId();
@@ -126,9 +130,9 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO{
 
 	
 	@Override
-	public Collection<SessionRating> getRatingsByAttendee(Attendee attendee) {
+	public Collection<SessionRating> getRatingsByAttendee(String attendeeId) {
 		Set<SessionRating> allAttendeeVotes = new HashSet<SessionRating>();
-		Collection<String> ids = ratingIdsByAttendee.get(attendee.getId());
+		Collection<String> ids = ratingIdsByAttendee.get(attendeeId);
 		if ((ids != null) && (!ids.isEmpty())) {
 			for (String id : ids) {
 				allAttendeeVotes.add(allRatings.get(id));

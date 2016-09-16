@@ -32,7 +32,6 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.JsonString;
 import javax.json.JsonWriter;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -71,16 +70,16 @@ public class AttendeeListProvider implements MessageBodyReader<List<Attendee>>, 
 			MultivaluedMap<String, String> map, InputStream is) throws IOException, WebApplicationException {
 		JsonReader rdr = null; 
 		try {
-			List<Attendee> ratings = new ArrayList<Attendee>();
+			List<Attendee> attendees = new ArrayList<Attendee>();
 			rdr = Json.createReader(is);
 			JsonArray arr = rdr.readArray();
 			for (int i = 0 ; i <arr.size(); i++) {
 				JsonObject attendeeJson = arr.getJsonObject(i);//rdr.readObject();
 				if (isDebugEnabled()) System.out.println(attendeeJson);
 				Attendee attendee = AttendeeProvider.fromJSON(attendeeJson);
-				ratings.add(attendee);
+				attendees.add(attendee);
 			}
-			return ratings;
+			return attendees;
 		} finally {
 			if (rdr != null) {
 				rdr.close();
@@ -113,20 +112,6 @@ public class AttendeeListProvider implements MessageBodyReader<List<Attendee>>, 
 	@Override
 	public void writeTo(List<Attendee> Attendees, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> map, OutputStream os) throws IOException, WebApplicationException {
-		
-//		JsonGenerator jsonGenerator = Json.createGenerator(new TeeOutputStream(os, System.out));
-//		jsonGenerator.writeStartArray();
-//		for (Attendee Attendee : Attendees) {
-//			jsonGenerator.writeStartObject()
-//				.write("id", Attendee.getId())
-//				.write("session", Attendee.getSession())
-//				.write("attendeeId", Attendee.getAttendeeId())
-//				.write("rating", Attendee.getRating())
-//			.writeEnd();
-//		}
-//		jsonGenerator.writeEnd();
-//		jsonGenerator.flush();
-//		jsonGenerator.close();
 		
 		JsonWriter writer = Json.createWriter(new TeeOutputStream(os, System.out));
 		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();

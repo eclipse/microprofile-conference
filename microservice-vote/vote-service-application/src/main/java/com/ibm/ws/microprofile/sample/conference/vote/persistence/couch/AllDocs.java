@@ -46,11 +46,11 @@ public class AllDocs {
 		try {
 		     rdr = Json.createReader(is);
 		     JsonObject couchIDJson = rdr.readObject();
-		     int total = couchIDJson.getInt("total_rows");
+
 		     JsonArray rowsJson = couchIDJson.getJsonArray("rows");
 		     
-		     Collection<String> ids = new ArrayList<String>(total);
-		     for(int i=0;i<total;i++){
+		     Collection<String> ids = new ArrayList<String>();
+		     for(int i=0;i<rowsJson.size();i++){
 		    	 JsonObject value = rowsJson.getJsonObject(i);
 		    	 String id = value.getString("id");
 		    	 ids.add(id);

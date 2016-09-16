@@ -17,100 +17,127 @@
 package com.ibm.ws.microprofile.sample.conference.vote.persistence.couch;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import com.ibm.ws.microprofile.sample.conference.vote.api.AttendeeProvider;
+import com.ibm.ws.microprofile.sample.conference.vote.api.SessionRatingProvider;
 
-@ApplicationScoped
+@Dependent
 public class CouchConnection {
 
+	@Inject
+	private Credentials credentials;
+	
 	public enum RequestType {
 		GET, POST, PUT, DELETE
 	}
 	
-	String username="0cbcf4ec-681d-4267-b8b2-63495750b883-bluemix";
-	String password="b2701582580bff41f9c9912b3c320f2407b2819a1704b0996543148abed1a52a";
-	String host="0cbcf4ec-681d-4267-b8b2-63495750b883-bluemix.cloudant.com";
-	String url="https://0cbcf4ec-681d-4267-b8b2-63495750b883-bluemix.cloudant.com";
-	
-	Credentials credentials = new Credentials(username, password, url, null);
-	
-	String usernameAndPassword = credentials.getUsername() + ":" + credentials.getPassword();
-    String authorizationHeaderName = "Authorization";
-    String authorizationHeaderValue = "Basic " + java.util.Base64.getEncoder().encodeToString( usernameAndPassword.getBytes() );
+	private String usernameAndPassword;
+	private String authorizationHeaderName = "Authorization";
+	private String authorizationHeaderValue;
 
-    String ifMatchHeaderName = "If-Match";
+	private String ifMatchHeaderName = "If-Match";
     
-	String dbName = "attendees";
-	String dbURL = url + "/" + dbName;
+	private String dbName = "attendees";
 	private Client client;
 	
 	boolean connected = false;
-	private WebTarget databaseTarget;
+	private String url;
 	
-	@PostConstruct
-	public void connect(){
-		try{
-	        this.client = ClientBuilder.newClient();
-	        this.client.register(CouchIDProvider.class);
-	        this.client.register(AllDocsProvider.class);
-	        this.client.register(AttendeeProvider.class);
-	        
-	        this.databaseTarget = client.target(url);
-	        this.databaseTarget = this.databaseTarget.path(dbName);
-	        Invocation.Builder builder = databaseTarget.request( "application/json" );
-	        builder = builder.header( authorizationHeaderName, authorizationHeaderValue );
-	        Response response = builder.get();
-	        
-			int code = response.getStatus();
-			
-			if(code != 200){
-		    	if(code == 404){
-		    		
-		    		Response putResponse = builder.put(Entity.json(""));
-		    		
-		    		code = putResponse.getStatus();
-		    		
-		    		if(code != 201){
-		    			System.out.println("Unable to create couch database: "+putResponse.readEntity(String.class));
-		    		}
-		    		else{
-		    			System.out.println("Couch DB Created: "+dbName);
-		    			connected = true;
-		    		}
-		    	}
-		    	else{
-		    		System.out.println("Unable to connect to couch database: "+response.readEntity(String.class));
-		    	}
-		    }
-			else{
-				connected = true;
+	public boolean connect(String dbName){
+		if(!connected){
+			this.dbName = dbName;
+			this.url = credentials.getUrl();
+			this.usernameAndPassword = credentials.getUsername() + ":" + credentials.getPassword();
+			this.authorizationHeaderValue = "Basic " + java.util.Base64.getEncoder().encodeToString( usernameAndPassword.getBytes() );
+
+			try{
+		        this.client = ClientBuilder.newClient();
+		        this.client.register(CouchIDProvider.class);
+		        this.client.register(AllDocsProvider.class);
+		        this.client.register(AttendeeProvider.class);
+		        this.client.register(SessionRatingProvider.class);
+		        
+		        WebTarget databaseTarget = client.target(url);
+		        databaseTarget = databaseTarget.path(dbName);
+		        Invocation.Builder builder = databaseTarget.request( "application/json" );
+		        builder = builder.header( authorizationHeaderName, authorizationHeaderValue );
+		        Response response = builder.get();
+		        
+				int code = response.getStatus();
+				
+				if(code != 200){
+			    	if(code == 404){
+			    		
+			    		Response putResponse = builder.put(Entity.json(""));
+			    		
+			    		code = putResponse.getStatus();
+			    		
+			    		if(code != 201){
+			    			System.out.println("Unable to create couch database: "+putResponse.readEntity(String.class));
+			    		}
+			    		else{
+			    			System.out.println("Couch DB Created: "+dbName);
+			    			connected = true;
+			    		}
+			    	}
+			    	else{
+			    		System.out.println("Unable to connect to couch database: "+response.readEntity(String.class));
+			    	}
+			    }
+				else{
+					MultivaluedMap<String, Object> headers = response.getHeaders();
+					for(Map.Entry<String, List<Object>> entry:headers.entrySet()){
+						for(Object value:entry.getValue()){
+							System.out.println(entry.getKey() + " : " + value);
+						}
+					}
+					connected = true;
+				}
+				
+				if(connected){
+					System.out.println("Connected to Couch DB: "+dbName);
+				}
 			}
-			
-			if(connected){
-				System.out.println("Connected to Couch DB: "+dbName);
+			catch(Throwable t){
+				t.printStackTrace();
+				System.out.println("Unable to connect to couch database: "+dbName);
 			}
 		}
-		catch(Throwable t){
-			t.printStackTrace();
-			System.out.println("Unable to connect to couch database: "+dbName);
-		}
+		return connected;
 	}
 	
-	public <T, R> R request(String path, RequestType requestType, T payload, Class<R> returnType, String etag, int...expectedStatus) {
+	public <T, R> R request(String path, RequestType requestType, T payload, Class<R> returnType, String etag, int expectedStatus) {
+		return request(path, null, null, requestType, payload, returnType, etag, expectedStatus);
+	}
+	
+	public <T, R> R request(String path, String queryName, String queryValue, RequestType requestType, T payload, Class<R> returnType, String etag, int expectedStatus) {
 		
-        WebTarget target = databaseTarget.path(dbName);
+		WebTarget target = client.target(url);
+		target = target.path(dbName);
         if(path != null && !path.equals("")){
-        	target = databaseTarget.path(path);
+        	target = target.path(path);
         }
+        
+        if(queryName != null && !queryName.equals("")){
+        	target = target.queryParam(queryName, queryValue);
+        }
+        
+        System.out.println(requestType +" : "+target.getUri());
+        
         Invocation.Builder builder = target.request( "application/json" );
         builder = builder.header( authorizationHeaderName, authorizationHeaderValue );
         if(etag != null){
@@ -135,8 +162,9 @@ public class CouchConnection {
 		}
         
 		int code = response.getStatus();
-	    if(!Arrays.asList(expectedStatus).contains(code)){
-			throw new RuntimeException("Unable to execute request: "+code);
+	    if(code != expectedStatus){
+	    	String error = response.readEntity(String.class);
+	    	throw new RequestStatusException("Unable to execute request: "+code+" : "+error, code);
 		}
 	    
 	    R returnedPayload = null;

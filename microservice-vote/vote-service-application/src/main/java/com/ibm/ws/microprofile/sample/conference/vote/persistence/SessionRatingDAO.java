@@ -46,13 +46,13 @@ public interface SessionRatingDAO {
 	 * @param session
 	 * @return
 	 */
-	Collection<SessionRating> getRatingsBySession(String session);
+	Collection<SessionRating> getRatingsBySession(String sessionId);
 	/**
 	 * Get the session ratings for the specified attendee 
 	 * @param attendee
 	 * @return
 	 */
-	Collection<SessionRating> getRatingsByAttendee(Attendee attendee);
+	Collection<SessionRating> getRatingsByAttendee(String attendeeId);
 	/**
 	 * Get all session ratings
 	 * @return

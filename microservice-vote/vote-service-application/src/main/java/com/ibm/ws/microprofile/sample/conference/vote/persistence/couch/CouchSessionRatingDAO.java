@@ -15,143 +15,143 @@
  */
 package com.ibm.ws.microprofile.sample.conference.vote.persistence.couch;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.Persistent;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.SessionRatingDAO;
+import com.ibm.ws.microprofile.sample.conference.vote.persistence.couch.CouchConnection.RequestType;
+
 @ApplicationScoped
 @Persistent
 public class CouchSessionRatingDAO implements SessionRatingDAO{
 
-	private Map<String,SessionRating> allRatings = new HashMap<String,SessionRating>();
+	@Inject
+	CouchConnection couch;
+	
+	private String allView = "function (doc) {emit(doc._id, 1)}";
 
-	private Map<String,Collection<String>> ratingIdsBySession = new HashMap<String,Collection<String>>();
+	private String sessionView = "function (doc) {emit(doc.session, doc._id)}";
+	private String attendeeView = "function (doc) {emit(doc.attendeeId, doc._id)}";
+	
+	private String designDoc = "{\"views\":{"
+							    + "\"all\":{\"map\":\""+allView+"\"},"
+							  	+ "\"session\":{\"map\":\""+sessionView+"\"},"
+							  	+ "\"attendee\":{\"map\":\""+attendeeView+"\"}}}";
 
-	private Map<String,Collection<String>> ratingIdsByAttendee = new HashMap<String,Collection<String>>();
-
+	
+	private boolean connected;
+	
+	@PostConstruct
+	public void connect(){
+		this.connected = couch.connect("ratings");
+		
+		try{
+			couch.request("_design/ratings", RequestType.GET, null, null, null, 200);
+		}
+		catch(RequestStatusException e){
+			if(e.getCode() == 404){
+				couch.request("_design/ratings", RequestType.PUT, designDoc, null, null, 201);
+			}
+			else{
+				throw e;
+			}
+		}
+	}
 	
 	@Override
 	public SessionRating rateSession(SessionRating sessionRating) {
 		
-		String session = sessionRating.getSession();
-		String attendeeId = sessionRating.getAttendeeId();
-		
-		allRatings.put(sessionRating.getId(), sessionRating);
-		Collection<String> sessionRatings = ratingIdsByAttendee.get(attendeeId);
-		if (sessionRatings == null) {
-			sessionRatings = new HashSet<String>();
-			ratingIdsByAttendee.put(attendeeId, sessionRatings);
-		}
-		sessionRatings.add(sessionRating.getId());
-
-		sessionRatings = ratingIdsBySession.get(session);
-		if (sessionRatings == null) {
-			sessionRatings = new HashSet<String>();
-			ratingIdsBySession.put(session, sessionRatings);
-		}
-		sessionRatings.add(sessionRating.getId());
+		CouchID ratingID = couch.request(null, RequestType.POST, sessionRating, CouchID.class, null, 201);
+		sessionRating = getSessionRating(ratingID.getId());
 
 		return sessionRating;
 		
 	}
 
+	private SessionRating getSessionRating(String id) {
+		SessionRating sessionRating = couch.request(id, RequestType.GET, null, SessionRating.class, null, 200);
+		return sessionRating;
+	}
+
 	@Override
 	public SessionRating updateRating(SessionRating newRating) {
-		allRatings.put(newRating.getId(), newRating);
-		return newRating;
+		SessionRating original = getSessionRating(newRating.getId());
 		
+		couch.request(newRating.getId(), RequestType.PUT, newRating, null, original.getRevision(), 201);
+		
+		newRating = getSessionRating(newRating.getId());
+		return newRating;
 	}
 
   	@Override
-	public void deleteRating(String id) {	
-  		SessionRating ratingToBeDeleted = allRatings.get(id);
-  		if (ratingToBeDeleted == null) {
-  			return;
-  		}
-  		String sessionId = ratingToBeDeleted.getSession();
-  		String attendeeId = ratingToBeDeleted.getAttendeeId();
-  		//Remove the session rating from three maps
-  		//Remove the rating from ratingIdsBySession
-  		Collection<String> ratingIdsPerSession = ratingIdsBySession.get(sessionId);
-  		if (ratingIdsPerSession != null) {
-	  		ratingIdsPerSession.remove(id);
-	  		if (ratingIdsPerSession.isEmpty()) {
-	  			ratingIdsBySession.remove(sessionId);
-	  		} else {
-	  			ratingIdsBySession.put(sessionId,  ratingIdsPerSession);
-	  		}
-  		}
+	public void deleteRating(String id) {
   		
-  		//Remove the rating from ratingIdsByAttendee
-  		Collection<String> ratingIdsPerAttendee = ratingIdsByAttendee.get(attendeeId);
-  		ratingIdsPerAttendee.remove(id);
-  		if (ratingIdsPerAttendee != null) {
-	  		if (ratingIdsPerAttendee.isEmpty()) {
-	  			ratingIdsByAttendee.remove(attendeeId);
-	  		} else {
-	  			ratingIdsByAttendee.put(attendeeId, ratingIdsPerAttendee);  	
-	  		}
-  		}
-  			
-  		//Remove the rating from the allRating
-		allRatings.remove(id);
+  		SessionRating original = getSessionRating(id);
 		
+  		couch.request(id, RequestType.DELETE, null, null, original.getRevision(), 200);
   	}
 
 	
 
 	@Override
 	public Collection<SessionRating> getRatingsBySession(String sessionId) {
-		System.out.println("> allSessionVotes() " + sessionId);
-		for (Map.Entry<String, Collection<String>> entry : ratingIdsBySession.entrySet()) {
-			System.out.println(entry.getKey() + " = " + entry.getValue());
-		}
-		Set<SessionRating> allSessionVotes = new HashSet<SessionRating>();
-		Collection<String> ids = ratingIdsBySession.get(sessionId);
-		if ((ids != null) && (!ids.isEmpty())) {
-			for (String id : ids) {
-				allSessionVotes.add(allRatings.get(id));
-			}
-		}
-		return allSessionVotes;
+		return querySessionRating("session", sessionId);
 	}
-
-
-
 	
 	@Override
-	public Collection<SessionRating> getRatingsByAttendee(Attendee attendee) {
-		Set<SessionRating> allAttendeeVotes = new HashSet<SessionRating>();
-		Collection<String> ids = ratingIdsByAttendee.get(attendee.getId());
-		if ((ids != null) && (!ids.isEmpty())) {
-			for (String id : ids) {
-				allAttendeeVotes.add(allRatings.get(id));
-			}
-		}
-		return allAttendeeVotes;
+	public Collection<SessionRating> getRatingsByAttendee(String attendeeId) {
+		return querySessionRating("attendee", attendeeId);
 	}
 
+	private Collection<SessionRating> querySessionRating(String query, String value) {
+		
+		AllDocs allDocs = couch.request("_design/ratings/_view/"+query,"key","\""+value+"\"", RequestType.GET, null, AllDocs.class, null, 200);
+	    
+	    Collection<SessionRating> ratings = new ArrayList<SessionRating>();
+	    for(String id:allDocs.getIds()){
+	    	SessionRating rating  = getSessionRating(id);
+	    	ratings.add(rating);
+	    }
+	    
+		return ratings;
+	}
+	
 	
 	@Override
 	public Collection<SessionRating> getAllRatings() {
 		
-		return allRatings.values();
+		AllDocs allDocs = couch.request("_design/ratings/_view/all", RequestType.GET, null, AllDocs.class, null, 200);
+	    
+	    Collection<SessionRating> sessionRatings = new ArrayList<SessionRating>();
+	    for(String id:allDocs.getIds()){
+	    	SessionRating sessionRating  = getSessionRating(id);
+	    	sessionRatings.add(sessionRating);
+	    }
+	    
+		return sessionRatings;
 	}
 
 	@Override
 	public void clearAllRatings() {
-		allRatings.clear();
-		ratingIdsBySession.clear();
-		ratingIdsByAttendee.clear();
+		AllDocs allDocs = couch.request("_design/ratings/_view/all", RequestType.GET, null, AllDocs.class, null, 200);
+	    
+	    for(String id:allDocs.getIds()){
+	    	deleteSessionRating(id);
+	    }
 		
+	}
+
+	private void deleteSessionRating(String id) {
+		SessionRating sessionRating = getSessionRating(id);
+		
+		couch.request(id, RequestType.DELETE, null, null, sessionRating.getRevision(), 200);
 	}
 
 }

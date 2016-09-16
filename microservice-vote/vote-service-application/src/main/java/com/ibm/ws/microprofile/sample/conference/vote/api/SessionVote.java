@@ -31,6 +31,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
@@ -43,8 +44,8 @@ import com.ibm.ws.microprofile.sample.conference.vote.persistence.SessionRatingD
 @Path("/session")
 public class SessionVote {
 
-	private @Inject @Persistent AttendeeDAO hashMapAttendeeDAO;
-	private @Inject @NonPersistent AttendeeDAO couchDBAttendeeDAO;
+	private @Inject @NonPersistent AttendeeDAO hashMapAttendeeDAO;
+	private @Inject @Persistent AttendeeDAO couchDBAttendeeDAO;
 	
 	private @Inject @NonPersistent SessionRatingDAO hashMapSessionRatingDAO;
 	private @Inject @Persistent SessionRatingDAO couchDBSessionRatingDAO;
@@ -53,7 +54,7 @@ public class SessionVote {
 	private SessionRatingDAO selectedSessionRatingDAO;
 	
 	@PostConstruct
-	private void setAttendeeSessionRating()
+	private void connectToDAO()
 	{
 		if (couchDBAttendeeDAO.isAccessible()) {
 			selectedAttendeeDAO = 	couchDBAttendeeDAO;
@@ -91,7 +92,7 @@ public class SessionVote {
 	@GET
 	@Path("/attendee")
 	@Produces(APPLICATION_JSON)
-	public Collection<Attendee> listAttendees() {
+	public Collection<Attendee> getAllAttendees() {
 		return selectedAttendeeDAO.getAllAttendees();
 	}
 	
@@ -118,11 +119,20 @@ public class SessionVote {
 		return rating;
 	}
 
+	@GET
+	@Path("/rate")
+	@Produces(APPLICATION_JSON)
+    @Consumes(APPLICATION_JSON)
+	public Collection<SessionRating> getAllSessionRatings() {
+		return selectedSessionRatingDAO.getAllRatings();
+	}
+	
 	@PUT
 	@Path("/rate/{id}")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public SessionRating updateRating(@PathParam("id") String id, SessionRating newRating) {
+		newRating.setId(id);
 		selectedSessionRatingDAO.updateRating(newRating);
 		
 		return newRating;
@@ -138,15 +148,15 @@ public class SessionVote {
 	@Path("/ratingsBySession")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-	public Collection<SessionRating> allSessionVotes(String sessionId) {
+	public Collection<SessionRating> allSessionVotes(@QueryParam("sessionId") String sessionId) {
 		return selectedSessionRatingDAO.getRatingsBySession(sessionId);
 	}
 
 	@GET
 	@Path("/averageRatingBySession")
-	//@Produces(APPLICATION_JSON)
-    //@Consumes(APPLICATION_JSON)
-	public double sessionRatingAverage(String sessionId) {
+	@Produces(APPLICATION_JSON)
+    @Consumes(APPLICATION_JSON)
+	public double sessionRatingAverage(@QueryParam("sessionId") String sessionId) {
 		Collection<SessionRating> allSessionVotes = allSessionVotes(sessionId);
 		int denominator = allSessionVotes.size();
 		int numerator = 0;
@@ -160,21 +170,13 @@ public class SessionVote {
 	@Path("/ratingsByAttendee")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-	public Collection<SessionRating> votesByAttendee(Attendee attendee) {
-		return selectedSessionRatingDAO.getRatingsByAttendee(attendee);
+	public Collection<SessionRating> votesByAttendee(@QueryParam("attendeeId") String attendeeId) {
+		return selectedSessionRatingDAO.getRatingsByAttendee(attendeeId);
 	}
 	
 
 	///////////////////////////////////////////////////////////////////////////////
 	// The following methods are intended for testing only - not part of the API //
-	Collection<Attendee> getAllRegisteredAttendees() {
-		return selectedAttendeeDAO.getAllAttendees();
-	}
-
-	Collection<SessionRating> getAllSessionRatings() {
-		return selectedSessionRatingDAO.getAllRatings();
-	}
-	
 	void clearAllAttendees() {
 		selectedAttendeeDAO.clearAllAttendees();
 	}
