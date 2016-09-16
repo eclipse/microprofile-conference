@@ -120,6 +120,19 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.6.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.microprofile.showcase</groupId>
+            <artifactId>demo-bootstrap</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <profiles>

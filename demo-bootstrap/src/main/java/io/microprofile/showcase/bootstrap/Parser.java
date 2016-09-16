@@ -78,6 +78,7 @@ public class Parser {
                 Schedule schedule = new Schedule(times);
                 schedule.setId(schedules.size()+1);
                 schedules.add(schedule);
+                schedule.setSessionId(session.getId());
 
                 session.setSchedule(schedule.getId());
 
