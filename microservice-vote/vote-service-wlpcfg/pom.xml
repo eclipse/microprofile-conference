@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>vote-service-wlpcfg</artifactId>
+    <name>Conference :: Vote :: Config</name>
     <packaging>pom</packaging>
 
     <dependencies>

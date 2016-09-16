@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>vote-service-application</artifactId>
+    <name>Conference :: Vote :: Application</name>
     <packaging>war</packaging>
 
     <dependencies>

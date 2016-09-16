@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>demo-bootstrap</artifactId>
-    <name>Bootstrap Data</name>
+    <name>Conference :: Bootstrap Data</name>
 
     <packaging>jar</packaging>
 
