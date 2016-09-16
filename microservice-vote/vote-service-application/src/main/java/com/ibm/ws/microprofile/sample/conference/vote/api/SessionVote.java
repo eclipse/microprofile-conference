@@ -38,6 +38,8 @@ import com.ibm.ws.microprofile.sample.conference.vote.persistence.AttendeeDAO;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.NonPersistent;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.Persistent;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.SessionRatingDAO;
+import com.ibm.ws.microprofile.sample.conference.vote.utils.Log;
+
 @ApplicationScoped
 @Path("/session")
 public class SessionVote {
@@ -72,6 +74,7 @@ public class SessionVote {
 	@Path("/attendee")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
+	@Log
 	public Attendee registerAttendee(String name) {
 		Attendee attendee = selectedAttendeeDAO.createNewAttendee(new Attendee(name));
 		return attendee;  
@@ -81,6 +84,7 @@ public class SessionVote {
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
+	@Log
 	public Attendee updateAttendee(@PathParam("id") String id, Attendee attendee) {
 		attendee.setID(id);
 		Attendee updated = selectedAttendeeDAO.updateAttendee(attendee);
@@ -90,6 +94,7 @@ public class SessionVote {
 	@GET
 	@Path("/attendee")
 	@Produces(APPLICATION_JSON)
+	@Log
 	public Collection<Attendee> listAttendees() {
 		return selectedAttendeeDAO.getAllAttendees();
 	}
@@ -97,6 +102,7 @@ public class SessionVote {
 	@GET
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
+	@Log
 	public Attendee getAttendee(@PathParam("id") String id) {
 		return selectedAttendeeDAO.getAttendee(id);
 	}
@@ -104,6 +110,7 @@ public class SessionVote {
 	@DELETE
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
+	@Log
 	public void deleteAttendee(@PathParam("id") String id) {
 		 selectedAttendeeDAO.deleteAttendee(id);
 	}
@@ -112,6 +119,7 @@ public class SessionVote {
 	@Path("/rate")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
+	@Log
 	public SessionRating rateSession(SessionRating sessionRating) {
 		SessionRating rating = selectedSessionRatingDAO.rateSession(sessionRating);
 		return rating;
@@ -121,6 +129,7 @@ public class SessionVote {
 	@Path("/rate/{id}")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
+	@Log
 	public SessionRating updateRating(@PathParam("id") String id, SessionRating newRating) {
 		selectedSessionRatingDAO.updateRating(newRating);
 		
@@ -129,6 +138,7 @@ public class SessionVote {
 	@DELETE
 	@Path("/rate/{id}")
 	@Produces(APPLICATION_JSON)
+	@Log
 	public void deleteRating(@PathParam("id") String id) {
 		selectedSessionRatingDAO.deleteRating(id);
 	}
@@ -137,6 +147,7 @@ public class SessionVote {
 	@Path("/ratingsBySession")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
+	@Log
 	public Collection<SessionRating> allSessionVotes(String sessionId) {
 		return selectedSessionRatingDAO.getRatingsBySession(sessionId);
 	}
@@ -145,6 +156,7 @@ public class SessionVote {
 	@Path("/averageRatingBySession")
 	//@Produces(APPLICATION_JSON)
     //@Consumes(APPLICATION_JSON)
+	@Log
 	public double sessionRatingAverage(String sessionId) {
 		Collection<SessionRating> allSessionVotes = allSessionVotes(sessionId);
 		int denominator = allSessionVotes.size();
@@ -159,6 +171,7 @@ public class SessionVote {
 	@Path("/ratingsByAttendee")
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
+	@Log
 	public Collection<SessionRating> votesByAttendee(Attendee attendee) {
 		return selectedSessionRatingDAO.getRatingsByAttendee(attendee);
 	}
