@@ -50,6 +50,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.microprofile.showcase</groupId>
+            <artifactId>demo-bootstrap</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- JAVA EE -->
         <dependency>
             <groupId>org.apache.tomee</groupId>
