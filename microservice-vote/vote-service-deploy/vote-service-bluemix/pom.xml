@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
             <artifactId>vote-service-wlpcfg</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
             <type>liberty-assembly</type>
         </dependency>
     </dependencies>
@@ -117,7 +117,7 @@
                             <goal>push</goal>
                         </goals>
                         <configuration>
-                            <path>${project.build.directory}/app/vote-service-wlpcfg-1.0-SNAPSHOT.zip</path>
+                            <path>${project.build.directory}/app/vote-service-wlpcfg-1.0.0-SNAPSHOT.zip</path>
                         </configuration>
                     </execution>
                 </executions>
