@@ -200,7 +200,7 @@ public class CouchDBAttendeeStore implements AttendeeDAO {
 	}
 
 	@Override
-	public Attendee deleteAttendee(String id) {
+	public void deleteAttendee(String id) {
 		Attendee attendee = getAttendee(id);
 		
 		WebTarget target = client.target(url);
@@ -216,8 +216,12 @@ public class CouchDBAttendeeStore implements AttendeeDAO {
 	    if(code != 200){
 			throw new RuntimeException("Unable to delete attendee: "+code);
 		}
-		
-		return attendee;
+	}
+
+	@Override
+	public boolean isAccessible() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

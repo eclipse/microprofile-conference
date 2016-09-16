@@ -73,7 +73,7 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public Attendee registerAttendee(String name) {
-		Attendee attendee = selectedAttendeeDAO.createNewAttendee(name);		
+		Attendee attendee = selectedAttendeeDAO.createNewAttendee(new Attendee(name));
 		return attendee;  
 	}
 	
@@ -83,7 +83,7 @@ public class SessionVote {
     @Consumes(APPLICATION_JSON)
 	public Attendee updateAttendee(@PathParam("id") String id, Attendee attendee) {
 		attendee.setID(id);
-		Attendee updated = store.updateAttendee(attendee);
+		Attendee updated = selectedAttendeeDAO.updateAttendee(attendee);
 		return updated;
 	}
 
@@ -98,14 +98,14 @@ public class SessionVote {
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
 	public Attendee getAttendee(@PathParam("id") String id) {
-		return store.getAttendee(id);
+		return selectedAttendeeDAO.getAttendee(id);
 	}
 	
 	@DELETE
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
 	public void deleteAttendee(@PathParam("id") String id) {
-		 selectedAttendeeDAO.deleteAttendee(String.valueOf(id));
+		 selectedAttendeeDAO.deleteAttendee(id);
 	}
 	
 	@POST
