@@ -25,7 +25,7 @@ public class Endpoint implements Serializable {
     private static final long serialVersionUID = 3484992987302610677L;
 
     private String name;
-    private String urlEncoded;
+    private String url;
 
     public String getName() {
         return this.name;
@@ -40,17 +40,17 @@ public class Endpoint implements Serializable {
      *
      * @return String
      */
-    public String getUrlEncoded() {
-        return this.urlEncoded;
+    public String getUrl() {
+        return this.url;
     }
 
     /**
      * Set a Base64 encoded URL
      *
-     * @param urlEncoded String
+     * @param url String
      */
-    public void setUrlEncoded(final String urlEncoded) {
-        this.urlEncoded = urlEncoded;
+    public void setUrl(final String url) {
+        this.url = url;
     }
 
 }

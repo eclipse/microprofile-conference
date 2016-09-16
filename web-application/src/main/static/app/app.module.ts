@@ -1,6 +1,7 @@
 import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
+import {HttpModule, JsonpModule } from "@angular/http";
 import {AppComponent} from "./app.component";
 import {AppRouting} from "./app.routing";
 import {SpeakersComponent} from "./speaker/speakers.component";
@@ -15,11 +16,14 @@ import {ScheduleService} from "./schedule/schedule.service";
 import {VotesComponent} from "./vote/votes.component";
 import {VoteComponent} from "./vote/vote.component";
 import {VoteService} from "./vote/vote.service";
+import {EndpointsService} from "./shared/endpoints.service";
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
+        HttpModule,
+        JsonpModule,
         AppRouting
     ],
     declarations: [
@@ -34,6 +38,7 @@ import {VoteService} from "./vote/vote.service";
         VoteComponent
     ],
     providers: [
+        EndpointsService,
         SpeakerService,
         SessionService,
         ScheduleService,

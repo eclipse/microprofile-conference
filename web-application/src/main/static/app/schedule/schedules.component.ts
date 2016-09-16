@@ -6,7 +6,7 @@ enableProdMode();
 
 @Component({
     selector: 'schedules',
-    templateUrl: 'app/schedule/schedules.component.jsp'
+    templateUrl: 'app/schedule/schedules.component.html'
 })
 
 export class SchedulesComponent implements OnInit {

@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>vote-service-deploy</artifactId>
+    <name>Conference :: Vote :: Deploy</name>
     <packaging>pom</packaging>
     
     <dependencies>

@@ -5,7 +5,7 @@ enableProdMode();
 
 @Component({
     selector: 'speaker',
-    templateUrl: 'app/speaker/speaker.component.jsp'
+    templateUrl: 'app/speaker/speaker.component.html'
 })
 
 export class SpeakerComponent {

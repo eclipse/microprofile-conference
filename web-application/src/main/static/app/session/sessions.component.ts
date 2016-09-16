@@ -6,7 +6,7 @@ enableProdMode();
 
 @Component({
     selector: 'sessions',
-    templateUrl: 'app/session/sessions.component.jsp'
+    templateUrl: 'app/session/sessions.component.html'
 })
 
 export class SessionsComponent implements OnInit {
