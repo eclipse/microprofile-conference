@@ -32,10 +32,47 @@ but the service projects have been written by vendors to use their container.
 
 The following sections describe vendor specifics:
 
-* `microservice-schedule`: TBC
-* `microservice-session` : TBC
-* `microservice-speaker` : TBC
-* `microservice-vote` : TBC
+==== `microservice-schedule`
+TBC
+
+==== `microservice-session`
+
+Provided using link:http://wildfly-swarm.io[WildFly Swarm]
+
+*Build and run the service*
+```
+cd microservice-session
+mvn clean package
+java -jar target/microservice-session-swarm.jar [-D<OPTION>]
+```
+
+*Address & Port Bindings*
+
+.Session Service Options
+|===
+|Flag |Description| Default
+
+| swarm.bind.address=<address>
+| Interface to bind servers
+| 0.0.0.0
+
+| swarm.http.port=<port>
+| Sets the port for the HTTP server
+| 8080
+
+| swarm.port.offset=<offset>
+| Sets a global port adjustment
+| 0
+|===
+
+
+For a full set of configuration options please see link:https://wildfly-swarm.gitbooks.io/wildfly-swarm-users-guide/content/[the Wildfly Swarm Userguide]
+
+==== `microservice-speaker`
+TBC
+
+==== `microservice-vote`
+TBC
 
 === Run the UI Web Application
 
