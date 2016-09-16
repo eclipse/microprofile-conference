@@ -150,16 +150,6 @@
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
-                    <!--<execution>-->
-                    <!--<id>bower-install</id>-->
-                    <!--<phase>generate-resources</phase>-->
-                    <!--<goals>-->
-                    <!--<goal>bower</goal>-->
-                    <!--</goals>-->
-                    <!--<configuration>-->
-                    <!--<arguments>install</arguments>-->
-                    <!--</configuration>-->
-                    <!--</execution>-->
                     <execution>
                         <id>gulp-build</id>
                         <phase>generate-resources</phase>
