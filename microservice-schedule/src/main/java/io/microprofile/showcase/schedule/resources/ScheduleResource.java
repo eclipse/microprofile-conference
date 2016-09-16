@@ -66,9 +66,9 @@ public class ScheduleResource {
     }
 
     @GET
-    @Path("/venue/{venue}")
-    public Response allForVenue(@PathParam("venue") String venue) {
-        List<Schedule> schedulesByVenue = scheduleDAO.findByVenue(venue);
+    @Path("/venue/{id}")
+    public Response allForVenue(@PathParam("id") String id) {
+        List<Schedule> schedulesByVenue = scheduleDAO.findByVenue(Long.valueOf(id));
         GenericEntity<List<Schedule>> entity = buildEntity(schedulesByVenue);
         return Response.ok(entity).build();
     }

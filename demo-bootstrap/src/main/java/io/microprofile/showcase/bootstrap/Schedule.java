@@ -8,6 +8,9 @@ import javax.json.JsonObject;
  */
 public class Schedule extends JsonWrapper {
 
+
+    private int sessionId;
+
     public Schedule(JsonObject underlying) {
         super(underlying);
     }
@@ -28,6 +31,13 @@ public class Schedule extends JsonWrapper {
             return underlying.getJsonNumber("length").doubleValue();
         }
 
+    public int getSessionId() {
+        return sessionId;
+    }
+
+    void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
+    }
 
     @Override
     public String toString() {
