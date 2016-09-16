@@ -7,4 +7,5 @@ export class Speaker {
     biography: string;
     picture: string;
     twitterHandle: string;
+    links: {[key: string]: string} = {};
 }
