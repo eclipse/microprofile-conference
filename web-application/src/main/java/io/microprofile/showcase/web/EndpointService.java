@@ -103,7 +103,7 @@ public class EndpointService {
     private Endpoint getEndpoint(final String name, final String val) {
         final Endpoint ep = new Endpoint();
         ep.setName(name);
-        ep.setUrlEncoded(val);
+        ep.setUrl(val);
         return ep;
     }
 

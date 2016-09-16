@@ -5,7 +5,7 @@ enableProdMode();
 
 @Component({
     selector: 'vote',
-    templateUrl: 'app/vote/vote.component.jsp'
+    templateUrl: 'app/vote/vote.component.html'
 })
 
 

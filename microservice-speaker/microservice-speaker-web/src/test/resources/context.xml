@@ -1,4 +1,5 @@
-<%--
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
   ~ Copyright 2016 Microprofile.io
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +13,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  --%>
+  -->
 
-<h3>{{title}}</h3>
-<div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action"
-       *ngFor="let speaker of speakers"
-       [class.selected]="speaker === selectedSpeaker"
-       (click)="onSelect(speaker)">
-        <span class="badge">{{speaker.id}}</span> {{speaker.nameLast}}
-    </a>
-</div>
-<speaker [speaker]="selectedSpeaker"></speaker>
+<Context path="/" antiJARLocking="true" reloadable="true"/>

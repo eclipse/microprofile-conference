@@ -103,6 +103,7 @@
                             <directory>target/static-resources</directory>
                         </resource>
                     </webResources>
+                    <warName>ROOT</warName>
                 </configuration>
             </plugin>
 

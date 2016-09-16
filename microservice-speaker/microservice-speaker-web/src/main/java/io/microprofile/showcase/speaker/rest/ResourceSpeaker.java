@@ -40,7 +40,7 @@ import java.util.Set;
  * The Speaker resource
  */
 @ApplicationScoped
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces({MediaType.APPLICATION_JSON})
 @Path("/")
 public class ResourceSpeaker {
 

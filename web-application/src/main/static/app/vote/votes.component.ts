@@ -6,7 +6,7 @@ enableProdMode();
 
 @Component({
     selector: 'votes',
-    templateUrl: 'app/vote/votes.component.jsp'
+    templateUrl: 'app/vote/votes.component.html'
 })
 
 export class VotesComponent implements OnInit{

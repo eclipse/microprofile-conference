@@ -5,7 +5,7 @@ enableProdMode();
 
 @Component({
     selector: 'session',
-    templateUrl: 'app/session/session.component.jsp'
+    templateUrl: 'app/session/session.component.html'
 })
 
 export class SessionComponent {

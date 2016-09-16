@@ -1,0 +1,10 @@
+<h3>{{title}}</h3>
+<div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action"
+       *ngFor="let speaker of speakers"
+       [class.selected]="speaker === selectedSpeaker"
+       (click)="onSelect(speaker)">
+        <span class="badge">{{speaker.id}}</span> {{speaker.nameLast}}
+    </a>
+</div>
+<speaker [speaker]="selectedSpeaker"></speaker>
