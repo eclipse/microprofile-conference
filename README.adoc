@@ -37,6 +37,13 @@ The following sections describe vendor specifics:
 * `microservice-speaker` : TBC
 * `microservice-vote` : TBC
 
+=== Run Services in Liberty
+
+* `microservice-schedule`: TBC
+* `microservice-session` : `mvn package liberty:run-server -pl :microservice-session` available on http://localhost:8080/sessions
+* `microservice-speaker` : TBC
+* `microservice-vote` : TBC
+
 === Run the UI Web Application
 
 This starts the UI app and all services running in an embedded container.
