@@ -18,6 +18,15 @@ The application consists of several Microservices and a Web-Application managing
 
 == Setup
 
+* Install npm:
+
+----
+cd web-application/src/main/static
+npm install npm
+npm install typings --global
+typings install --global
+----
+
 * Build the projects using Maven (`mvn clean install`) or (`mvn -fn clean install`) to skip over failed tests.
 * To get the technical documentation, just `mvn clean generate-resources` under the `docs` directory. You will get a PDF and HTML version of the documentation under `docs/target/generated-docs`
 
@@ -38,7 +47,6 @@ mvn clean install -DskipTests
 
 .Console 1
 ----
-# Make sure  you have typings install (npm install -g typings)
 mvn clean package tomee:run -pl :web-application -DskipTests
 ----
 
