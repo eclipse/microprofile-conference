@@ -33,9 +33,9 @@ public class HashMapAttendeeDAO implements AttendeeDAO {
 	private Map<String,Attendee> attendees = new HashMap<String,Attendee>();
 	
 	@Override
-	public Attendee createNewAttendee(String name) {
+	public Attendee createNewAttendee(Attendee attendee) {
 		String attendeeId = UUID.randomUUID().toString();
-		Attendee attendee = new Attendee(attendeeId, name);
+		attendee = new Attendee(attendeeId, attendee.getName());
 		attendees.put(attendeeId, attendee);
 		return attendee;
 	}

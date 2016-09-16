@@ -20,8 +20,8 @@ import java.util.UUID;
 
 public class SessionRating {
 	
-	private final String id;
-	private final String revision;
+	private String id;
+	private String revision;
 	private String session;
 	private String attendeeId;
 	private int rating;
