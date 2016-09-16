@@ -1,0 +1,9 @@
+<server description="Session server">
+    <featureManager>
+        <feature>microProfile-1.0</feature>
+    </featureManager>
+    
+    <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="8081" />
+    
+    <webApplication location="microservice-schedule.war" contextRoot="/"/>
+</server>

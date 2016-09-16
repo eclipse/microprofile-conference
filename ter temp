@@ -1,0 +1,224 @@
+* [33mf594f07[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtemp[m[33m)[m Update README.adoc Node v6.6.0
+* [33m042ae9e[m Fix typings install
+* [33md8b4c20[m Fix #32
+* [33m2531f6a[m Add NPM install steps to 'Setup' section
+* [33m2373ca7[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m Add Liberty build to schedule
+* [33mcee2823[m Add Liberty build to session
+*   [33mb63e3e1[m Merge pull request #30 from AndyGee/master
+[32m|[m[33m\[m  
+[32m|[m * [33m2847708[m Template components and services for all microservices, and some models.
+* [33m|[m   [33mb07e5b4[m Merge pull request #29 from AndyGee/master
+[34m|[m[33m\[m [33m\[m  
+[34m|[m [33m|[m[33m/[m  
+[34m|[m * [33m83fee9a[m Names
+[34m|[m *   [33m96b9d33[m Merge remote-tracking branch 'upstream/master'
+[34m|[m [36m|[m[34m\[m  
+[34m|[m [36m|[m[34m/[m  
+[34m|[m[34m/[m[36m|[m   
+* [36m|[m   [33mbf8feaf[m Merge pull request #27 from heiko-braun/bootstrap_data
+[1;32m|[m[1;33m\[m [36m\[m  
+[1;32m|[m * [36m|[m [33m52f1c80[m Accidentally removed the microprofile fraction
+[1;32m|[m * [36m|[m [33m03583d6[m - Provide a shared bootstrap data module
+[1;32m|[m[1;32m/[m [36m/[m  
+* [36m|[m   [33m9878b82[m Merge pull request #26 from heiko-braun/session_data
+[1;34m|[m[1;35m\[m [36m\[m  
+[1;34m|[m * [36m|[m [33m32ff922[m Parse join data form j1 schedule and implement allSession(). The remaining REST methods will follow shortly
+[1;34m|[m [1;35m|[m * [33m69bf366[m Service framework in place (Currently for speaker), with complete endpoint resolution via WEB-INF/conference.properties
+[1;34m|[m [1;35m|[m[1;34m/[m  
+[1;34m|[m[1;34m/[m[1;35m|[m   
+* [1;35m|[m   [33maa8086b[m Merge pull request #25 from AndyGee/master
+[1;35m|[m[31m\[m [1;35m\[m  
+[1;35m|[m [31m|[m[1;35m/[m  
+[1;35m|[m[1;35m/[m[31m|[m   
+[1;35m|[m * [33maf47492[m Disable web.xml com.ibm.websphere.jaxrs.server.IBMRestServlet - Is this required for LP? Added JaxRs2Extension CXF workaround for Payara schedule service. Added service endpoints to UI app. Fix List injection in SpeakerDAO. Fixed some scopes.
+[1;35m|[m[1;35m/[m  
+*   [33m6986cb8[m Merge pull request #24 from AndyGee/master
+[32m|[m[33m\[m  
+[32m|[m * [33m6f9ed49[m Added UI EndpointService Fixed and updated build for liberty-profile using profile
+[32m|[m[32m/[m  
+*   [33m642b1c3[m Merge pull request #23 from AndyGee/master
+[34m|[m[35m\[m  
+[34m|[m * [33m432d1f7[m Added routing and jsp pages
+* [35m|[m   [33m19ef2fc[m Merge pull request #22 from ivannov/master
+[36m|[m[1;31m\[m [35m\[m  
+[36m|[m * [35m|[m [33m92a29c9[m Added the final finders and the delete operation
+[36m|[m[36m/[m [35m/[m  
+* [35m|[m   [33m82b4ee7[m Merge pull request #21 from AndyGee/master
+[1;32m|[m[35m\[m [35m\[m  
+[1;32m|[m [35m|[m[35m/[m  
+[1;32m|[m *   [33m97be6b0[m Merge remote-tracking branch 'upstream/master'
+[1;32m|[m [1;34m|[m[1;32m\[m  
+[1;32m|[m [1;34m|[m[1;32m/[m  
+[1;32m|[m[1;32m/[m[1;34m|[m   
+* [1;34m|[m   [33m5754f45[m Merge pull request #20 from AndyGee/master
+[1;36m|[m[31m\[m [1;34m\[m  
+* [31m\[m [1;34m\[m   [33m5889e99[m Merge pull request #18 from WASdev/master
+[32m|[m[33m\[m [31m\[m [1;34m\[m  
+[32m|[m * [31m\[m [1;34m\[m   [33m0c9747b[m Merge pull request #5 from microprofile/master
+[32m|[m [34m|[m[35m\[m [31m\[m [1;34m\[m  
+[32m|[m * [35m\[m [31m\[m [1;34m\[m   [33mf9641b1[m Merge pull request #4 from WASdev/copyright
+[32m|[m [36m|[m[1;31m\[m [35m\[m [31m\[m [1;34m\[m  
+[32m|[m [36m|[m * [35m|[m [31m|[m [1;34m|[m [33ma8fb647[m undo unnecessary copyright
+[32m|[m [36m|[m * [35m|[m [31m|[m [1;34m|[m [33m8b8f172[m Adding copyright comments and minor pom.xml fix
+[32m|[m [36m|[m[36m/[m [35m/[m [31m/[m [1;34m/[m  
+[32m|[m * [35m|[m [31m|[m [1;34m|[m   [33m6fb4f8f[m Merge pull request #3 from WASdev/initial-vote
+[32m|[m [1;32m|[m[1;33m\[m [35m\[m [31m\[m [1;34m\[m  
+[32m|[m [1;32m|[m * [35m|[m [31m|[m [1;34m|[m [33m4b10f5a[m delete unnecessary files
+[32m|[m [1;32m|[m[1;32m/[m [35m/[m [31m/[m [1;34m/[m  
+[32m|[m * [35m|[m [31m|[m [1;34m|[m   [33m24ffcc6[m Merge pull request #2 from microprofile/master
+[32m|[m [1;34m|[m[1;35m\[m [35m\[m [31m\[m [1;34m\[m  
+[32m|[m * [1;35m\[m [35m\[m [31m\[m [1;34m\[m   [33mf790fa1[m Merge pull request #1 from WASdev/initial-vote
+[32m|[m [1;36m|[m[31m\[m [1;35m\[m [35m\[m [31m\[m [1;34m\[m  
+[32m|[m [1;36m|[m * [1;35m|[m [35m|[m [31m|[m [1;34m|[m [33m44dc9f4[m initial vote service impl
+[32m|[m [1;36m|[m[1;36m/[m [1;35m/[m [35m/[m [31m/[m [1;34m/[m  
+* [1;36m|[m [1;35m|[m [35m|[m [31m|[m [1;34m|[m [33me151393[m Updating Schedule documentation
+* [1;36m|[m [1;35m|[m [35m|[m [31m|[m [1;34m|[m [33m94f0366[m Adding dummy data into the schedule map
+* [1;36m|[m [1;35m|[m [35m|[m [31m|[m [1;34m|[m [33m13979ea[m Adding Swagger
+* [1;36m|[m [1;35m|[m [35m|[m [31m|[m [1;34m|[m [33m9de7e00[m Updating WildFly Swarm version
+* [1;36m|[m [1;35m|[m [35m|[m [31m|[m [1;34m|[m [33m34b5014[m Adding doc to run, deploy and execute the web app
+* [1;36m|[m [1;35m|[m [35m|[m [31m|[m [1;34m|[m [33m415fe5e[m Fixing build
+[35m|[m [1;36m|[m[35m_[m[1;35m|[m[35m/[m [31m/[m [1;34m/[m  
+[35m|[m[35m/[m[1;36m|[m [1;35m|[m [31m|[m [1;34m|[m   
+* [1;36m|[m [1;35m|[m [31m|[m [1;34m|[m [33mb38d3d5[m Adding Maven resource plugin version
+* [1;36m|[m [1;35m|[m [31m|[m [1;34m|[m   [33m90d647e[m Merge pull request #17 from AndyGee/master
+[32m|[m[33m\[m [1;36m\[m [1;35m\[m [31m\[m [1;34m\[m  
+* [33m|[m [1;36m|[m [1;35m|[m [31m|[m [1;34m|[m [33m141d264[m Update README.adoc
+* [33m|[m [1;36m|[m [1;35m|[m [31m|[m [1;34m|[m   [33mc5d2b69[m Merge pull request #16 from AndyGee/master
+[34m|[m[35m\[m [33m\[m [1;36m\[m [1;35m\[m [31m\[m [1;34m\[m  
+[34m|[m [35m|[m [33m|[m [1;36m|[m [1;35m|[m [31m|[m * [33mfcba851[m Complete speaker resource tests
+[34m|[m [35m|[m [33m|[m [1;36m|[m [1;35m|[m [31m|[m[31m/[m  
+[34m|[m [35m|[m [33m|[m [1;36m|[m [1;35m|[m * [33m262f2db[m Fix #19 - Removed EJB
+[34m|[m [35m|[m [33m|[m [1;36m|[m[33m_[m[1;35m|[m[33m/[m  
+[34m|[m [35m|[m [33m|[m[33m/[m[1;36m|[m [1;35m|[m   
+[34m|[m [35m|[m * [1;36m|[m [1;35m|[m [33m5940e37[m Service
+[34m|[m [35m|[m[35m/[m [1;36m/[m [1;35m/[m  
+[34m|[m * [1;36m|[m [1;35m|[m [33m4bf6450[m Dummy speakers list ...Not dummy speakers!
+[34m|[m * [1;36m|[m [1;35m|[m [33mf8fd45c[m Ignore bat file
+[34m|[m * [1;36m|[m [1;35m|[m   [33mb81cfc4[m Merge remote-tracking branch 'upstream/master'
+[34m|[m [36m|[m[34m\[m [1;36m\[m [1;35m\[m  
+[34m|[m [36m|[m[34m/[m [1;36m/[m [1;35m/[m  
+[34m|[m[34m/[m[36m|[m [1;36m|[m [1;35m|[m   
+* [36m|[m [1;36m|[m [1;35m|[m [33m0833ed1[m After much hair pulling - A working Angular2 | Bootstrap4 | EE7 webapp (#15)
+* [36m|[m [1;36m|[m [1;35m|[m   [33maadee02[m Merge pull request #14 from ivannov/master
+[1;32m|[m[1;33m\[m [36m\[m [1;36m\[m [1;35m\[m  
+[1;32m|[m * [36m|[m [1;36m|[m [1;35m|[m [33m8520d73[m Added allForVenue operation
+[1;32m|[m[1;32m/[m [36m/[m [1;36m/[m [1;35m/[m  
+* [36m|[m [1;36m|[m [1;35m|[m [33m9f4a2bd[m Fixed Maven site plugin version
+* [36m|[m [1;36m|[m [1;35m|[m [33m0f93c92[m Fixed Maven exec plugin version
+* [36m|[m [1;36m|[m [1;35m|[m [33m956b622[m Fixed Maven dependency plugin version
+[1;35m|[m [36m|[m[1;35m_[m[1;36m|[m[1;35m/[m  
+[1;35m|[m[1;35m/[m[36m|[m [1;36m|[m   
+[1;35m|[m * [1;36m|[m [33me84a5c6[m Speakers fallback
+[1;35m|[m * [1;36m|[m [33m4aa4b22[m Working Angular2 application - See the readme.adoc
+[1;35m|[m * [1;36m|[m [33md3c6b47[m Gulp structure correct
+[1;35m|[m * [1;36m|[m [33m7df9a29[m Bootstrap
+[1;35m|[m * [1;36m|[m [33m7eec7f2[m Normalize all the line endings
+[1;35m|[m * [1;36m|[m [33m49129fe[m Angular2
+[1;35m|[m * [1;36m|[m [33m54835e2[m Saving files before refreshing line endings
+[1;35m|[m * [1;36m|[m [33m051b56e[m Angular2
+[1;35m|[m * [1;36m|[m   [33m4e0b301[m Merge remote-tracking branch 'refs/remotes/microprofile/master'
+[1;35m|[m [1;34m|[m[1;35m\[m [1;36m\[m  
+[1;35m|[m [1;34m|[m[1;35m/[m [1;36m/[m  
+[1;35m|[m[1;35m/[m[1;34m|[m [1;36m|[m   
+* [1;34m|[m [1;36m|[m [33m29dbd51[m Adding Swarm profile
+* [1;34m|[m [1;36m|[m [33m3ed9af0[m Improved pom.xml
+* [1;34m|[m [1;36m|[m [33m3f600d9[m Adding Schedule documentation
+[1;35m|[m * [1;36m|[m   [33m1270b18[m Merge remote-tracking branch 'refs/remotes/microprofile/master'
+[1;35m|[m [1;36m|[m[1;35m\[m [1;36m\[m  
+[1;35m|[m [1;36m|[m[1;35m/[m [1;36m/[m  
+[1;35m|[m[1;35m/[m[1;36m|[m [1;36m|[m   
+* [1;36m|[m [1;36m|[m   [33m99cebc1[m Merge pull request #9 from AndyGee/master
+[32m|[m[1;36m\[m [1;36m\[m [1;36m\[m  
+[32m|[m [1;36m|[m[1;36m/[m [1;36m/[m  
+[32m|[m * [1;36m|[m [33mc4303d5[m Remove venues - will get from service
+[32m|[m * [1;36m|[m   [33mc460bbd[m Merge remote-tracking branch 'refs/remotes/microprofile/master'
+[32m|[m [34m|[m[32m\[m [1;36m\[m  
+[32m|[m [34m|[m[32m/[m [1;36m/[m  
+[32m|[m[32m/[m[34m|[m [1;36m|[m   
+* [34m|[m [1;36m|[m   [33mdb5ddc8[m Merge pull request #12 from smillidge/update-dependencies
+[36m|[m[1;31m\[m [34m\[m [1;36m\[m  
+[36m|[m * [34m|[m [1;36m|[m [33mec507be[m Updated dependency for latest Payara Embedded Generates Uberjar in package phase for java -jar conference-schedule.jar
+[36m|[m[36m/[m [34m/[m [1;36m/[m  
+* [34m|[m [1;36m|[m [33me2db6c7[m The schedule service: model, dao and first resource methods (#10)
+[1;36m|[m [34m|[m[1;36m/[m  
+[1;36m|[m[1;36m/[m[34m|[m   
+[1;36m|[m * [33m310200a[m Speaker MS
+[1;36m|[m * [33m3b5741a[m Speaker
+[1;36m|[m *   [33mfaa14c6[m Merge remote-tracking branch 'refs/remotes/microprofile/master'
+[1;36m|[m [1;32m|[m[1;36m\[m  
+[1;36m|[m [1;32m|[m[1;36m/[m  
+[1;36m|[m[1;36m/[m[1;32m|[m   
+* [1;32m|[m   [33m058e145[m Merge pull request #8 from kenfinnigan/master
+[1;34m|[m[1;35m\[m [1;32m\[m  
+[1;34m|[m * [1;32m|[m [33m888397c[m Fix some items that were lost in merge
+[1;34m|[m[1;34m/[m [1;32m/[m  
+[1;34m|[m *   [33m9577afd[m Merge remote-tracking branch 'refs/remotes/microprofile/master'
+[1;34m|[m [1;36m|[m[1;34m\[m  
+[1;34m|[m [1;36m|[m[1;34m/[m  
+[1;34m|[m[1;34m/[m[1;36m|[m   
+* [1;36m|[m   [33md50f98d[m Merge pull request #7 from AndyGee/master
+[32m|[m[33m\[m [1;36m\[m  
+[32m|[m [33m|[m *   [33m5faa170[m Merge branch 'microprofile/master'
+[32m|[m [33m|[m [33m|[m[32m\[m  
+[32m|[m [33m|[m[33m/[m [32m/[m  
+[32m|[m [33m|[m [32m/[m   
+[32m|[m [33m|[m[32m/[m    
+[32m|[m[32m/[m[33m|[m     
+* [33m|[m [33mcf73c73[m Update README.adoc
+* [33m|[m   [33m68a09cd[m Merge pull request #5 from AndyGee/master
+[36m|[m[1;31m\[m [33m\[m  
+[36m|[m [1;31m|[m * [33md575f92[m Missing repo?
+[36m|[m [1;31m|[m[1;31m/[m  
+[36m|[m * [33m64b025b[m resteasy-jackson-provider
+[36m|[m *   [33m8cca7bb[m Session merge
+[36m|[m [1;32m|[m[36m\[m  
+[36m|[m [1;32m|[m[36m/[m  
+[36m|[m[36m/[m[1;32m|[m   
+* [1;32m|[m   [33mecb25ee[m Merge pull request #6 from kenfinnigan/master
+[1;34m|[m[1;35m\[m [1;32m\[m  
+[1;34m|[m * [1;32m\[m   [33m1a26c79[m Merge pull request #1 from AndyGee/patch-1
+[1;34m|[m [1;36m|[m[31m\[m [1;32m\[m  
+[1;34m|[m [1;36m|[m * [1;32m|[m [33me18fd22[m Missing some squigglies?
+[1;34m|[m [1;36m|[m[1;36m/[m [1;32m/[m  
+[1;34m|[m * [1;32m|[m [33m93d8528[m Initial updates to Session Service
+[1;34m|[m[1;34m/[m [1;32m/[m  
+[1;34m|[m * [33m2b33365[m Simplify
+[1;34m|[m * [33m03fbe80[m License
+[1;34m|[m * [33m827f1f4[m First Speaker test
+[1;34m|[m * [33mda8e4ea[m Normalize to eol=lf
+[1;34m|[m * [33m12eda0c[m JavaOne speakers page parser
+[1;34m|[m * [33mbb13eac[m JavaOne speakers page parser
+[1;34m|[m * [33m64403cc[m DAO
+[1;34m|[m[1;34m/[m  
+* [33m7080314[m Adding editor config file
+* [33m92fdb7d[m Adding technical documentation
+* [33ma898af4[m Adding information to the readme
+*   [33m9242b45[m Merge pull request #4 from AndyGee/master
+[32m|[m[33m\[m  
+[32m|[m *   [33mef82e48[m Disable license-maven-plugin - Licence must be identical in each file, not contain project references and be above the package This plugin should only be in a profile that requires activation
+[32m|[m [34m|[m[35m\[m  
+[32m|[m [34m|[m * [33m0ac1f5e[m Initial project work
+[32m|[m [34m|[m * [33m8a79a4f[m Initial project work
+[32m|[m * [35m|[m [33m8a2c961[m Normalize Apache Licence - Must be above 'package' Disable license plugin until safe
+[32m|[m * [35m|[m [33m57daa17[m Initial project work
+[32m|[m * [35m|[m [33md5e6aa3[m Initial project work
+[32m|[m[32m/[m [35m/[m  
+* [35m|[m   [33m1f45e92[m Merge pull request #2 from karianna/master
+[35m|[m[1;31m\[m [35m\[m  
+[35m|[m [1;31m|[m[35m/[m  
+[35m|[m[35m/[m[1;31m|[m   
+[35m|[m * [33m3fb8aaa[m Add Apache v2 license to all the things
+[35m|[m * [33m218158d[m Add Apache v2 license to all the things
+[35m|[m * [33m608d5b4[m Initial creation of Apache v2.0 licenses
+[35m|[m * [33mb790f6d[m Add license plugin
+[35m|[m[35m/[m  
+*   [33mf1675a7[m Merge pull request #1 from AndyGee/master
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33m1ea3923[m web-application
+[1;32m|[m * [33m2ea38b5[m Fix path
+[1;32m|[m * [33m920b67b[m Dummy files for GIT
+[1;32m|[m * [33m8e01931[m Format
+[1;32m|[m * [33m1330aa7[m web-application
+[1;32m|[m * [33m46f628a[m Initial maven project
+[1;32m|[m[1;32m/[m  
+* [33m21830e8[m readme
