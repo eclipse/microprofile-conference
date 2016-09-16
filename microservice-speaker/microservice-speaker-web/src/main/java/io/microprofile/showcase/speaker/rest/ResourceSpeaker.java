@@ -35,6 +35,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -53,8 +54,8 @@ public class ResourceSpeaker {
     private UriInfo uriInfo;
 
     @GET
-    public Set<Speaker> retrieveAll() {
-        final Set<Speaker> speakers = this.speakerDAO.getSpeakers();
+    public Collection<Speaker> retrieveAll() {
+        final Collection<Speaker> speakers = this.speakerDAO.getSpeakers();
 
         speakers.forEach(this::addHyperMedia);
 
