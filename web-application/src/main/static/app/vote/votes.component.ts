@@ -44,7 +44,7 @@ export class VotesComponent implements OnInit {
     }
 
     gotoDetail(): void {
-        this.router.navigate(['/detail', this.selectedVote.id]);
+        this.router.navigate(['/detail', this.selectedVote.nextAttendeeId]);
     }
 
     //noinspection TypeScriptUnresolvedVariable
