@@ -40,9 +40,11 @@ export class EndpointsService {
     private cacheEndpoint(endpoints: Endpoints, name: string): Endpoint {
         this.endpoints = endpoints;
 
+        console.log("Endpoints : " + this.endpoints.links['self']);
+
         for (let ep of this.endpoints.endpoints) {
             this.map[ep.name] = ep;
-            console.log('Loaded endpoint: ' + ep.name + " : " + ep.url);
+            console.log('Endpoint: ' + ep.name + ' : ' + ep.url);
         }
 
         return this.map[name];

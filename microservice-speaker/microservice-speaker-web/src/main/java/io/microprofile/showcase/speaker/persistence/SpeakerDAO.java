@@ -25,6 +25,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -46,19 +47,19 @@ public class SpeakerDAO {
     private void initStore() {
         System.out.println("Initialise speaker DAO from bootstrap data");
 
-        bootstrapData.getSpeaker()
-            .forEach(bootstrap -> {
+        this.bootstrapData.getSpeaker()
+                .forEach(bootstrap -> {
 
-                String id = String.valueOf(bootstrap.getId());
-                String[] names = bootstrap.getFullName().split(" ");
-                Speaker sp = new Speaker();
-                sp.setId(id);
-                sp.setNameFirst(names[0]);
-                sp.setNameLast(names[1]);
-                sp.setOrganization(bootstrap.getCompany());
-                sp.setBiography(bootstrap.getJobTitle());
-                speakers.put(id, sp);
-            });
+                    final String id = String.valueOf(bootstrap.getId());
+                    final String[] names = bootstrap.getFullName().split(" ");
+                    final Speaker sp = new Speaker();
+                    sp.setId(id);
+                    sp.setNameFirst(names[0]);
+                    sp.setNameLast(names[1]);
+                    sp.setOrganization(bootstrap.getCompany());
+                    sp.setBiography(bootstrap.getJobTitle());
+                    this.speakers.put(id, sp);
+                });
 
     }
 
@@ -80,7 +81,7 @@ public class SpeakerDAO {
      */
     public Speaker persist(final Speaker speaker) {
 
-        String id = UUID.randomUUID().toString();
+        final String id = UUID.randomUUID().toString();
         speaker.setId(id);
 
         this.speakers.put(id, speaker);
@@ -95,7 +96,7 @@ public class SpeakerDAO {
      * @param id Valid ID
      */
     public void remove(final String id) {
-       this.speakers.remove(id);
+        this.speakers.remove(id);
     }
 
     /**
@@ -106,10 +107,10 @@ public class SpeakerDAO {
      */
     public Speaker update(final Speaker speaker) {
 
-        if(!speakers.keySet().contains(speaker.getId()))
-            throw new IllegalArgumentException("Speaker not found "+speaker.getId());
+        if (!this.speakers.keySet().contains(speaker.getId()))
+            throw new IllegalArgumentException("Speaker not found " + speaker.getId());
 
-        return this.speakers.put(speaker.getId(),speaker);
+        return this.speakers.put(speaker.getId(), speaker);
     }
 
     /**
@@ -120,8 +121,8 @@ public class SpeakerDAO {
      */
     public Optional<Speaker> getSpeaker(final String id) {
 
-        if(speakers.containsKey(id))
-            return Optional.of(speakers.get(id));
+        if (this.speakers.containsKey(id))
+            return Optional.of(this.speakers.get(id));
 
         return Optional.empty();
     }
@@ -132,7 +133,7 @@ public class SpeakerDAO {
      * @param speaker Speaker to find - may contain partial details
      * @return Optional matching speakers
      */
-    public Optional<Set<Speaker>> find(final Speaker speaker) {
+    public Set<Speaker> find(final Speaker speaker) {
 
         final ArrayList<Speaker> speakers = new ArrayList<>();
         speakers.addAll(this.speakers.values());
@@ -147,13 +148,11 @@ public class SpeakerDAO {
         });
 
         if (!speakers.isEmpty()) {
-            final Set<Speaker> result = new HashSet<>(speakers.size());
-            result.addAll(speakers);
-            return Optional.of(result);
+            return new HashSet<>(speakers);
         }
 
 
-        return Optional.empty();
+        return Collections.emptySet();
     }
 
     /**
