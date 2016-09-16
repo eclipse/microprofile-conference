@@ -7,5 +7,6 @@ export class ScheduleService {
     schedules: Schedule[];
 
     getSchedules(): void {
+        r
     }
 }

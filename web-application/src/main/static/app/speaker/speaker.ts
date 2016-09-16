@@ -1,3 +1,4 @@
+//This is the same model our service emits
 export class Speaker {
     id: string;
     nameFirst: string;

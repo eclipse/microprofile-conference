@@ -18,9 +18,11 @@ package io.microprofile.showcase.web;
 
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,8 +30,6 @@ import org.junit.runner.RunWith;
 
 import javax.ws.rs.core.MediaType;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Arquillian will start the container, deploy all @Deployment bundles, then run all the @Test methods.
@@ -42,7 +42,7 @@ import java.util.Iterator;
  * of a class for another allowing for easy mocking.
  */
 @RunWith(Arquillian.class)
-public class PhoneServiceTest extends Assert {
+public class EndpointServiceTest extends Assert {
 
     /**
      * ShrinkWrap is used to create a war file on the fly.
@@ -53,9 +53,11 @@ public class PhoneServiceTest extends Assert {
      * <p>
      * More than one @Deployment method is allowed.
      */
-    @Deployment
-    public static WebArchive createDeployment() {
-        return ShrinkWrap.create(WebArchive.class).addClasses(Phone.class, PhoneService.class);
+    @Deployment(testable = false)
+    public static WebArchive createDeployment() throws Exception {
+        return ShrinkWrap.create(WebArchive.class).addClasses(Application.class, Endpoint.class, Endpoints.class, EndpointService.class)
+                .addAsWebInfResource("conference.properties", "conference.properties")
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
     /**
@@ -67,25 +69,23 @@ public class PhoneServiceTest extends Assert {
      * the name of the webapp
      */
     @ArquillianResource
-    private URL webappUrl;
+    private URL url;
 
     @Test
-    public void getPhoneList() throws Exception {
+    @RunAsClient
+    public void getEndpoints() throws Exception {
 
-        final WebClient webClient = WebClient.create(webappUrl.toURI());
+        final WebClient webClient = WebClient.create(this.url.toURI());
         webClient.accept(MediaType.APPLICATION_JSON);
 
-        final Collection<? extends Phone> phones = webClient.path("phone/list").getCollection(Phone.class);
+        final String reset = webClient.path("/service/endpoints/").get(String.class);
+        Assert.assertNotNull("Failed to reset", reset);
 
-        assertEquals(5, phones.size());
+        final Endpoints eps = webClient.path("conference")
+                .get(Endpoints.class);
 
-        final Iterator<? extends Phone> it = phones.iterator();
-        assertEquals("motorola-xoom-with-wi-fi", it.next().getId());
-        assertEquals("motorola-xoom", it.next().getId());
-        assertEquals("samsung-galaxy-tab", it.next().getId());
-        assertEquals("droid-pro-by-motorola", it.next().getId());
-        assertEquals("t-mobile-g2", it.next().getId());
-
+        Assert.assertNotNull("Failed to get Endpoints", eps);
+        Assert.assertFalse("Endpoints is empty", eps.getEndpoints().isEmpty());
     }
 
 }

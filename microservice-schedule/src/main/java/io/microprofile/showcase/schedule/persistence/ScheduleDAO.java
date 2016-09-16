@@ -16,17 +16,36 @@
 package io.microprofile.showcase.schedule.persistence;
 
 import io.microprofile.showcase.schedule.model.Schedule;
+import io.microprofile.showcase.schedule.model.Session;
+import io.microprofile.showcase.schedule.model.Venue;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.time.Month.SEPTEMBER;
 
 @ApplicationScoped
 public class ScheduleDAO {
 
-    private long sequence = 0L;
+    private long sequence = 11L;
 
-    private final Map<Long, Schedule> scheduleMap = new HashMap<>();
+    private Map<Long, Schedule> scheduleMap;
+
+    @PostConstruct
+    private void intializeScheduleMapWithDummyData() {
+        scheduleMap = new HashMap<>();
+        for (long i = 1; i <= 10; i++) {
+            scheduleMap.put(i, new Schedule(i,
+                new Session(i, "Java " + i + " for dummies", "The one who can't be named"),
+                new Venue(i, "Room 2" + i + i + 1),
+                LocalDate.of(2016, SEPTEMBER, 18), LocalTime.of(14, (int) i), Duration.ofHours(1)));
+        }
+    }
 
     public Schedule addSchedule(Schedule schedule) {
         long id;
@@ -63,16 +82,23 @@ public class ScheduleDAO {
         return schedule;
     }
 
-    public void deleteSchedule(Schedule schedule) {
-        if (schedule != null && schedule.getId() != null) {
-            scheduleMap.remove(schedule.getId());
+    public void deleteSchedule(Long scheduleId) {
+        if (scheduleId != null) {
+            scheduleMap.remove(scheduleId);
         }
     }
 
     public List<Schedule> findByVenue(String venue) {
         return scheduleMap.values()
+            .stream()
+            .filter(schedule -> schedule.getVenue().getName().equals(venue))
+            .collect(Collectors.toList());
+    }
+
+    public List<Schedule> findByDate(LocalDate date) {
+        return scheduleMap.values()
                 .stream()
-                .filter(schedule -> schedule.getVenue().getName().equals(venue))
+                .filter(schedule -> schedule.getDate().equals(date))
                 .collect(Collectors.toList());
     }
 }

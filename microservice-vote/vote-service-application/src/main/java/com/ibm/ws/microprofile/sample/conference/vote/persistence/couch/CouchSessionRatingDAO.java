@@ -98,7 +98,11 @@ public class CouchSessionRatingDAO implements SessionRatingDAO{
   		couch.request(id, RequestType.DELETE, null, null, original.getRevision(), 200);
   	}
 
-	
+  	@Override
+	public SessionRating getRating(String id) {
+  		SessionRating sessionRating = couch.request(id, RequestType.GET, null, SessionRating.class, null, 200);
+		return sessionRating;
+	}
 
 	@Override
 	public Collection<SessionRating> getRatingsBySession(String sessionId) {

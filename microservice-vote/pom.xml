@@ -46,20 +46,21 @@
         <packaging.type>usr</packaging.type>
         
         <!-- Cloud Foundry/Bluemix properties -->
-        <cf.context>eu-gb.mybluemix.net</cf.context>
-        <cf.target>https://api.eu-gb.bluemix.net</cf.target>
-        <cf.space>dev</cf.space>
+        <cf.context>mybluemix.net</cf.context>
+        <cf.target>https://api.ng.bluemix.net</cf.target>
+        <cf.space>MicroProfile</cf.space>
         <cf.context.root>${cf.host}.${cf.context}/${warContext}</cf.context.root>
-        
-        <!-- The Cloud Foundry or Bluemix organization, username and password can be 
-            entered here. -->
-        <!-- <cf.org></cf.org> -->
-        <!-- <cf.username></cf.username> -->
-        <!-- <cf.password></cf.password> -->
+        <cf.org>WASdev</cf.org>
+
         <!-- This is the host for your app in Bluemix and what it will be called in the dashboard. -->
-        <cf.host>${app.name}</cf.host>
+        <cf.host>microprofile-microservice-vote</cf.host>
         
-    <app.name>libertyProject</app.name>
+        <!-- The Cloud Foundry or Bluemix username and password can be 
+            entered here. -->
+       <!-- <cf.username></cf.username>
+        <cf.password></cf.password> -->
+        
+        <app.name>libertyProject</app.name>
     </properties>
     
     <repositories>

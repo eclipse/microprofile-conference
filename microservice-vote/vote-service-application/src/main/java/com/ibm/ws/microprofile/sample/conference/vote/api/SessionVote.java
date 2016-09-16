@@ -39,9 +39,11 @@ import com.ibm.ws.microprofile.sample.conference.vote.persistence.AttendeeDAO;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.NonPersistent;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.Persistent;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.SessionRatingDAO;
+import com.ibm.ws.microprofile.sample.conference.vote.utils.Log;
 
 @ApplicationScoped
 @Path("/session")
+@Log
 public class SessionVote {
 
 	private @Inject @NonPersistent AttendeeDAO hashMapAttendeeDAO;
@@ -122,7 +124,6 @@ public class SessionVote {
 	@GET
 	@Path("/rate")
 	@Produces(APPLICATION_JSON)
-    @Consumes(APPLICATION_JSON)
 	public Collection<SessionRating> getAllSessionRatings() {
 		return selectedSessionRatingDAO.getAllRatings();
 	}
@@ -137,6 +138,14 @@ public class SessionVote {
 		
 		return newRating;
 	}
+	
+	@GET
+	@Path("/rate/{id}")
+	@Produces(APPLICATION_JSON)
+	public SessionRating getRating(@PathParam("id") String id) {
+		return selectedSessionRatingDAO.getRating(id);
+	}
+	
 	@DELETE
 	@Path("/rate/{id}")
 	@Produces(APPLICATION_JSON)

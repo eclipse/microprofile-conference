@@ -156,4 +156,9 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO{
 		
 	}
 
+	@Override
+	public SessionRating getRating(String id) {
+		return allRatings.get(id);
+	}
+
 }

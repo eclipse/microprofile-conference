@@ -17,6 +17,7 @@ package io.microprofile.showcase.schedule.resources;
 
 import io.microprofile.showcase.schedule.model.Schedule;
 import io.microprofile.showcase.schedule.persistence.ScheduleDAO;
+import io.swagger.annotations.Api;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -24,10 +25,16 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/")
+@Api(description = "Schedule REST Endpoint")
 @RequestScoped
+@Produces("application/json")
 public class ScheduleResource {
 
     @Inject
@@ -35,16 +42,14 @@ public class ScheduleResource {
 
     @POST
     @Consumes("application/json")
-    @Produces("application/json")
     public Response add(Schedule schedule) {
         Schedule created = scheduleDAO.addSchedule(schedule);
         return Response.created(URI.create("/" + created.getId()))
-                        .entity(created)
-                        .build();
+            .entity(created)
+            .build();
     }
 
     @GET
-    @Produces("application/json")
     @Path("/{id}")
     public Response retrieve(@PathParam("id") Long id) {
         return scheduleDAO.findById(id)
@@ -53,23 +58,57 @@ public class ScheduleResource {
     }
 
     @GET
-    @Produces("application/json")
-    public Response allForVenue(@QueryParam("venue") String venue) {
+    @Path("/all")
+    public Response allSchedules() {
+        List<Schedule> allSchedules = scheduleDAO.getAllSchedules();
+        GenericEntity<List<Schedule>> entity = buildEntity(allSchedules);
+        return Response.ok(entity).build();
+    }
+
+    @GET
+    @Path("/venue/{venue}")
+    public Response allForVenue(@PathParam("venue") String venue) {
         List<Schedule> schedulesByVenue = scheduleDAO.findByVenue(venue);
         GenericEntity<List<Schedule>> entity = buildEntity(schedulesByVenue);
         return Response.ok(entity).build();
     }
 
-//    public Response activeAtDate(@QueryParam("time") String dateTime) {
+    @GET
+    @Path("/active/{dateTime}")
+    public Response activeAtDate(@PathParam("dateTime") String dateTimeString) {
+        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString);
+        List<Schedule> schedulesByDate = scheduleDAO.findByDate(dateTime.toLocalDate());
+        List<Schedule> activeAtTime = schedulesByDate.stream()
+            .filter(schedule -> isTimeInSchedule(dateTime.toLocalTime(), schedule))
+            .collect(Collectors.toList());
+        GenericEntity<List<Schedule>> entity = buildEntity(activeAtTime);
+        return Response.ok(entity).build();
+    }
 
-//    }
-//
-//    public Response allForDay(@QueryParam("day") String date) {
-//
-//    }
-//
+    @GET
+    @Path("/all/{date}")
+    public Response allForDay(@PathParam("date") String dateString) {
+        LocalDate date = LocalDate.parse(dateString);
+        List<Schedule> schedulesByDate = scheduleDAO.findByDate(date);
+        GenericEntity<List<Schedule>> entity = buildEntity(schedulesByDate);
+        return Response.ok(entity).build();
+    }
+
+    @DELETE
+    @Path("/{scheduleId}")
+    public Response remove(@PathParam("scheduleId") Long scheduleId) {
+        scheduleDAO.deleteSchedule(scheduleId);
+        return Response.noContent().build();
+    }
 
     private GenericEntity<List<Schedule>> buildEntity(final List<Schedule> scheduleList) {
         return new GenericEntity<List<Schedule>>(scheduleList) {};
+    }
+
+    private boolean isTimeInSchedule(LocalTime currentTime, Schedule schedule) {
+        LocalTime scheduleStartTime = schedule.getStartTime();
+        LocalTime scheduleEndTime = scheduleStartTime.plus(schedule.getDuration());
+        return scheduleStartTime.isBefore(currentTime) &&
+            scheduleEndTime.isAfter(currentTime);
     }
 }

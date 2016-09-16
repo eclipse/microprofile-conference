@@ -38,6 +38,7 @@ mvn clean install -DskipTests
 
 .Console 1
 ----
+# Make sure  you have typings install (npm install -g typings)
 mvn clean package tomee:run -pl :web-application -DskipTests
 ----
 
@@ -46,6 +47,8 @@ mvn clean package tomee:run -pl :web-application -DskipTests
 $ cd web-application
 $ mvn frontend:gulp
 ----
+
+Open a browser at http://localhost:8080/
 
 == Tests
 

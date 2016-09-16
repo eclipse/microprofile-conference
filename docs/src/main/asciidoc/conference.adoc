@@ -81,6 +81,7 @@ image::schedule.png[title="Schedule diagram"]
      List<Schedule> allForVenue(venue)
      List<Schedule> activeAtTime(time)
      List<Schedule> allForDay(date)
+     List<Schedule> all
 
 == Session Voting Service
 

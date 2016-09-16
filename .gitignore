@@ -18,3 +18,4 @@ rebuild.sh
 derby.log
 npm-debug.log
 /update.fork.bat
+update.fork.bat

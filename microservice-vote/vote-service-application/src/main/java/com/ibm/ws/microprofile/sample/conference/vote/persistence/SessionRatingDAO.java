@@ -62,6 +62,12 @@ public interface SessionRatingDAO {
 	 * Delete all ratings
 	 */
 	void clearAllRatings();
+	
+	/**
+	 * Get a session rating
+	 * @param id
+	 */
+	SessionRating getRating(String id);
 
 	
 

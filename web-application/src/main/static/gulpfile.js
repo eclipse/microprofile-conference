@@ -80,6 +80,12 @@ gulp.task('js-third-party', function () {
         './node_modules/zone.js/dist/zone.js',
         './node_modules/reflect-metadata/Reflect.js',
         './node_modules/systemjs/dist/system.src.js',
+        './node_modules/html5shiv/dist/html5shiv.min.js',
+        './node_modules/respond.js/dest/respond.min.js',
+        './node_modules/jquery/dist/jquery.min.js',
+        './node_modules/jquery-easing/dist/jquery.easing.1.3.umd.min.js',
+        './node_modules/bootstrap/dist/js/bootstrap.min.js',
+        './node_modules/tether/dist/js/tether.min.js',
         // angular2
         './node_modules/@angular/core/bundles/core.umd.js',
         './node_modules/@angular/common/bundles/common.umd.js',

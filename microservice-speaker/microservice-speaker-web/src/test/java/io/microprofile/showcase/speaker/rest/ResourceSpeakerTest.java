@@ -27,19 +27,24 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import java.net.URL;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @RunWith(Arquillian.class)
 public class ResourceSpeakerTest {
+
+    private final Logger log = Logger.getLogger(ResourceSpeakerTest.class.getName());
 
     @Deployment(testable = false)
     public static WebArchive deploy() {
@@ -58,19 +63,142 @@ public class ResourceSpeakerTest {
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
+    @ArquillianResource
+    private URL url;
+
     @Test
     @RunAsClient
-    public void resourceTest(@ArquillianResource final URL url) {
+    public void testGet() {
 
-        final Client client = ClientBuilder.newBuilder().build();
-        final WebTarget target = client.target(url.toExternalForm() + "speaker");
+        final Set<Speaker> speakers = this.getWebTarget("speaker")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get(new GenericType<Set<Speaker>>() {
+                });
 
-        final Set<Speaker> speakers = target.request(MediaType.APPLICATION_JSON_TYPE).get(new GenericType<Set<Speaker>>() {
-        });
+        Assert.assertFalse(speakers.isEmpty());
 
         for (final Speaker speaker : speakers) {
-            System.out.println(speaker.getNameFirst() + " " + speaker.getNameLast());
+            this.log.info("Listed: " + speaker.getNameFirst() + " " + speaker.getNameLast());
         }
+    }
+
+    @Test
+    @RunAsClient
+    public void testSearch() {
+
+        final Speaker search = new Speaker();
+        search.setNameFirst("Ar");
+        search.setNameLast("G");
+
+        final Set<Speaker> speakers = this.getWebTarget("speaker/search").request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.json(search))
+                .readEntity(new GenericType<Set<Speaker>>() {
+                });
+
+        Assert.assertFalse(speakers.isEmpty());
+
+        boolean foundArun = false;
+
+        for (final Speaker speaker : speakers) {
+            this.log.info("Found: " + speaker.getNameFirst() + " " + speaker.getNameLast());
+            if ("Arun".equals(speaker.getNameFirst()) && "Gupta".equals(speaker.getNameLast())) {
+                foundArun = true;
+            }
+        }
+
+        Assert.assertTrue(foundArun);
+    }
+
+    @Test
+    @RunAsClient
+    public void testAddandRetrieve() {
+
+        Speaker speaker = new Speaker();
+        speaker.setNameFirst("Andy");
+        speaker.setNameLast("Gumbrecht");
+        speaker.setOrganization("Tomitribe");
+        speaker.setTwitterHandle("@AndyGeeDe");
+        speaker.setBiography("Some bloke");
+        speaker.setPicture("https://pbs.twimg.com/profile_images/425313992689475584/KIrtgA86.jpeg");
+
+        final Speaker added = this.getWebTarget("speaker/add").request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.json(speaker))
+                .readEntity(Speaker.class);
+
+        final String id = added.getId();
+        Assert.assertNotNull(id);
+
+        speaker = this.getWebTarget("speaker/retrieve/{id}").resolveTemplate("id", id)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get()
+                .readEntity(Speaker.class);
+
+        Assert.assertEquals("Failed to get added speaker", "Gumbrecht", speaker.getNameLast());
+        this.log.info("Added: " + speaker.toString());
+    }
+
+    @Test
+    @RunAsClient
+    public void testUpdate() {
+
+        final Speaker search = new Speaker();
+        search.setNameFirst("Sebastian");
+        search.setNameLast("Daschner");
+
+        final Set<Speaker> speakers = this.getWebTarget("speaker/search").request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.json(search))
+                .readEntity(new GenericType<Set<Speaker>>() {
+                });
+
+        final Speaker found = speakers.iterator().next();
+        final String id = found.getId();
+
+        Assert.assertNull("Expected no organization", found.getOrganization());
+
+        found.setOrganization("Freelancer");
+
+        this.getWebTarget("speaker/update").request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.json(found));
+
+        final Speaker updated = this.getWebTarget("speaker/retrieve/{id}").resolveTemplate("id", id)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get()
+                .readEntity(Speaker.class);
+
+        Assert.assertEquals("Failed to update speaker", "Freelancer", updated.getOrganization());
+        this.log.info("Updated: " + updated.toString());
+    }
+
+    @Test
+    @RunAsClient
+    public void testRemove() {
+        final Speaker search = new Speaker();
+        search.setNameFirst("Markus");
+        search.setNameLast("Eisele");
+
+        final Set<Speaker> speakers = this.getWebTarget("speaker/search").request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.json(search))
+                .readEntity(new GenericType<Set<Speaker>>() {
+                });
+
+        final Speaker found = speakers.iterator().next();
+        final String id = found.getId();
+
+        this.getWebTarget("speaker/remove/{id}").resolveTemplate("id", id)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .delete();
+
+        final Speaker updated = this.getWebTarget("speaker/retrieve/{id}").resolveTemplate("id", id)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get()
+                .readEntity(Speaker.class);
+
+        Assert.assertNull("Found unexpected response", updated.getId());
+    }
+
+    private WebTarget getWebTarget(final String endpoint) {
+        final Client client = ClientBuilder.newBuilder().build();
+        return client.target(this.url.toExternalForm() + endpoint);
     }
 
 }

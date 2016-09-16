@@ -38,21 +38,41 @@
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <!--SERVICES-->
-        <!--These are here simply to enforce the build order-->
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>microservice-speaker</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
             <scope>provided</scope>
         </dependency>
 
-        <!--3RD PARTY-->
+        <!--SERVICES-->
+        <!--These are here to enforce the build order. The UI is independent of the Microprofile Services-->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>microservice-speaker-model</artifactId>
+            <artifactId>microservice-speaker-web</artifactId>
             <version>${project.version}</version>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>microservice-schedule</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>microservice-session</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+            <artifactId>vote-service-application</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+            <scope>provided</scope>
         </dependency>
 
         <!--TEST-->
@@ -92,6 +112,13 @@
                 <configuration>
                     <tomeeVersion>${version.tomee}</tomeeVersion>
                     <tomeeClassifier>plus</tomeeClassifier>
+
+                    <webapps>
+                        <webapp>${project.groupId}:microservice-speaker-web:${project.version}</webapp>
+                        <webapp>${project.groupId}:microservice-session:${project.version}</webapp>
+                        <webapp>${project.groupId}:microservice-schedule:${project.version}</webapp>
+                        <webapp>com.ibm.ws.microprofile.sample.conference:vote-service-application:${project.version}</webapp>
+                    </webapps>
                 </configuration>
             </plugin>
 

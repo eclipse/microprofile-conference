@@ -5,7 +5,7 @@ enableProdMode();
 
 @Component({
     selector: 'schedule',
-    templateUrl: 'schedule.component.jsp'
+    templateUrl: 'app/schedule/schedule.component.jsp'
 })
 
 export class ScheduleComponent {

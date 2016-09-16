@@ -32,12 +32,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="/">
     <title>Microprofile Conference</title>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
+    <!-- Custom Fonts -->
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/lora.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/montserrat.css" rel="stylesheet" type="text/css">
+
+    <!-- Theme CSS -->
+    <%--<link rel="stylesheet" href="assets/css/grayscale.min.css">--%>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 
     <!-- 1. Load libraries -->
@@ -47,8 +55,16 @@
     <script src="assets/js/node_modules/reflect-metadata/Reflect.js"></script>
     <script src="assets/js/node_modules/systemjs/dist/system.src.js"></script>
 
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="assets/js/node_modules/html5shiv/dist/html5shiv.min.js"></script>
+    <script src="assets/js/node_modules/respond.js/dest/respond.min.js"></script>
+    <![endif]-->
+
     <!-- 2. Configure SystemJS -->
     <script src="assets/js/systemjs.config.js"></script>
+
     <script>
         System.import('app').catch(function (err) {
             console.error(err);
@@ -57,13 +73,33 @@
 </head>
 <!-- 3. Display the application -->
 <body>
+
 <!--[if lt IE 9]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://outdatedbrowser.com/">upgrade
     your browser</a> to improve your experience.</p>
 <![endif]-->
+
 <div class="container">
     <h1>Microprofile Conference</h1>
     <microprofile-conference>Loading...</microprofile-conference>
 </div>
+
+<!-- Footer -->
+<footer>
+    <div class="container text-center">
+        <p>Copyright &copy Microprofile 2016</p>
+    </div>
+</footer>
+
+<%--Grayscale--%>
+<script src="assets/js/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="assets/js/node_modules/tether/dist/js/tether.min.js"></script>
+<script src="assets/js/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="assets/js/node_modules/jquery-easing/dist/jquery.easing.1.3.umd.min.js"></script>
+<%--<script src="assets/js/maps.js"></script>--%>
+<%--<script src="assets/js/grayscale.js"></script>--%>
+
 </body>
+
+
 </html>

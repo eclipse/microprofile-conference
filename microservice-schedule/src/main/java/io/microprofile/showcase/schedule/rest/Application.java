@@ -15,8 +15,39 @@
  */
 package io.microprofile.showcase.schedule.rest;
 
+import io.microprofile.showcase.schedule.resources.ScheduleResource;
+import io.swagger.jaxrs.config.BeanConfig;
+import io.swagger.jaxrs.listing.ApiListingResource;
+import io.swagger.jaxrs.listing.SwaggerSerializers;
+
 import javax.ws.rs.ApplicationPath;
+import java.util.HashSet;
+import java.util.Set;
 
 @ApplicationPath("/schedule")
 public class Application extends javax.ws.rs.core.Application {
+
+    public Application() {
+        final BeanConfig beanConfig = new BeanConfig();
+        beanConfig.setTitle("Schedule");
+        beanConfig.setDescription("Gives the schedules of the conference");
+        beanConfig.setVersion("1.0.0");
+        beanConfig.setSchemes(new String[]{"http"});
+        beanConfig.setHost("localhost:8081/schedule");
+        beanConfig.setBasePath("/");
+        beanConfig.setResourcePackage("io.microprofile.showcase.schedule.resources");
+        beanConfig.setPrettyPrint(true);
+        beanConfig.setScan(true);
+    }
+
+    @Override
+    public Set<Class<?>> getClasses() {
+        final Set<Class<?>> resources = new HashSet();
+
+        resources.add(ScheduleResource.class);
+        resources.add(ApiListingResource.class);
+        resources.add(SwaggerSerializers.class);
+
+        return resources;
+    }
 }

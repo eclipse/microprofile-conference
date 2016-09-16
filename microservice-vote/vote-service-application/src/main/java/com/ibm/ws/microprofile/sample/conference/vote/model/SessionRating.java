@@ -16,6 +16,8 @@
 
 package com.ibm.ws.microprofile.sample.conference.vote.model;
 
+import java.util.UUID;
+
 public class SessionRating {
 	
 	private String id;
@@ -36,8 +38,9 @@ public class SessionRating {
 		this.session = session;
 		this.attendeeId = attendeeId;
 		this.rating = rating;
+		this.id = UUID.randomUUID().toString();
 	}
-	
+
 	public String getId() {
 		return id;
 	}
