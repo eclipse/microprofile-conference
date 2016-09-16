@@ -28,7 +28,7 @@ import javax.interceptor.InvocationContext;
 @Priority(Logger.PRIORITY)
 public class Logger {
 
-    static final int PRIORITY = 3000;
+    static final int PRIORITY = 2001;
 
     @AroundInvoke
     public Object Log(InvocationContext context) throws Exception {
