@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.ibm.ws.microprofile.sample.conference.vote.store.couch;
+package com.ibm.ws.microprofile.sample.conference.vote.persistence.couch;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -32,90 +33,20 @@ import com.ibm.ws.microprofile.sample.conference.vote.api.AttendeeProvider;
 import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.AttendeeDAO;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.Persistent;
+import com.ibm.ws.microprofile.sample.conference.vote.persistence.couch.CouchConnection.RequestType;
 
 @ApplicationScoped
 @Persistent
-public class CouchDBAttendeeStore implements AttendeeDAO {
+public class CouchAttendeeDAO implements AttendeeDAO {
 
-	
-	String username="0cbcf4ec-681d-4267-b8b2-63495750b883-bluemix";
-	String password="b2701582580bff41f9c9912b3c320f2407b2819a1704b0996543148abed1a52a";
-	String host="0cbcf4ec-681d-4267-b8b2-63495750b883-bluemix.cloudant.com";
-	String url="https://0cbcf4ec-681d-4267-b8b2-63495750b883-bluemix.cloudant.com";
-	
-	String usernameAndPassword = username + ":" + password;
-    String authorizationHeaderName = "Authorization";
-    String authorizationHeaderValue = "Basic " + java.util.Base64.getEncoder().encodeToString( usernameAndPassword.getBytes() );
-
-    String ifMatchHeaderName = "If-Match";
-    
-	String dbName = "attendees";
-	String dbURL = url + "/" + dbName;
-	private Client client;
-	
-	public CouchDBAttendeeStore() {
-		
-		
-	}
-	
-	@PostConstruct
-	public void connect(){
-		try{
-	        this.client = ClientBuilder.newClient();
-	        this.client.register(CouchIDProvider.class);
-	        this.client.register(CouchAllDocsProvider.class);
-	        this.client.register(AttendeeProvider.class);
-	        
-	        WebTarget target = client.target(url);
-	        target = target.path(dbName);
-	        Invocation.Builder builder = target.request( "application/json" );
-	        builder = builder.header( authorizationHeaderName, authorizationHeaderValue );
-	        Response response = builder.get();
-	        
-			int code = response.getStatus();
-			
-			if(code != 200){
-		    	if(code == 404){
-		    		
-		    		Response putResponse = builder.put(Entity.json(""));
-		    		
-		    		code = putResponse.getStatus();
-		    		
-		    		if(code != 201){
-		    			throw new RuntimeException("Unable to create couch database: "+putResponse.readEntity(String.class));
-		    		}
-		    		else{
-		    			System.out.println("Couch DB Created: "+dbName);
-		    		}
-		    	}
-		    	else{
-		    		throw new RuntimeException("Unable to connect to couch database: "+response.readEntity(String.class));
-		    	}
-		    }
-			System.out.println("Connected to Couch DB: "+dbName);
-		}
-		catch(Throwable t){
-			t.printStackTrace();
-		}
-	}
+	@Inject
+	CouchConnection couch;
 	
 	@Override
 	public Attendee createNewAttendee(Attendee attendee) {
 		
-        WebTarget target = client.target(url);
-        target = target.path(dbName);
-        Invocation.Builder builder = target.request( "application/json" );
-        builder = builder.header( authorizationHeaderName, authorizationHeaderValue );
-        Response postResponse = builder.post(Entity.json(attendee));
-		
-		int code = postResponse.getStatus();
-	    if(code != 201){
-			throw new RuntimeException("Unable to create attendee: "+code);
-		}
-	    
-	    CouchID attendeeID = postResponse.readEntity(CouchID.class);
-	    
-	    attendee = getAttendee(attendeeID.getId());
+		CouchID attendeeID = couch.request(null, RequestType.POST, attendee, CouchID.class, null, 201);
+		attendee = getAttendee(attendeeID.getId());
 		
 		return attendee;
 	}
@@ -125,23 +56,9 @@ public class CouchDBAttendeeStore implements AttendeeDAO {
 		
 		Attendee original = getAttendee(attendee.getId());
 		
-		WebTarget target = client.target(url);
-        target = target.path(dbName);
-        target = target.path(attendee.getId());
-        
-        Invocation.Builder builder = target.request( "application/json" );
-        builder = builder.header( authorizationHeaderName, authorizationHeaderValue );
-        builder = builder.header( ifMatchHeaderName, original.getRevision() );
-        Response response = builder.put(Entity.json(attendee));
+		couch.request(attendee.getId(), RequestType.PUT, attendee, null, original.getRevision(), 201);
 		
-		int code = response.getStatus();
-	    if(code != 201){
-			throw new RuntimeException("Unable to update attendee: "+code);
-		}
-	    
-	    CouchID attendeeID = response.readEntity(CouchID.class);
-	    
-	    attendee = getAttendee(attendeeID.getId());
+		attendee = getAttendee(attendee.getId());
 		
 		return attendee;
 	}
@@ -161,7 +78,7 @@ public class CouchDBAttendeeStore implements AttendeeDAO {
 			throw new RuntimeException("Unable to retrieve all docs: "+code);
 		}
 	    
-	    CouchAllDocs ids = postResponse.readEntity(CouchAllDocs.class);
+	    AllDocs ids = postResponse.readEntity(AllDocs.class);
 	    
 	    Collection<Attendee> attendees = new ArrayList<Attendee>();
 	    for(String id:ids.getIds()){
@@ -220,8 +137,7 @@ public class CouchDBAttendeeStore implements AttendeeDAO {
 
 	@Override
 	public boolean isAccessible() {
-		// TODO Auto-generated method stub
-		return false;
+		return couch.isAccessible();
 	}
 
 }

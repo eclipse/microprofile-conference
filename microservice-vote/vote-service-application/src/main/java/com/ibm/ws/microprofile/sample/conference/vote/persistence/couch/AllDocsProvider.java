@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ibm.ws.microprofile.sample.conference.vote.store.couch;
+package com.ibm.ws.microprofile.sample.conference.vote.persistence.couch;
 
 import static com.ibm.ws.microprofile.sample.conference.vote.utils.Debug.isDebugEnabled;
 
@@ -36,34 +36,34 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class CouchAllDocsProvider implements MessageBodyReader<CouchAllDocs>, MessageBodyWriter<CouchAllDocs> {
+public class AllDocsProvider implements MessageBodyReader<AllDocs>, MessageBodyWriter<AllDocs> {
 
 	@Override
 	public boolean isReadable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
-		if (isDebugEnabled()) System.out.println("AP.isReadable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(CouchAllDocs.class));
-		return clazz.equals(CouchAllDocs.class);
+		if (isDebugEnabled()) System.out.println("AP.isReadable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(AllDocs.class));
+		return clazz.equals(AllDocs.class);
 	}
 
 	@Override
-	public CouchAllDocs readFrom(Class<CouchAllDocs> clazz, Type type, Annotation[] annotations, MediaType mediaType,
+	public AllDocs readFrom(Class<AllDocs> clazz, Type type, Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, String> map, InputStream is) throws IOException, WebApplicationException {
-		return CouchAllDocs.fromJSON(is);
+		return AllDocs.fromJSON(is);
 	}
 	
 	@Override
-	public long getSize(CouchAllDocs attendee, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
+	public long getSize(AllDocs attendee, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
 		if (isDebugEnabled()) System.out.println("AP.getSize() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType);
 		return 0;
 	}
 
 	@Override
 	public boolean isWriteable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
-		if (isDebugEnabled()) System.out.println("AP.isWriteable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(CouchAllDocs.class));
-		return clazz.equals(CouchAllDocs.class);
+		if (isDebugEnabled()) System.out.println("AP.isWriteable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(AllDocs.class));
+		return clazz.equals(AllDocs.class);
 	}
 
 	@Override
-	public void writeTo(CouchAllDocs CouchAllDocs, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
+	public void writeTo(AllDocs CouchAllDocs, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> map, OutputStream os) throws IOException, WebApplicationException {
 		CouchAllDocs.toJSON(os);
 	}

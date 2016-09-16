@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ibm.ws.microprofile.sample.conference.vote.store.couch;
+package com.ibm.ws.microprofile.sample.conference.vote.persistence.couch;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -51,7 +51,7 @@ public class CouchID {
 		try {
 		     rdr = Json.createReader(is);
 		     JsonObject couchIDJson = rdr.readObject();
-		     System.out.println("JSON: "+couchIDJson.toString());
+		     
 		     JsonString idJson = couchIDJson.getJsonString("id");
 		     JsonString revJson = couchIDJson.getJsonString("rev");
 		     CouchID attendee = new CouchID(idJson.getString(), revJson.getString());

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ibm.ws.microprofile.sample.conference.vote.store.couch;
+package com.ibm.ws.microprofile.sample.conference.vote.persistence.couch;
 
 import static com.ibm.ws.microprofile.sample.conference.vote.utils.Debug.isDebugEnabled;
 

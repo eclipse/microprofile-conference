@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ibm.ws.microprofile.sample.conference.vote.store.couch;
+package com.ibm.ws.microprofile.sample.conference.vote.persistence.couch;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,11 +29,11 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-public class CouchAllDocs {
+public class AllDocs {
 
 	private final Collection<String> ids;
 	
-	public CouchAllDocs(Collection<String> ids) {
+	public AllDocs(Collection<String> ids) {
 		this.ids = ids;
 	}
 	
@@ -41,7 +41,7 @@ public class CouchAllDocs {
 		return ids;
 	}
 	
-	public static CouchAllDocs fromJSON(InputStream is) {
+	public static AllDocs fromJSON(InputStream is) {
 		JsonReader rdr = null; 
 		try {
 		     rdr = Json.createReader(is);
@@ -56,7 +56,7 @@ public class CouchAllDocs {
 		    	 ids.add(id);
 		     }
 		     
-		     CouchAllDocs allDocs = new CouchAllDocs(ids);
+		     AllDocs allDocs = new AllDocs(ids);
 		     return allDocs;
 		}
 		finally {
@@ -67,7 +67,7 @@ public class CouchAllDocs {
 		
 	}
 	
-	public static CouchAllDocs fromJSON(String json) {
+	public static AllDocs fromJSON(String json) {
 		ByteArrayInputStream bais;
 		try {
 			bais = new ByteArrayInputStream(json.getBytes("UTF-8"));
