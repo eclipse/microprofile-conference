@@ -1,5 +1,5 @@
-import {Component, enableProdMode} from "@angular/core";
-import { Schedule } from './schedule';
+import {Component, Input, enableProdMode} from "@angular/core";
+import {Schedule} from "./schedule";
 
 enableProdMode();
 
@@ -9,5 +9,7 @@ enableProdMode();
 })
 
 export class ScheduleComponent {
+    title = 'Conference Schedule';
+    @Input()
     schedule: Schedule;
 }
