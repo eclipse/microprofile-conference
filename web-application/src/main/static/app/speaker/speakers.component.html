@@ -4,7 +4,7 @@
        *ngFor="let speaker of speakers"
        [class.selected]="speaker === selectedSpeaker"
        (click)="onSelect(speaker)">
-        <span class="badge">{{speaker.id}}</span> {{speaker.nameLast}}
+        <span class="badge">{{speaker.id}}</span> {{speaker.nameFirst}} {{speaker.nameLast}}, {{speaker.organization}}
     </a>
 </div>
 <speaker [speaker]="selectedSpeaker"></speaker>
