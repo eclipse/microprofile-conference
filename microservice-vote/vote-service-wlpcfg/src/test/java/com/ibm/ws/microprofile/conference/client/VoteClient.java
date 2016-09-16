@@ -148,7 +148,7 @@ public class VoteClient {
 
 		// Update a session
 		SessionRating originalSr5 = sr5;
-		sr5 = updateRating(new SessionRating(originalSr5.getId(), originalSr5.getSession(), originalSr5.getAttendeeId(), 6));
+		sr5 = updateRating(new SessionRating(originalSr5.getId(), originalSr5.getRevision(), originalSr5.getSession(), originalSr5.getAttendeeId(), 6));
 		assertEquals("Unexpected rating value from udpated SessionRating", 6, sr5.getRating());
 
 		// Check rating for a given session
