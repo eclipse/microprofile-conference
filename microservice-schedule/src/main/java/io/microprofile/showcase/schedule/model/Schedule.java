@@ -33,26 +33,31 @@ import java.util.Objects;
 public class Schedule {
 
     private Long id;
-    private Session session;
-    private Venue venue;
+    private Long sessionId;
+    private String venue;
+    private Long venueId;
+
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate date;
+
     @XmlJavaTypeAdapter(LocalTimeAdapter.class)
     private LocalTime startTime;
+
     @XmlJavaTypeAdapter(DurationAdapter.class)
     private Duration duration;
 
     public Schedule() {
     }
 
-    public Schedule(Session session, Venue venue, LocalDate date, LocalTime startTime, Duration duration) {
-        this(null, session, venue, date, startTime, duration);
+    public Schedule(Long sessionId, String venue, Long venueId, LocalDate date, LocalTime startTime, Duration duration) {
+        this(null, sessionId, venue, venueId, date, startTime, duration);
     }
 
-    public Schedule(Long id, Session session, Venue venue, LocalDate date, LocalTime startTime, Duration duration) {
+    public Schedule(Long id, Long sessionId, String venue, Long venueId, LocalDate date, LocalTime startTime, Duration duration) {
         this.id = id;
-        this.session = session;
+        this.sessionId = sessionId;
         this.venue = venue;
+        this.venueId = venueId;
         this.date = date;
         this.startTime = startTime;
         this.duration = duration;
@@ -66,12 +71,16 @@ public class Schedule {
         this.id = id;
     }
 
-    public Session getSession() {
-        return session;
+    public Long getSessionId() {
+        return sessionId;
     }
 
-    public Venue getVenue() {
+    public String getVenue() {
         return venue;
+    }
+
+    public Long getVenueId() {
+        return venueId;
     }
 
     public LocalDate getDate() {
@@ -91,7 +100,7 @@ public class Schedule {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Schedule schedule = (Schedule) o;
-        return Objects.equals(session, schedule.session) &&
+        return Objects.equals(sessionId, schedule.sessionId) &&
             Objects.equals(venue, schedule.venue) &&
             Objects.equals(date, schedule.date) &&
             Objects.equals(startTime, schedule.startTime) &&
@@ -100,17 +109,21 @@ public class Schedule {
 
     @Override
     public int hashCode() {
-        return Objects.hash(session, venue, date, startTime, duration);
+        return Objects.hash(sessionId, venue, date, startTime, duration);
     }
 
     @Override
     public String toString() {
         return "Schedule{" +
-            "session=" + session +
+            "session=" + sessionId +
             ", venue='" + venue + '\'' +
             ", date=" + date +
             ", startTime=" + startTime +
             ", duration=" + duration +
             '}';
+    }
+
+    public void setSessionId(long sessionId) {
+        this.sessionId = sessionId;
     }
 }

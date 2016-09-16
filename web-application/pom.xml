@@ -107,22 +107,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.tomee.maven</groupId>
-                <artifactId>tomee-maven-plugin</artifactId>
-                <configuration>
-                    <tomeeVersion>${version.tomee}</tomeeVersion>
-                    <tomeeClassifier>plus</tomeeClassifier>
-
-                    <webapps>
-                        <webapp>${project.groupId}:microservice-speaker-web:${project.version}</webapp>
-                        <webapp>${project.groupId}:microservice-session:${project.version}</webapp>
-                        <webapp>${project.groupId}:microservice-schedule:${project.version}</webapp>
-                        <webapp>com.ibm.ws.microprofile.sample.conference:vote-service-application:${project.version}</webapp>
-                    </webapps>
-                </configuration>
-            </plugin>
-
             <!--Deals with npm, bower and gulp-->
             <plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -170,5 +154,35 @@
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>tomee</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tomee.maven</groupId>
+                        <artifactId>tomee-maven-plugin</artifactId>
+                        <configuration>
+                            <tomeeVersion>${version.tomee}</tomeeVersion>
+                            <tomeeClassifier>plus</tomeeClassifier>
+                            <!--@formatter:off-->
+                            <webapps>
+                                <webapp>${project.groupId}:microservice-speaker-web:${project.version}</webapp>
+                                <webapp>${project.groupId}:microservice-session:${project.version}</webapp>
+                                <webapp>${project.groupId}:microservice-schedule:${project.version}</webapp>
+                                <webapp>com.ibm.ws.microprofile.sample.conference:vote-service-application:${project.version}</webapp>
+                            </webapps>
+                            <!--@formatter:on-->
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
