@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
-import {Vote} from "./vote";
 import {Endpoint} from "../shared/endpoint";
 import {Http} from "@angular/http";
 import "../rxjs-operators";
+import {Rating} from "./rating";
 
 @Injectable()
 export class VoteService {
@@ -11,16 +11,16 @@ export class VoteService {
     }
 
     //noinspection TypeScriptUnresolvedVariable
-    getVotes(endPoint: Endpoint): Promise<Vote[]> {
+    getRatings(endPoint: Endpoint, session: string): Promise<Rating[]> {
 
-        return this.http.get(endPoint.url)
+        return this.http.post(endPoint.url + '/ratingsBySession', session)
             .toPromise()
-            .then(response => response.json() as Vote[])
-            .catch(this.handleError);
+            .then(response => response.json() as Rating[])
+            .catch(VoteService.handleError);
     }
 
     //noinspection TypeScriptUnresolvedVariable
-    private handleError(error: any): Promise<any> {
+    private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // TODO - Display safe error
         //noinspection TypeScriptUnresolvedVariable
         return Promise.reject(error.message || error);

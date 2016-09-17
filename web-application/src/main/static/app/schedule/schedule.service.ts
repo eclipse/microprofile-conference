@@ -13,7 +13,7 @@ export class ScheduleService {
     //noinspection TypeScriptUnresolvedVariable
     getSchedules(endPoint: Endpoint): Promise<Schedule[]> {
 
-        return this.http.get(endPoint.url)
+        return this.http.get(endPoint.url + '/all')
             .toPromise()
             .then(response => response.json() as Schedule[])
             .catch(this.handleError);

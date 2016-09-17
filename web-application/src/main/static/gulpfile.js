@@ -13,26 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var webapp = 'ROOT';
-var resources = 'static-resources';
-var target = '../../../target';
-var gulp = require('gulp');
-var ts = require('gulp-typescript');
-var tslint = require('gulp-tslint');
-var sourcemaps = require('gulp-sourcemaps');
-var uglify = require('gulp-uglify');
-var concat = require('gulp-concat');
-var del = require('del');
-var gulpsync = require('gulp-sync')(gulp);
-var jade = require('gulp-pug');
-var sass = require('gulp-sass');
-var es = require('event-stream');
-var autoprefixer = require('gulp-autoprefixer');
-var KarmaServer = require('karma').Server;
-var angularTemplateCache = require('gulp-angular-templatecache');
-
+const webapp = 'ROOT';
+const resources = 'static-resources';
+const target = '../../../target';
+const gulp = require('gulp');
+const ts = require('gulp-typescript');
+const tslint = require('gulp-tslint');
+const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify');
+const concat = require('gulp-concat');
+const del = require('del');
+const gulpsync = require('gulp-sync')(gulp);
+const jade = require('gulp-pug');
+const sass = require('gulp-sass');
+const es = require('event-stream');
+const autoprefixer = require('gulp-autoprefixer');
+const KarmaServer = require('karma').Server;
+const angularTemplateCache = require('gulp-angular-templatecache');
+const gutil = require('gulp-util');
 const tscConfig = require('./tsconfig.json');
-const tsProject = ts.createProject('tsconfig.json');
+const tsProject = ts.createProject('./tsconfig.json');
+const babel = require('gulp-babel');
 
 /**
  * Run all css & image tasks
@@ -65,9 +66,12 @@ gulp.task('compile-ts', function () {
     return tsProject.src()
         .pipe(sourcemaps.init())
         .pipe(ts(tscConfig.compilerOptions))
+        .pipe(babel({
+            presets: ['es2015']
+        }))
         .pipe(uglify({
             mangle: false
-        }))
+        }).on('error',gutil.log))
         .pipe(sourcemaps.write({includeContent: false}))
         .pipe(gulp.dest(target + '/' + resources + '/app/'));
 });
@@ -79,7 +83,7 @@ gulp.task('js-third-party', function () {
         './node_modules/core-js/client/shim.min.js',
         './node_modules/zone.js/dist/zone.js',
         './node_modules/reflect-metadata/Reflect.js',
-        './node_modules/systemjs/dist/system.src.js',
+        './node_modules/systemjs/dist/system.js',
         './node_modules/html5shiv/dist/html5shiv.min.js',
         './node_modules/respond.js/dest/respond.min.js',
         './node_modules/jquery/dist/jquery.min.js',
@@ -95,7 +99,9 @@ gulp.task('js-third-party', function () {
         './node_modules/@angular/http/bundles/http.umd.js',
         './node_modules/@angular/router/bundles/router.umd.js',
         './node_modules/@angular/forms/bundles/forms.umd.js',
-        './node_modules/es6-promise/dist/es6-promise.min.js'
+        './node_modules/es6-promise/dist/es6-promise.min.js',
+        './node_modules/typescript/lib/typescript.js',
+        './node_modules/plugin-typescript/lib/plugin.js'
     ];
 
     var tasks = [];

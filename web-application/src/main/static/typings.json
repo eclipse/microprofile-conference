@@ -1,6 +1,4 @@
 {
-  "name": "microprofile-conference",
-  "dependencies": {},
   "globalDependencies": {
     "angular-protractor": "registry:dt/angular-protractor#1.5.0+20160914235635",
     "core-js": "registry:dt/core-js#0.0.0+20160914114559",
