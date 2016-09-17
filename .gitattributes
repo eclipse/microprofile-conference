@@ -11,6 +11,7 @@
 *.config        text
 *.css           text
 *.df            text
+*.eot           text
 *.extension     text
 *.groovy        text
 *.htm           text
@@ -31,6 +32,7 @@
 *.template      text
 *.tld           text
 *.ts            text
+*.ttf           text
 *.txt           text
 *.vm            text
 *.wadl          text
@@ -38,6 +40,9 @@
 *.xhtml         text
 *.xml           text
 *.xsd           text
+*.yml           text
+*.eot           text
+*.yml           text
 *.yml           text
 
 cipher          text
@@ -55,10 +60,13 @@ NOTICE          text
 *.jar           binary
 *.jpg           binary
 *.jpeg          binary
+*.otf           binary
 *.png           binary
 *.ser           binary
 *.so            binary
 *.war           binary
+*.woff          binary
+*.woff2         binary
 *.zip           binary
 *.exe           binary
 *.gz            binary

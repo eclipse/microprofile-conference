@@ -156,7 +156,7 @@ public class VenueJavaOne2016 extends Venue {
             this.log.log(Level.SEVERE, "Failed to parse token: " + token, e);
         }
 
-        this.log.info("Found:" + speaker);
+        this.log.log(Level.FINE, "Found:" + speaker);
 
         return speaker;
     }

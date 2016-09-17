@@ -17,11 +17,11 @@ package io.microprofile.showcase.web;
 
 import javax.ws.rs.ApplicationPath;
 
-@ApplicationPath("/rest")
+@ApplicationPath("/service")
 public class Application  extends javax.ws.rs.core.Application{
 
     @Override
     public String toString() {
-        return "Microprofile Conference";
+        return "Microprofile Conference API";
     }
 }

@@ -1,0 +1,10 @@
+<h3>{{title}}</h3>
+<div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action"
+       *ngFor="let session of sessions"
+       [class.selected]="session === selectedSession"
+       (click)="onSelect(session)">
+        <span class="badge">{{session.id}}</span> {{session.title}}, Speakers: {{session.speakers}}
+    </a>
+</div>
+<session [session]="selectedSession"></session>

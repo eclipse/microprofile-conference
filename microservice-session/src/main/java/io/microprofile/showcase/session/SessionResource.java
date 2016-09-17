@@ -15,10 +15,8 @@
  */
 package io.microprofile.showcase.session;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,45 +26,68 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.Collection;
+import java.util.Optional;
 
 /**
  * @author Ken Finnigan
+ * @author Heiko Braun
  */
 @Path("sessions")
 @ApplicationScoped
 public class SessionResource {
 
+    @Inject
+    private SessionStore sessionStore;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Session> allSessions() throws Exception {
-        return Collections.EMPTY_LIST;
+    public Collection<Session> allSessions() throws Exception {
+        return sessionStore.getSessions();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Session createSession(Session session) throws Exception {
-        return null;
+        return sessionStore.save(session);
     }
 
     @GET
     @Path("/{sessionId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Session retrieveSession(@PathParam("sessionId") Long sessionId) throws Exception {
-        return null;
+    public Response retrieveSession(@PathParam("sessionId") Integer sessionId) throws Exception {
+        Optional<Session> result = sessionStore.find(sessionId);
+
+        if(result.isPresent())
+            return Response.ok(result.get()).build();
+        else
+           return Response.status(404).build();
+
     }
 
     @PUT
     @Path("/{sessionId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Session updateSession(@PathParam("sessionId") Long sessionId, Session session) throws Exception {
-        return null;
+    public Response updateSession(@PathParam("sessionId") Integer sessionId, Session session) throws Exception {
+        Optional<Session> updated = sessionStore.update(sessionId, session);
+        if(updated.isPresent())
+            return Response.ok(updated.get()).build();
+        else
+            return Response.status(404).build();
     }
 
     @DELETE
     @Path("/{sessionId}")
-    public void deleteSession(@PathParam("sessionId") Long sessionId) throws Exception {
+    public Response deleteSession(@PathParam("sessionId") Integer sessionId) throws Exception {
+        Optional<Session> removed = sessionStore.remove(sessionId);
+        if(removed.isPresent())
+            return Response.ok().build();
+        else
+            return Response.status(404).build();
+
     }
 
     //TODO Add Search
@@ -74,19 +95,52 @@ public class SessionResource {
     @GET
     @Path("/{sessionId}/speakers")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<?> sessionSpeakers(@PathParam("sessionId") Long sessionId) throws Exception {
-        return null;
+    public Response sessionSpeakers(@PathParam("sessionId") Integer sessionId) throws Exception {
+
+        Optional<Session> session = sessionStore.getSessions().stream()
+            .filter(s -> s.getId() == sessionId)
+            .findFirst();
+
+        if(session.isPresent())
+            return Response.ok(session.get().getSpeakers()).build();
+        else
+            return Response.status(404).build();
+
     }
 
     @PUT
     @Path("/{sessionId}/speakers/{speakerId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Session addSessionSpeaker(@PathParam("sessionId") Long sessionId, @PathParam("speakerId") Long speakerId) throws Exception {
-        return null;
+    public Response addSessionSpeaker(@PathParam("sessionId") Integer sessionId, @PathParam("speakerId") Integer speakerId) throws Exception {
+
+        Optional<Session> result = sessionStore.find(sessionId);
+
+        if(result.isPresent()) {
+            Session session = result.get();
+            Collection<Integer> speakers = session.getSpeakers();
+            speakers.add(speakerId);
+            sessionStore.update(sessionId, session);
+            return Response.ok(session).build();
+        }
+
+        return Response.status(404).build();
     }
 
     @DELETE
     @Path("/{sessionId}/speakers/{speakerId}")
-    public void removeSessionSpeaker(@PathParam("sessionId") Long sessionId, @PathParam("speakerId") Long speakerId) throws Exception {
+    public Response removeSessionSpeaker(@PathParam("sessionId") Integer sessionId, @PathParam("speakerId") Integer speakerId) throws Exception {
+        Optional<Session> result = sessionStore.find(sessionId);
+
+        if(result.isPresent()) {
+            Session session = result.get();
+            Collection<Integer> speakers = session.getSpeakers();
+            speakers.remove(speakerId);
+            sessionStore.update(sessionId, session);
+            return Response.ok(session).build();
+        }
+
+        return Response.status(404).build();
     }
+
+
 }

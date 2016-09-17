@@ -22,6 +22,21 @@
     <display-name>Microprofile Conference</display-name>
 
     <servlet-mapping>
+        <servlet-name>jsp</servlet-name>
+        <url-pattern>*.jspx</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>jsp</servlet-name>
+        <url-pattern>*.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>index</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/app/*</url-pattern>
     </servlet-mapping>
@@ -31,14 +46,33 @@
         <url-pattern>/assets/*</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>index</servlet-name>
-        <url-pattern>/*</url-pattern>
-    </servlet-mapping>
-
     <servlet>
         <servlet-name>index</servlet-name>
-        <jsp-file>/index.jsp</jsp-file>
+        <jsp-file>/index.html</jsp-file>
+    </servlet>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>jsp</servlet-name>
+        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+        <init-param>
+            <param-name>fork</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>xpoweredBy</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <!-- Add the following init-param -->
+        <init-param>
+            <param-name>development</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>3</load-on-startup>
     </servlet>
 
 </web-app>

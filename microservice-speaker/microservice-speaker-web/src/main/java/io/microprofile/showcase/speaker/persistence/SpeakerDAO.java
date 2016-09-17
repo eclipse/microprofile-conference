@@ -15,7 +15,7 @@
  */
 package io.microprofile.showcase.speaker.persistence;
 
-import io.microprofile.showcase.speaker.domain.Venue;
+import io.microprofile.showcase.bootstrap.BootstrapData;
 import io.microprofile.showcase.speaker.model.Speaker;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,11 +24,10 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -39,17 +38,28 @@ import java.util.UUID;
 @ApplicationScoped
 public class SpeakerDAO {
 
-    private final HashMap<String, Set<Speaker>> speakers = new HashMap<>();
-
     @Inject
-    private List<Venue> venues;
+    BootstrapData bootstrapData;
+
+    private final HashMap<String, Speaker> speakers = new HashMap<>();
 
     @PostConstruct
-    private void postConstruct() {
+    private void initStore() {
+        System.out.println("Initialise speaker DAO from bootstrap data");
 
-        for (final Venue venue : this.venues) {
-            this.speakers.put(venue.getName(), venue.getSpeakers());
-        }
+        this.bootstrapData.getSpeaker()
+                .forEach(bootstrap -> {
+
+                    final String id = String.valueOf(bootstrap.getId());
+                    final String[] names = bootstrap.getFullName().split(" ");
+                    final Speaker sp = new Speaker();
+                    sp.setId(id);
+                    sp.setNameFirst(names[0]);
+                    sp.setNameLast(names[1]);
+                    sp.setOrganization(bootstrap.getCompany());
+                    sp.setBiography(bootstrap.getJobTitle());
+                    this.speakers.put(id, sp);
+                });
 
     }
 
@@ -58,13 +68,9 @@ public class SpeakerDAO {
      *
      * @return Set of Speakers
      */
-    public Set<Speaker> getSpeakers() {
+    public Collection<Speaker> getSpeakers() {
 
-        final Set<Speaker> speakers = new HashSet<>();
-
-        this.speakers.values().forEach(speakers::addAll);
-
-        return speakers;
+        return this.speakers.values();
     }
 
     /**
@@ -75,10 +81,10 @@ public class SpeakerDAO {
      */
     public Speaker persist(final Speaker speaker) {
 
-        speaker.setId(UUID.randomUUID().toString());
+        final String id = UUID.randomUUID().toString();
+        speaker.setId(id);
 
-        //TODO - Venue based
-        this.speakers.get(this.speakers.keySet().iterator().next()).add(speaker);
+        this.speakers.put(id, speaker);
 
         return speaker;
     }
@@ -90,15 +96,7 @@ public class SpeakerDAO {
      * @param id Valid ID
      */
     public void remove(final String id) {
-        for (final Map.Entry<String, Set<Speaker>> entry : this.speakers.entrySet()) {
-            final Iterator<Speaker> it = entry.getValue().iterator();
-            while (it.hasNext()) {
-                if (it.next().getId().equals(id)) {
-                    it.remove();
-                    return;
-                }
-            }
-        }
+        this.speakers.remove(id);
     }
 
     /**
@@ -109,20 +107,10 @@ public class SpeakerDAO {
      */
     public Speaker update(final Speaker speaker) {
 
-        final Set<Speaker> speakers = this.getSpeakers();
-        for (final Speaker s : speakers) {
-            if (s.getId().equals(speaker.getId())) {
-                s.setPicture(speaker.getPicture());
-                s.setBiography(speaker.getBiography());
-                s.setOrganization(speaker.getOrganization());
-                s.setNameFirst(speaker.getNameFirst());
-                s.setNameLast(speaker.getNameLast());
-                s.setTwitterHandle(speaker.getTwitterHandle());
-                return s;
-            }
-        }
+        if (!this.speakers.keySet().contains(speaker.getId()))
+            throw new IllegalArgumentException("Speaker not found " + speaker.getId());
 
-        return null;
+        return this.speakers.put(speaker.getId(), speaker);
     }
 
     /**
@@ -133,13 +121,8 @@ public class SpeakerDAO {
      */
     public Optional<Speaker> getSpeaker(final String id) {
 
-        for (final Map.Entry<String, Set<Speaker>> entry : this.speakers.entrySet()) {
-            for (final Speaker speaker : entry.getValue()) {
-                if (speaker.getId().equals(id)) {
-                    return Optional.of(speaker);
-                }
-            }
-        }
+        if (this.speakers.containsKey(id))
+            return Optional.of(this.speakers.get(id));
 
         return Optional.empty();
     }
@@ -150,13 +133,10 @@ public class SpeakerDAO {
      * @param speaker Speaker to find - may contain partial details
      * @return Optional matching speakers
      */
-    public Optional<Set<Speaker>> find(final Speaker speaker) {
+    public Set<Speaker> find(final Speaker speaker) {
 
         final ArrayList<Speaker> speakers = new ArrayList<>();
-
-        for (final Map.Entry<String, Set<Speaker>> entry : this.speakers.entrySet()) {
-            speakers.addAll(entry.getValue());
-        }
+        speakers.addAll(this.speakers.values());
 
         CollectionUtils.filter(speakers, object -> {
             final Speaker find = Speaker.class.cast(object);
@@ -168,13 +148,11 @@ public class SpeakerDAO {
         });
 
         if (!speakers.isEmpty()) {
-            final Set<Speaker> result = new HashSet<>(speakers.size());
-            result.addAll(speakers);
-            return Optional.of(result);
+            return new HashSet<>(speakers);
         }
 
 
-        return Optional.empty();
+        return Collections.emptySet();
     }
 
     /**

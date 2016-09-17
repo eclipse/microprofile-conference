@@ -1,1 +1,1 @@
-export { SharedService } from './shared.service.ts';
+export { EndpointsService } from './endpoints.service.ts';

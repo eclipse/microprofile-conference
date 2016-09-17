@@ -17,6 +17,7 @@ package io.microprofile.showcase.speaker.domain;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.inject.Named;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +25,19 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+@ApplicationScoped
 public class ProducerVenue {
 
     private final Logger log = LogManager.getLogManager().getLogger(ProducerVenue.class.getName());
 
+    /**
+     * Support for eventually having more than one venue
+     *
+     * @return List of Venue
+     */
     @Produces
-    @ApplicationScoped
+    @VenueList
+    @Named(value = "venueList")
     public List<Venue> produceVenues() {
 
         final List<Venue> venues = new ArrayList<>();

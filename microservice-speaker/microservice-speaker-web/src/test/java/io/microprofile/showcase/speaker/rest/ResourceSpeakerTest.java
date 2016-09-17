@@ -27,6 +27,7 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +38,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import java.io.File;
 import java.net.URL;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -49,6 +51,8 @@ public class ResourceSpeakerTest {
     @Deployment(testable = false)
     public static WebArchive deploy() {
 
+        File bootstrapLib = Maven.resolver().resolve("io.microprofile.showcase:demo-bootstrap:1.0.0-SNAPSHOT").withoutTransitivity().asSingleFile();
+
         return ShrinkWrap.create(WebArchive.class
                 , ResourceSpeakerTest.class.getName() + ".war")
                 .addClasses(
@@ -60,7 +64,10 @@ public class ResourceSpeakerTest {
                         ProducerVenue.class,
                         Speaker.class
                 )
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+            .addAsLibraries(
+                bootstrapLib
+            );
     }
 
     @ArquillianResource
@@ -142,8 +149,8 @@ public class ResourceSpeakerTest {
     public void testUpdate() {
 
         final Speaker search = new Speaker();
-        search.setNameFirst("Sebastian");
-        search.setNameLast("Daschner");
+        search.setNameFirst("Charlie");
+        search.setNameLast("Hunt");
 
         final Set<Speaker> speakers = this.getWebTarget("speaker/search").request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.json(search))
@@ -153,9 +160,9 @@ public class ResourceSpeakerTest {
         final Speaker found = speakers.iterator().next();
         final String id = found.getId();
 
-        Assert.assertNull("Expected no organization", found.getOrganization());
+        Assert.assertEquals("Oracle", found.getOrganization());
 
-        found.setOrganization("Freelancer");
+        found.setOrganization("Oracle Corporation");
 
         this.getWebTarget("speaker/update").request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.json(found));
@@ -165,7 +172,7 @@ public class ResourceSpeakerTest {
                 .get()
                 .readEntity(Speaker.class);
 
-        Assert.assertEquals("Failed to update speaker", "Freelancer", updated.getOrganization());
+        Assert.assertEquals("Failed to update speaker", "Oracle Corporation", updated.getOrganization());
         this.log.info("Updated: " + updated.toString());
     }
 

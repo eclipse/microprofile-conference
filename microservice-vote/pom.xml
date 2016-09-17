@@ -19,6 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
 
     <parent>
         <artifactId>microprofile-conference</artifactId>
@@ -26,7 +27,18 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
     <artifactId>microservice-vote</artifactId>
     <name>Conference :: Vote</name>
+
+    <properties>
+
+    </properties>
+
+    <modules>
+        <module>vote-service-application</module>
+        <module>vote-service-deploy</module>
+        <module>vote-service-wlpcfg</module>
+    </modules>
 
 </project>
