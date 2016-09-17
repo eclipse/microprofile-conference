@@ -43,8 +43,8 @@
                 <dependencies>
                     <dependency>
                         <groupId>fish.payara.extras</groupId>
-                        <artifactId>payara-micro</artifactId>
-                        <version>${version.payara}</version>
+                        <artifactId>payara-microprofile</artifactId>
+                        <version>1.0</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -68,7 +68,7 @@
                             <includePluginDependencies>true</includePluginDependencies>
                             <executableDependency>
                                 <groupId>fish.payara.extras</groupId>
-                                <artifactId>payara-micro</artifactId>
+                                <artifactId>payara-microprofile</artifactId>
                             </executableDependency>
                         </configuration>
                     </execution>
