@@ -59,6 +59,7 @@
                             <arguments>
                                 <argument>--noCluster</argument>
                                 <argument>--autoBindHttp</argument>
+                                <argument>--logo</argument>
                                 <argument>--deploy</argument>
                                 <argument>${basedir}/target/${project.artifactId}.war</argument>
                                 <argument>--outputUberJar</argument>
