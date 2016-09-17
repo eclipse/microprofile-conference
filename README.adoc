@@ -33,7 +33,7 @@ but the service projects have been written by vendors to use their container.
 The following sections describe vendor specifics:
 
 ==== `microservice-schedule`
-The Schedule service is provided using a special microprofile release of Payara Micro link:http://www.payara.fish/payara_micro[Payara Micro] which can be downloaded from link:http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22payara-microprofile%22[Maven Central]
+The Schedule service is provided using a special microprofile release of link:http://www.payara.fish/payara_micro[Payara Micro] which can be downloaded from link:http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22payara-microprofile%22[Maven Central]
 
 *Build and run the service*
 When building the service Payara Microprofile packages both the war file and the microprofile runtime into a single UberJar for convenience.
@@ -44,7 +44,7 @@ java -jar target/microservice-schedule.jar [Options]
 ```
 
 *Port Bindings*
-By default the microservice will bind to port 8080, if this is not available it will bind to the next available port e.g. 8081. To specifiy the port use --port as a command line option
+By default the microservice will bind to port 8080, if this is not available it will bind to the next available port e.g. 8081. To specify the port use --port as a command line option
 
 To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options. 
 
