@@ -60,19 +60,19 @@ public class SessionStore {
     }
 
     public Optional<Session> update(Integer sessionId, Session session) {
-        Optional<Session> exisiting = find(sessionId);
-        if(exisiting.isPresent()) {
+        Optional<Session> existing = find(sessionId);
+        if(existing.isPresent()) {
             session.setId(sessionId);
             storage.put(sessionId, session);
         }
-        return exisiting;
+        return existing;
     }
 
     public Optional<Session> remove(Integer sessionId) {
-        Optional<Session> exisiting = find(sessionId);
-        if(exisiting.isPresent()) {
-            storage.remove(exisiting.get().getId());
+        Optional<Session> existing = find(sessionId);
+        if(existing.isPresent()) {
+            storage.remove(existing.get().getId());
         }
-        return exisiting;
+        return existing;
     }
 }
