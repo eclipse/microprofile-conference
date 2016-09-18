@@ -3,6 +3,8 @@ package io.microprofile.showcase.session;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -41,7 +43,7 @@ public class SessionStore {
 
     @PostConstruct
     private void initStore() {
-        System.out.println("Initialise sessions store from bootstrap data");
+        Logger.getLogger(SessionStore.class.getName()).log(Level.INFO, "Initialise sessions from bootstrap data");
 
         bootstrapData.getSessions()
             .forEach(bootstrap -> storage.put(bootstrap.getId(), SessionFactory.fromBootstrap(bootstrap)));
@@ -58,19 +60,19 @@ public class SessionStore {
     }
 
     public Optional<Session> update(Integer sessionId, Session session) {
-        Optional<Session> exisiting = find(sessionId);
-        if(exisiting.isPresent()) {
+        Optional<Session> existing = find(sessionId);
+        if(existing.isPresent()) {
             session.setId(sessionId);
             storage.put(sessionId, session);
         }
-        return exisiting;
+        return existing;
     }
 
     public Optional<Session> remove(Integer sessionId) {
-        Optional<Session> exisiting = find(sessionId);
-        if(exisiting.isPresent()) {
-            storage.remove(exisiting.get().getId());
+        Optional<Session> existing = find(sessionId);
+        if(existing.isPresent()) {
+            storage.remove(existing.get().getId());
         }
-        return exisiting;
+        return existing;
     }
 }

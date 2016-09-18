@@ -21,6 +21,7 @@ const ts = require('gulp-typescript');
 const tslint = require('gulp-tslint');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
+const cleanCSS = require('gulp-clean-css');
 const concat = require('gulp-concat');
 const del = require('del');
 const gulpsync = require('gulp-sync')(gulp);
@@ -38,20 +39,32 @@ const babel = require('gulp-babel');
 /**
  * Run all css & image tasks
  */
-gulp.task('css', gulpsync.sync(['images', 'css-third-party']));
+gulp.task('css', gulpsync.sync(['images', 'css-build']));
 
 /**
  * Copy images from assets to
  */
 gulp.task('images', function () {
-    return gulp.src('./app/assets/**/*.{gif,jpg,png,svg}')
+    return gulp.src('./app/assets/**/*.{gif,jpg,png,svg,ico}')
         .pipe(gulp.dest(target + '/' + resources + '/assets'));
 });
 
-gulp.task('css-third-party', function () {
-    return gulp.src([
-        './node_modules/bootstrap/dist/css/bootstrap.min.css'
-    ]).pipe(gulp.dest(target + '/' + resources + '/assets/css/'));
+gulp.task('css-build', gulpsync.sync(['sass', 'css-concat']));
+
+gulp.task('sass', function () {
+    return gulp.src('./node_modules/bootstrap/scss/bootstrap-flex.scss')
+        .pipe(sass().on('error', sass.logError))
+        .pipe(autoprefixer({
+            browsers: ['last 1 versions']
+        }))
+        .pipe(cleanCSS())
+        .pipe(gulp.dest(target + '/scss/'));
+});
+
+gulp.task('css-concat', function () {
+    return gulp.src(target + '/scss/*.css')
+        .pipe(concat('bootstrap.min.css'))
+        .pipe(gulp.dest(target + '/' + resources + '/assets/css/'))
 });
 
 gulp.task('js', gulpsync.sync(['compile-ts', 'js-third-party', 'js-bundles']));
@@ -71,7 +84,7 @@ gulp.task('compile-ts', function () {
         }))
         .pipe(uglify({
             mangle: false
-        }).on('error',gutil.log))
+        }).on('error', gutil.log))
         .pipe(sourcemaps.write({includeContent: false}))
         .pipe(gulp.dest(target + '/' + resources + '/app/'));
 });
@@ -99,9 +112,7 @@ gulp.task('js-third-party', function () {
         './node_modules/@angular/http/bundles/http.umd.js',
         './node_modules/@angular/router/bundles/router.umd.js',
         './node_modules/@angular/forms/bundles/forms.umd.js',
-        './node_modules/es6-promise/dist/es6-promise.min.js',
-        './node_modules/typescript/lib/typescript.js',
-        './node_modules/plugin-typescript/lib/plugin.js'
+        './node_modules/es6-promise/dist/es6-promise.min.js'
     ];
 
     var tasks = [];

@@ -1,6 +1,8 @@
 package io.microprofile.showcase.bootstrap;
 
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
@@ -20,7 +22,7 @@ public class BootstrapDataProducer {
         Parser parser = new Parser();
         BootstrapData data = parser.parse(resource);
 
-        System.out.println("Schedule contains "+data.getSessions().size() + " sessions");
+        Logger.getLogger(BootstrapData.class.getName()).log(Level.INFO, "Schedule contains "+data.getSessions().size() + " sessions");
 
         return data;
     }
