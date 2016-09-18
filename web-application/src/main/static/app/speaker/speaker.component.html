@@ -28,12 +28,13 @@
                              alt="{{speaker.nameFirst}} {{speaker.nameLast}}" width="200" height="200">
                     </div>
                     <div class="col-xs-8 p-a-1">
-                        <p class="text-justify">{{speaker.biography}}</p>
+                        <textarea class="form-control" id="bio" rows="9" readonly>{{speaker.biography}}</textarea>
+                        <!--<p class="text-justify"></p>-->
                     </div>
                 </div>
                 <div class="row p-a-1">
-                    <div class="col-xs p-a-1">Company: {{speaker.organization}}</div>
-                    <div class="col-xs p-a-1">Twitter: {{speaker.twitterHandle}}</div>
+                    <div class="col-xs">Company: {{speaker.organization}}</div>
+                    <div class="col-xs">Twitter: {{speaker.twitterHandle}}</div>
                 </div>
             </div>
         </div>

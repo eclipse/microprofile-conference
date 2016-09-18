@@ -9,14 +9,14 @@ enableProdMode();
 
 @Component({
     selector: 'speakers',
-    templateUrl: 'app/speaker/speakers.component.html'
+    templateUrl: 'app/speaker/speakers.component.html',
 })
-
 export class SpeakersComponent implements OnInit {
     title = 'Speakers';
     speakers: Speaker[];
     selectedSpeaker: Speaker;
-    endPoint: Endpoint;
+    search: string;
+    private endPoint: Endpoint;
 
     constructor(private router: Router, private speakerService: SpeakerService, private endpointsService: EndpointsService) {
     }
@@ -41,6 +41,10 @@ export class SpeakersComponent implements OnInit {
 
     onSelect(speaker: Speaker): void {
         this.selectedSpeaker = speaker;
+    }
+
+    onSearch(search: string): void {
+        this.search = search;
     }
 
     gotoDetail(): void {

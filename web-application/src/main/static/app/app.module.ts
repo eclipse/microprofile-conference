@@ -17,6 +17,7 @@ import {VotesComponent} from "./vote/votes.component";
 import {VoteComponent} from "./vote/vote.component";
 import {VoteService} from "./vote/vote.service";
 import {EndpointsService} from "./shared/endpoints.service";
+import {SpeakerFilter} from "./speaker/speaker.filter";
 
 @NgModule({
     imports: [
@@ -35,7 +36,8 @@ import {EndpointsService} from "./shared/endpoints.service";
         SchedulesComponent,
         ScheduleComponent,
         VotesComponent,
-        VoteComponent
+        VoteComponent,
+        SpeakerFilter
     ],
     providers: [
         EndpointsService,
