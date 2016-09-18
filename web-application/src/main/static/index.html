@@ -48,26 +48,59 @@
             console.error(err);
         });
     </script>
+
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            /* The html and body elements cannot have any padding or margin. */
+        }
+
+        /* Wrapper for page content to push down footer */
+        #wrap {
+            min-height: 100%;
+            height: auto !important;
+            height: 100%;
+            /* Negative indent footer by it's height */
+            margin: 0 auto -30px;
+        }
+
+        #push,
+        #footer {
+            height: 30px;
+        }
+
+        #footer {
+            background-color: #f5f5f5;
+        }
+        .selected {
+            background-color: #CFD8DC !important;
+            color: white;
+        }
+    </style>
 </head>
 <!-- 3. Display the application -->
 <body>
 
 <!--[if lt IE 9]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://outdatedbrowser.com/">upgrade
-    your browser</a> to improve your experience.</p>
+    your browser</a> for <strong>free</strong> to improve your experience.</p>
 <![endif]-->
 
-<div class="container">
-    <h1>Microprofile Conference</h1>
-    <conference>Loading...</conference>
+<div id="wrap">
+
+    <div class="container">
+        <conference>Loading...</conference>
+    </div>
+
+    <div id="push"></div>
+
 </div>
 
 <!-- Footer -->
-<footer>
-    <div class="container text-center">
-        <p>Copyright &copy Microprofile 2016</p>
-    </div>
-</footer>
+<div id="footer" class="text-sm-right">
+    <p>Copyright &copy Microprofile 2016</p>
+</div>
 
 
 <script src="assets/js/node_modules/jquery/dist/jquery.min.js"></script>
@@ -76,6 +109,5 @@
 <script src="assets/js/node_modules/jquery-easing/dist/jquery.easing.1.3.umd.min.js"></script>
 
 </body>
-
 
 </html>
