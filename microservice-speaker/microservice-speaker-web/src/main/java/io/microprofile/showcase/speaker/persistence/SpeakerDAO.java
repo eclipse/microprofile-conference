@@ -16,6 +16,8 @@
 package io.microprofile.showcase.speaker.persistence;
 
 import io.microprofile.showcase.bootstrap.BootstrapData;
+import io.microprofile.showcase.speaker.domain.Venue;
+import io.microprofile.showcase.speaker.domain.VenueList;
 import io.microprofile.showcase.speaker.model.Speaker;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -23,14 +25,18 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Speaker Data Access Object
@@ -39,13 +45,24 @@ import java.util.UUID;
 public class SpeakerDAO {
 
     @Inject
-    BootstrapData bootstrapData;
+    private BootstrapData bootstrapData;
+
+    @Inject
+    @VenueList
+    @Named(value = "venueList")
+    private List<Venue> venues;
 
     private final HashMap<String, Speaker> speakers = new HashMap<>();
 
     @PostConstruct
     private void initStore() {
-        System.out.println("Initialise speaker DAO from bootstrap data");
+        Logger.getLogger(SpeakerDAO.class.getName()).log(Level.INFO, "Initialise speaker DAO from bootstrap data");
+
+        final Set<Speaker> featured = new HashSet<>(0);
+
+        for (final Venue venue : this.venues) {
+            featured.addAll(venue.getSpeakers());
+        }
 
         this.bootstrapData.getSpeaker()
                 .forEach(bootstrap -> {
@@ -58,9 +75,27 @@ public class SpeakerDAO {
                     sp.setNameLast(names[1]);
                     sp.setOrganization(bootstrap.getCompany());
                     sp.setBiography(bootstrap.getJobTitle());
+
+                    sp.setPicture("assets/images/unknown.jpg");
+
+                    appendFeatured(featured, sp);
+
                     this.speakers.put(id, sp);
                 });
 
+    }
+
+    private void appendFeatured(final Set<Speaker> featured, final Speaker sp) {
+        for (final Speaker fs : featured) {
+            if (fs.getNameFirst().toLowerCase().equals(sp.getNameFirst().toLowerCase())
+                    && fs.getNameLast().toLowerCase().equals(sp.getNameLast().toLowerCase())) {
+                sp.setPicture(fs.getPicture());
+                sp.setBiography(fs.getBiography());
+                sp.setTwitterHandle(fs.getTwitterHandle());
+                sp.setOrganization(fs.getOrganization());
+                break;
+            }
+        }
     }
 
     /**
@@ -70,7 +105,17 @@ public class SpeakerDAO {
      */
     public Collection<Speaker> getSpeakers() {
 
-        return this.speakers.values();
+        final List<Speaker> values = new ArrayList<>(this.speakers.values());
+
+        Collections.sort(values, (s1, s2) -> {
+
+            final String name1 = s1.getNameFirst() + s1.getNameLast();
+            final String name2 = s2.getNameFirst() + s2.getNameLast();
+
+            return name1.compareTo(name2);
+        });
+
+        return values;
     }
 
     /**

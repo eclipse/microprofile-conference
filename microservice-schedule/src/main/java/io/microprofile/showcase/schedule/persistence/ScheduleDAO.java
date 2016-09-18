@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -46,7 +48,7 @@ public class ScheduleDAO {
 
     @PostConstruct
     private void initStore() {
-        System.out.println("Initialise schedule DAO from bootstrap data");
+        Logger.getLogger(ScheduleDAO.class.getName()).log(Level.INFO, "Initialise schedule DAO from bootstrap data");
 
         LocalDateAdapter dateAdapter = new LocalDateAdapter();
         LocalTimeAdapter timeAdapter = new LocalTimeAdapter();

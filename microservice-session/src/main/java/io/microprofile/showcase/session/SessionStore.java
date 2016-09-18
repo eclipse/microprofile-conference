@@ -3,6 +3,8 @@ package io.microprofile.showcase.session;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -41,7 +43,7 @@ public class SessionStore {
 
     @PostConstruct
     private void initStore() {
-        System.out.println("Initialise sessions store from bootstrap data");
+        Logger.getLogger(SessionStore.class.getName()).log(Level.INFO, "Initialise sessions from bootstrap data");
 
         bootstrapData.getSessions()
             .forEach(bootstrap -> storage.put(bootstrap.getId(), SessionFactory.fromBootstrap(bootstrap)));
