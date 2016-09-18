@@ -19,7 +19,7 @@
     "@angular/platform-server": "^2.0.0",
     "@angular/router": "^3.0.0",
     "@angular/upgrade": "^2.0.0",
-    "angular2-in-memory-web-api": "0.0.18",
+    "angular2-in-memory-web-api": "^0.0.18",
     "bootstrap": "^4.0.0-alpha.4",
     "bower": "^1.7.9",
     "core-js": "^2.4.1",
