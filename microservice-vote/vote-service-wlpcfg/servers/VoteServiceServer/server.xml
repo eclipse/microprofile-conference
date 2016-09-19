@@ -3,7 +3,7 @@
     <!-- Enable features -->
 
     <featureManager>
-        <feature>localConnector-1.0</feature>
+        <feature>microProfile-1.0</feature>
 	<!--
         <feature>servlet-3.1</feature>
         <feature>jaxrs-2.0</feature>

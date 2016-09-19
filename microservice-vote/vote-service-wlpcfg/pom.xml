@@ -9,10 +9,11 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+    <groupId>microprofile-conference</groupId>
     <artifactId>vote-service-wlpcfg</artifactId>
     <name>Conference :: Vote :: Config</name>
     <packaging>liberty-assembly</packaging>
+    <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <testServerHttpPort>9080</testServerHttpPort>
@@ -21,7 +22,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+            <groupId>microprofile-conference</groupId>
             <artifactId>${warName}</artifactId>
             <version>${warVersion}</version>
             <type>war</type>
@@ -39,7 +40,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+            <groupId>microprofile-conference</groupId>
             <artifactId>${warName}</artifactId>
             <version>${warVersion}</version>
             <classifier>classes</classifier>
