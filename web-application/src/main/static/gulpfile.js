@@ -185,7 +185,7 @@ gulp.task('build', gulpsync.sync(['clean-tomee', 'js', 'css', 'pages', 'copy-tom
 
 gulp.task('default', gulpsync.sync(['build']), function () {
     gulp.watch(
-        ['./app/**/*', '../../test/**/*.js'],
+        ['index.html', './app/**/*', '../../test/**/*.js'],
         gulpsync.sync(['build'])
     );
 });
