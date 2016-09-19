@@ -18,17 +18,34 @@ package com.ibm.ws.microprofile.sample.conference.vote.model;
 
 public class Attendee {
 
-	private final long id;
+	private String id;
+	private final String revision;
 	private String name;
 	
+	public Attendee(String name) {
+		this(null, null, name);
+	}
 
-	public Attendee(long id, String name) {
+	public Attendee(String id, String name) {
+		this(id, null, name);
+	}
+	
+	public Attendee(String id, String revision, String name) {
 		this.id = id;
+		this.revision = revision;
 		this.name = name;
 	}
 	
-	public long getId() {
+	public String getId() {
 		return id;
+	}
+	
+	public void setID(String id) {
+		this.id = id;
+	}
+	
+	public String getRevision() {
+		return revision;
 	}
 	
 	public String getName() {

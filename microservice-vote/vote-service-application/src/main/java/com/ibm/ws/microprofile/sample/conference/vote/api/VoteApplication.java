@@ -19,16 +19,18 @@ package com.ibm.ws.microprofile.sample.conference.vote.api;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-
+@ApplicationPath("/")
 public class VoteApplication extends Application {
 
 	@Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<Class<?>>();
-        //classes.add(SessionVote().class);
+        
         classes.add(AttendeeProvider.class);
+        classes.add(AttendeeListProvider.class);
         classes.add(SessionRatingProvider.class);
         classes.add(SessionRatingListProvider.class);
         return classes;
