@@ -8,7 +8,7 @@ The application consists of several Microservices and a Web-Application managing
 * `microservice-session` : Sessions of the conference
 * `microservice-speaker` : Speakers of the conference
 * `microservice-vote` : Votes for each session
-* `web-application` : Frontend Angular2 | Bootstrap4 | EE7 web application
+* `web-application` : Frontend Angular2 | Bootstrap4
 
 == Technologies
 
