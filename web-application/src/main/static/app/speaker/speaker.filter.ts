@@ -22,14 +22,10 @@ export class SpeakerFilter implements PipeTransform {
     private likeSpeaker(speaker: Speaker, search: string[]) : boolean {
 
         if (search.length === 1) {
-            var b = speaker.nameFirst.toLowerCase().includes(search[0]) || speaker.nameLast.toLowerCase().includes(search[0]);
-            console.log('has first or last: ' + b);
-            return b;
+            return speaker.nameFirst.toLowerCase().includes(search[0].toLowerCase()) || speaker.nameLast.toLowerCase().includes(search[0].toLowerCase());
         } else {
-            var b = speaker.nameFirst.toLowerCase().includes(search[0]) && speaker.nameLast.toLowerCase().includes(search[1])
-                || speaker.nameFirst.toLowerCase().includes(search[1]) && speaker.nameLast.toLowerCase().includes(search[0]);
-            console.log('has either first or last: ' + b);
-            return b;
+            return speaker.nameFirst.toLowerCase().includes(search[0].toLowerCase()) && speaker.nameLast.toLowerCase().includes(search[1].toLowerCase())
+                || speaker.nameFirst.toLowerCase().includes(search[1].toLowerCase()) && speaker.nameLast.toLowerCase().includes(search[0].toLowerCase());
         }
     }
 }
