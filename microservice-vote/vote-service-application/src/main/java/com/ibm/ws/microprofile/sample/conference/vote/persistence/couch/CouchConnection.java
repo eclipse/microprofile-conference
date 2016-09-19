@@ -16,12 +16,9 @@
 
 package com.ibm.ws.microprofile.sample.conference.vote.persistence.couch;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
@@ -99,12 +96,12 @@ public class CouchConnection {
 			    	}
 			    }
 				else{
-					MultivaluedMap<String, Object> headers = response.getHeaders();
-					for(Map.Entry<String, List<Object>> entry:headers.entrySet()){
-						for(Object value:entry.getValue()){
-							System.out.println(entry.getKey() + " : " + value);
-						}
-					}
+//					MultivaluedMap<String, Object> headers = response.getHeaders();
+//					for(Map.Entry<String, List<Object>> entry:headers.entrySet()){
+//						for(Object value:entry.getValue()){
+//							System.out.println(entry.getKey() + " : " + value);
+//						}
+//					}
 					connected = true;
 				}
 				

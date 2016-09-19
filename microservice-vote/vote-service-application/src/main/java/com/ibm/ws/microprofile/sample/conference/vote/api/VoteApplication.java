@@ -19,9 +19,10 @@ package com.ibm.ws.microprofile.sample.conference.vote.api;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-
+@ApplicationPath("/")
 public class VoteApplication extends Application {
 
 	@Override

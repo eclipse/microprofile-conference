@@ -21,10 +21,9 @@ import io.microprofile.showcase.speaker.persistence.SpeakerDAO;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -32,31 +31,42 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.util.Collections;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.Collection;
 import java.util.Set;
 
 /**
  * The Speaker resource
  */
 @ApplicationScoped
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces({MediaType.APPLICATION_JSON})
+@Consumes(MediaType.APPLICATION_JSON)
 @Path("/")
 public class ResourceSpeaker {
 
     @Inject
     private SpeakerDAO speakerDAO;
 
+    @Context
+    private UriInfo uriInfo;
+
     @GET
-    public Set<Speaker> retrieveAll() {
-        return this.speakerDAO.getSpeakers();
+    public Collection<Speaker> retrieveAll() {
+        final Collection<Speaker> speakers = this.speakerDAO.getSpeakers();
+
+        speakers.forEach(this::addHyperMedia);
+
+        return speakers;
     }
 
     @POST
     @Lock(LockType.WRITE)
     @Path("/add")
     public Speaker add(final Speaker speaker) {
-        return this.speakerDAO.persist(speaker);
+        return this.addHyperMedia(this.speakerDAO.persist(speaker));
     }
 
     @DELETE
@@ -69,18 +79,47 @@ public class ResourceSpeaker {
     @Lock(LockType.WRITE)
     @Path("/update")
     public Speaker update(final Speaker speaker) {
-        return this.speakerDAO.update(speaker);
+        return this.addHyperMedia(this.speakerDAO.update(speaker));
     }
 
     @GET
     @Path("/retrieve/{id}")
     public Speaker retrieve(@PathParam("id") final String id) {
-        return this.speakerDAO.getSpeaker(id).orElse(new Speaker());
+        return this.addHyperMedia(this.speakerDAO.getSpeaker(id).orElse(new Speaker()));
     }
 
     @PUT
     @Path("/search")
     public Set<Speaker> search(final Speaker speaker) {
-        return this.speakerDAO.find(speaker).orElse(Collections.emptyNavigableSet());
+        final Set<Speaker> speakers = this.speakerDAO.find(speaker);
+
+        speakers.forEach(this::addHyperMedia);
+
+        return speakers;
+    }
+
+    private Speaker addHyperMedia(final Speaker s) {
+
+        if (null != s) {
+
+            if (null != s.getId()) {
+                s.getLinks().put("self", this.getUri(s, "retrieve"));
+                s.getLinks().put("remove", this.getUri(s, "remove"));
+                s.getLinks().put("update", this.getUri("update"));
+            }
+
+            s.getLinks().put("add", this.getUri("add"));
+            s.getLinks().put("search", this.getUri("search"));
+        }
+
+        return s;
+    }
+
+    private URI getUri(final Speaker s, final String path) {
+        return this.uriInfo.getBaseUriBuilder().path(ResourceSpeaker.class).path(ResourceSpeaker.class, path).build(s.getId());
+    }
+
+    private URI getUri(final String path) {
+        return this.uriInfo.getBaseUriBuilder().path(ResourceSpeaker.class).build(path);
     }
 }

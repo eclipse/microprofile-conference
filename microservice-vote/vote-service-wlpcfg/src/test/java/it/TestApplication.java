@@ -22,7 +22,7 @@ public class TestApplication extends EndpointTest {
 
     @Test
     public void testDeployment() {
-        testEndpoint("/index.html", "<h1>Welcome to your Liberty Application</h1>");
+        testEndpoint("/", "Microservice Session Vote Application");
     }
 
 }

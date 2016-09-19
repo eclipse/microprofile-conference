@@ -17,6 +17,7 @@
 package com.ibm.ws.microprofile.sample.conference.vote.api;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 import java.util.Collection;
 
@@ -42,7 +43,7 @@ import com.ibm.ws.microprofile.sample.conference.vote.persistence.SessionRatingD
 import com.ibm.ws.microprofile.sample.conference.vote.utils.Log;
 
 @ApplicationScoped
-@Path("/session")
+@Path("/")
 @Log
 public class SessionVote {
 
@@ -65,6 +66,13 @@ public class SessionVote {
 			selectedAttendeeDAO = 	hashMapAttendeeDAO;
 			selectedSessionRatingDAO = hashMapSessionRatingDAO;
 		}
+	}
+	
+	@GET
+	@Path("/")
+	@Produces(TEXT_HTML)
+	public String info() {
+		return "Microservice Session Vote Application";
 	}
 	
 	public void setAttendeeSessionRating(AttendeeDAO attendee, SessionRatingDAO rating) {

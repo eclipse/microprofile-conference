@@ -15,49 +15,92 @@
  */
 package io.microprofile.showcase.schedule.persistence;
 
+import io.microprofile.showcase.bootstrap.BootstrapData;
 import io.microprofile.showcase.schedule.model.Schedule;
-import io.microprofile.showcase.schedule.model.Session;
-import io.microprofile.showcase.schedule.model.Venue;
+import io.microprofile.showcase.schedule.model.adapters.LocalDateAdapter;
+import io.microprofile.showcase.schedule.model.adapters.LocalTimeAdapter;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
-import static java.time.Month.SEPTEMBER;
 
 @ApplicationScoped
 public class ScheduleDAO {
 
+
+    @Inject
+    BootstrapData bootstrapData;
+
     private long sequence = 11L;
 
-    private Map<Long, Schedule> scheduleMap;
+    private Map<Long, Schedule> scheduleMap = new ConcurrentHashMap<>();
+    private Map<Long, String> venues = new ConcurrentHashMap<>();
 
     @PostConstruct
-    private void intializeScheduleMapWithDummyData() {
-        scheduleMap = new HashMap<>();
-        for (long i = 1; i <= 10; i++) {
-            scheduleMap.put(i, new Schedule(i,
-                new Session(i, "Java " + i + " for dummies", "The one who can't be named"),
-                new Venue(i, "Room 2" + i + i + 1),
-                LocalDate.of(2016, SEPTEMBER, 18), LocalTime.of(14, (int) i), Duration.ofHours(1)));
-        }
+    private void initStore() {
+        Logger.getLogger(ScheduleDAO.class.getName()).log(Level.INFO, "Initialise schedule DAO from bootstrap data");
+
+        LocalDateAdapter dateAdapter = new LocalDateAdapter();
+        LocalTimeAdapter timeAdapter = new LocalTimeAdapter();
+
+        bootstrapData.getSchedules()
+            .forEach(bootstrap -> {
+
+                try {
+
+                    Long venueId = null;
+                    for(Long key : venues.keySet()) {
+                        String v = venues.get(key);
+                        if(v.equals(bootstrap.getVenue())) {
+                            // existing venue
+                            venueId = key;
+                            break;
+                        }
+                    }
+
+                    // generate a new key
+                    if(null==venueId)
+                        venueId = sequence++;
+
+                    Schedule sched = new Schedule(
+                        new Long(bootstrap.getId()),
+                        new Long(bootstrap.getSessionId()),
+                        bootstrap.getVenue(),
+                        venueId,
+                        dateAdapter.unmarshal(bootstrap.getDate()),
+                        timeAdapter.unmarshal(bootstrap.getStartTime()),
+                        Duration.ofMinutes(new Double(bootstrap.getLength()).longValue())
+                    );
+
+
+                    scheduleMap.put(new Long(bootstrap.getId()), sched);
+                    venues.put(venueId, sched.getVenue());
+
+                } catch (Exception e) {
+                    System.out.println("Failed to parse bootstrap data: "+ e.getMessage());
+                }
+
+            });
+
     }
 
     public Schedule addSchedule(Schedule schedule) {
-        long id;
-        synchronized (scheduleMap) {
-            id = sequence++;
-            schedule.setId(id);
-            if (schedule.getSession().getId() == null) {
-                schedule.getSession().setId(sequence++);
-            }
-            if (schedule.getVenue().getId() == null) {
-                schedule.getVenue().setId(sequence++);
-            }
+
+        long id = sequence++;
+        schedule.setId(id);
+
+        if (schedule.getSessionId() == null) {
+            schedule.setSessionId(sequence++);
         }
 
         scheduleMap.put(id, schedule);
@@ -88,10 +131,10 @@ public class ScheduleDAO {
         }
     }
 
-    public List<Schedule> findByVenue(String venue) {
+    public List<Schedule> findByVenue(Long venueId) {
         return scheduleMap.values()
             .stream()
-            .filter(schedule -> schedule.getVenue().getName().equals(venue))
+            .filter(schedule -> schedule.getVenueId().equals(venueId))
             .collect(Collectors.toList());
     }
 

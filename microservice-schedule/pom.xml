@@ -43,8 +43,8 @@
                 <dependencies>
                     <dependency>
                         <groupId>fish.payara.extras</groupId>
-                        <artifactId>payara-micro</artifactId>
-                        <version>${version.payara}</version>
+                        <artifactId>payara-microprofile</artifactId>
+                        <version>1.0</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -57,18 +57,19 @@
                         <configuration>
                             <mainClass>fish.payara.micro.PayaraMicro</mainClass>
                             <arguments>
-                               <argument>--noCluster</argument>
-                               <argument>--autoBindHttp</argument>
-                               <argument>--deploy</argument>
-                               <argument>${basedir}/target/${project.artifactId}.war</argument>
-                               <argument>--outputUberJar</argument>
-                               <argument>${basedir}/target/${project.artifactId}.jar</argument>
+                                <argument>--noCluster</argument>
+                                <argument>--autoBindHttp</argument>
+                                <argument>--logo</argument>
+                                <argument>--deploy</argument>
+                                <argument>${basedir}/target/${project.artifactId}.war</argument>
+                                <argument>--outputUberJar</argument>
+                                <argument>${basedir}/target/${project.artifactId}.jar</argument>
                             </arguments>
                             <includeProjectDependencies>false</includeProjectDependencies>
                             <includePluginDependencies>true</includePluginDependencies>
                             <executableDependency>
                                 <groupId>fish.payara.extras</groupId>
-                                <artifactId>payara-micro</artifactId>
+                                <artifactId>payara-microprofile</artifactId>
                             </executableDependency>
                         </configuration>
                     </execution>
@@ -85,7 +86,54 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-jaxrs</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.microprofile.showcase</groupId>
+            <artifactId>demo-bootstrap</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <profiles>
@@ -118,41 +166,5 @@
                 </dependency>
             </dependencies>
         </profile>
-        <profile>
-            <id>swarm</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly.swarm</groupId>
-                    <artifactId>undertow</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.wildfly.swarm</groupId>
-                    <artifactId>jaxrs-cdi</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.wildfly.swarm</groupId>
-                    <artifactId>jaxrs-jsonp</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.wildfly.swarm</groupId>
-                    <artifactId>jpa</artifactId>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.wildfly.swarm</groupId>
-                        <artifactId>wildfly-swarm-plugin</artifactId>
-                        <configuration>
-                            <properties>
-                                <swarm.http.port>8081</swarm.http.port>
-                                <swarm.context.path>/schedule</swarm.context.path>
-                            </properties>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
     </profiles>
 </project>

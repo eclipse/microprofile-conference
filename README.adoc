@@ -8,7 +8,7 @@ The application consists of several Microservices and a Web-Application managing
 * `microservice-session` : Sessions of the conference
 * `microservice-speaker` : Speakers of the conference
 * `microservice-vote` : Votes for each session
-* `web-application` : Frontend Angular2 | Bootstrap4 | EE7 web application
+* `web-application` : Frontend Angular2 | Bootstrap4
 
 == Technologies
 
@@ -16,31 +16,88 @@ The application consists of several Microservices and a Web-Application managing
 * Micro Profile
 * JAX-RS 2.0 / JSON-P 1.0 / CDI 1.1
 
-== Setup
-
-* Build the projects using Maven (`mvn clean install`) or (`mvn -fn clean install`) to skip over failed tests.
-* To get the technical documentation, just `mvn clean generate-resources` under the `docs` directory. You will get a PDF and HTML version of the documentation under `docs/target/generated-docs`
-
-== Development
+== Development Build
 
 ----
 mvn clean install -DskipTests
 ----
 
+* Build the projects using Maven (`mvn clean install`) or (`mvn -fn clean install`) to skip over failed tests.
+* To get the technical documentation, just `mvn clean generate-resources` under the `docs` directory. You will get a PDF and HTML version of the documentation under `docs/target/generated-docs`
+
 === Run Services
 
-* `microservice-schedule`: TBC
-* `microservice-session` : TBC
-* `microservice-speaker` : TBC
-* `microservice-vote` : TBC
+Each service can run on any container (this is the Microprofile guarantee),
+but the service projects have been written by vendors to use their container.
 
-=== Run UI
+The following sections describe vendor specifics:
+
+==== `microservice-schedule`
+The Schedule service is provided using a special microprofile release of link:http://www.payara.fish/payara_micro[Payara Micro] which can be downloaded from link:http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22payara-microprofile%22[Maven Central]
+
+*Build and run the service*
+When building the service Payara Microprofile packages both the war file and the microprofile runtime into a single UberJar for convenience.
+```
+cd microservice-schedule
+mvn clean package
+java -jar target/microservice-schedule.jar [Options]
+```
+
+*Port Bindings*
+By default the microservice will bind to port 8080, if this is not available it will bind to the next available port e.g. 8081. To specify the port use --port as a command line option
+
+To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options. 
+
+==== `microservice-session`
+
+Provided using link:http://wildfly-swarm.io[WildFly Swarm]
+
+*Build and run the service*
+```
+cd microservice-session
+mvn clean package
+java -jar target/microservice-session-swarm.jar [-D<OPTION>]
+```
+
+*Address & Port Bindings*
+
+.Session Service Options
+|===
+|Flag |Description| Default
+
+| swarm.bind.address=<address>
+| Interface to bind servers
+| 0.0.0.0
+
+| swarm.http.port=<port>
+| Sets the port for the HTTP server
+| 8080
+
+| swarm.port.offset=<offset>
+| Sets a global port adjustment
+| 0
+|===
+
+
+For a full set of configuration options please see link:https://wildfly-swarm.gitbooks.io/wildfly-swarm-users-guide/content/[the Wildfly Swarm Userguide]
+
+==== `microservice-speaker`
+TBC
+
+==== `microservice-vote`
+TBC
+
+=== Run the UI Web Application
+
+This starts the UI app and all services running in an embedded container.
+The landing page is http://localhost:8080
 
 .Console 1
 ----
-# Make sure  you have typings install (npm install -g typings)
 mvn clean package tomee:run -pl :web-application -DskipTests
 ----
+
+This starts a gulp task that monitors and updates changes to the static resources.
 
 .Console 2
 ----
@@ -56,6 +113,24 @@ mvn clean test
 
 == Common problems/bugs
 
+=== NPM issues
+
+The web-application project uses the *com.github.eirslett:frontend-maven-plugin* to download
+and install all node and npm requirements.
+Sometimes this may fail if console permissions are not permissive enough.
+
+In such cases you will have to manually install some reqiurements:
+
+<1> Download and install node: https://nodejs.org/en/download/current/
+
+<2> Install npm manually:
+
+----
+cd web-application/src/main/static
+npm install npm
+npm install typings --global
+typings install --global
+----
 
 == Access to staging/beta/production
 

@@ -40,7 +40,7 @@ import org.junit.Test;
 
 public class VoteClient {
 
-	private static String ROOT_URL = "http://localhost:9080/vote/rest/session";
+	private static String ROOT_URL = "http://localhost:9080/vote";
 	private static String ATTENDEE_URL = ROOT_URL + "/attendee";
 	private static String RATE_URL = ROOT_URL + "/rate";
 	private static String RATE_BY_SESSION_URL = ROOT_URL + "/ratingsBySession";

@@ -103,22 +103,7 @@
                             <directory>target/static-resources</directory>
                         </resource>
                     </webResources>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.tomee.maven</groupId>
-                <artifactId>tomee-maven-plugin</artifactId>
-                <configuration>
-                    <tomeeVersion>${version.tomee}</tomeeVersion>
-                    <tomeeClassifier>plus</tomeeClassifier>
-
-                    <webapps>
-                        <webapp>${project.groupId}:microservice-speaker-web:${project.version}</webapp>
-                        <webapp>${project.groupId}:microservice-session:${project.version}</webapp>
-                        <webapp>${project.groupId}:microservice-schedule:${project.version}</webapp>
-                        <webapp>com.ibm.ws.microprofile.sample.conference:vote-service-application:${project.version}</webapp>
-                    </webapps>
+                    <warName>ROOT</warName>
                 </configuration>
             </plugin>
 
@@ -135,7 +120,7 @@
                             <goal>install-node-and-npm</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v6.5.0</nodeVersion>
+                            <nodeVersion>v6.6.0</nodeVersion>
                             <npmVersion>3.10.7</npmVersion>
                         </configuration>
                     </execution>
@@ -149,16 +134,6 @@
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
-                    <!--<execution>-->
-                    <!--<id>bower-install</id>-->
-                    <!--<phase>generate-resources</phase>-->
-                    <!--<goals>-->
-                    <!--<goal>bower</goal>-->
-                    <!--</goals>-->
-                    <!--<configuration>-->
-                    <!--<arguments>install</arguments>-->
-                    <!--</configuration>-->
-                    <!--</execution>-->
                     <execution>
                         <id>gulp-build</id>
                         <phase>generate-resources</phase>
@@ -179,5 +154,35 @@
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>tomee</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tomee.maven</groupId>
+                        <artifactId>tomee-maven-plugin</artifactId>
+                        <configuration>
+                            <tomeeVersion>${version.tomee}</tomeeVersion>
+                            <tomeeClassifier>plus</tomeeClassifier>
+                            <!--@formatter:off-->
+                            <webapps>
+                                <webapp>${project.groupId}:microservice-speaker-web:${project.version}</webapp>
+                                <webapp>${project.groupId}:microservice-session:${project.version}</webapp>
+                                <webapp>${project.groupId}:microservice-schedule:${project.version}</webapp>
+                                <webapp>com.ibm.ws.microprofile.sample.conference:vote-service-application:${project.version}</webapp>
+                            </webapps>
+                            <!--@formatter:on-->
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

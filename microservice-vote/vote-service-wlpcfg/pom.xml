@@ -11,7 +11,13 @@
 
     <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
     <artifactId>vote-service-wlpcfg</artifactId>
+    <name>Conference :: Vote :: Config</name>
     <packaging>liberty-assembly</packaging>
+
+    <properties>
+        <testServerHttpPort>9080</testServerHttpPort>
+        <testServerHttpsPort>9443</testServerHttpsPort>
+    </properties>
 
     <dependencies>
         <dependency>

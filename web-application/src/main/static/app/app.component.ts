@@ -1,19 +1,12 @@
-import {Component} from "@angular/core";
+import {Component, enableProdMode} from "@angular/core";
+
+enableProdMode();
 
 @Component({
-    selector: 'microprofile-conference',
-    template: `
-  <nav>
-      <a routerLink="/speakers" routerLinkActive="active">Speakers</a>
-      <a routerLink="/sessions">Sessions</a>
-      <a routerLink="/schedules">Schedules</a>
-      <a routerLink="/votes">Votes</a>
-    </nav>
-    <router-outlet></router-outlet>
-`,
+    selector: 'conference',
+    templateUrl: 'app/app.component.html'
 })
 
 export class AppComponent {
     title = 'Microprofile Conference';
 }
-

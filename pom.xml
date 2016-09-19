@@ -103,7 +103,7 @@
         <version.el>2.2</version.el>
         <version.junit>4.12</version.junit>
         <version.jsonunit>1.12.1</version.jsonunit>
-        <version.jackson>2.8.1</version.jackson>
+        <version.jackson>2.8.2</version.jackson>
 
         <!-- App servers -->
         <version.wildfly-swarm>2016.9</version.wildfly-swarm>
@@ -123,6 +123,7 @@
     </properties>
 
     <modules>
+        <module>demo-bootstrap</module>
         <module>microservice-session</module>
         <module>microservice-vote</module>
         <module>microservice-speaker</module>
@@ -191,14 +192,14 @@
                 <version>${version.jackson}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${version.commons-lang3}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
                 <version>${version.jackson}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${version.commons-lang3}</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.swizzle</groupId>

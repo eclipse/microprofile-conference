@@ -27,6 +27,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +44,9 @@ public class EndpointService {
 
     @Context
     private ServletContext context;
+
+    @Context
+    private UriInfo uriInfo;
 
     /**
      * Allows the cached Endpoints to be reset, forcing a config reload
@@ -94,6 +98,7 @@ public class EndpointService {
             eps.setApplication(application);
             eps.setEndpoints(endpointSet);
 
+            eps = this.addHyperMedia(eps);
             this.map.put(application, eps);
         }
 
@@ -103,9 +108,20 @@ public class EndpointService {
     private Endpoint getEndpoint(final String name, final String val) {
         final Endpoint ep = new Endpoint();
         ep.setName(name);
-        ep.setUrlEncoded(val);
+        ep.setUrl(val);
         return ep;
     }
 
+    private Endpoints addHyperMedia(final Endpoints eps) {
+
+        if (null != eps) {
+
+            if (null != eps.getApplication()) {
+                eps.getLinks().put("self", this.uriInfo.getBaseUriBuilder().path(EndpointService.class).build(eps.getApplication()));
+            }
+        }
+
+        return eps;
+    }
 
 }

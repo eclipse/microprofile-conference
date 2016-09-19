@@ -30,7 +30,7 @@ public class TestApplication {
     @Test
     public void testDeployment() {
         String context = System.getProperty("cf.context.root");
-        String url = "http://" + context + "/index.html";
+        String url = "http://" + context + "/";
         System.out.println("Testing " + url);
         Response response = sendRequest(url, "GET");
         int responseCode = response.getStatus();
@@ -38,7 +38,7 @@ public class TestApplication {
                    responseCode == 200);
         String responseString = response.readEntity(String.class);
         response.close();
-        assertTrue("Incorrect response, response is " + responseString, responseString.contains("<h1>Welcome to your Liberty Application</h1>"));
+        assertTrue("Incorrect response, response is " + responseString, responseString.contains("Microservice Session Vote Application"));
     }
 
     public Response sendRequest(String url, String requestType) {
