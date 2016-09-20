@@ -51,7 +51,7 @@ public class ResourceSpeakerTest {
     @Deployment(testable = false)
     public static WebArchive deploy() {
 
-        File bootstrapLib = Maven.resolver().resolve("io.microprofile.showcase:demo-bootstrap:1.0.0-SNAPSHOT").withoutTransitivity().asSingleFile();
+        final File bootstrapLib = Maven.resolver().resolve("io.microprofile.showcase:demo-bootstrap:1.0.0-SNAPSHOT").withoutTransitivity().asSingleFile();
 
         return ShrinkWrap.create(WebArchive.class
                 , ResourceSpeakerTest.class.getName() + ".war")
@@ -65,9 +65,9 @@ public class ResourceSpeakerTest {
                         Speaker.class
                 )
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-            .addAsLibraries(
-                bootstrapLib
-            );
+                .addAsLibraries(
+                        bootstrapLib
+                );
     }
 
     @ArquillianResource

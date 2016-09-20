@@ -51,6 +51,25 @@ public class VenueJavaOne2016 extends Venue {
 
     public Set<Speaker> getSpeakers() {
 
+        final Set<Speaker> speakers = this.getSpeakersOnline();
+
+        if (speakers.isEmpty()) {
+            try {
+                speakers.addAll(this.getSpeakersFile());
+            } catch (final IOException e) {
+                this.log.log(Level.SEVERE, "Failed to read fallback json: " + this.url, e);
+            }
+        }
+
+        return speakers;
+    }
+
+    private Set<Speaker> getSpeakersOnline() {
+
+        if (null == System.getProperty("microprofile.speaker.scrape")) {
+            return new TreeSet<>();
+        }
+
         final Set<Speaker> speakers = new TreeSet<>((left, that) -> {
 
             if (left.getNameFirst().compareTo(that.getNameFirst()) < 0) {
@@ -117,19 +136,10 @@ public class VenueJavaOne2016 extends Venue {
                 }
             }
         }
-
-        if (speakers.isEmpty()) {
-            try {
-                speakers.addAll(this.getFallback());
-            } catch (final IOException e) {
-                this.log.log(Level.SEVERE, "Failed to read fallback json: " + this.url, e);
-            }
-        }
-
         return speakers;
     }
 
-    private Set<Speaker> getFallback() throws IOException {
+    private Set<Speaker> getSpeakersFile() throws IOException {
         final ObjectMapper om = new ObjectMapper();
         final InputStream is = this.getClass().getResourceAsStream("/JavaOne2016.json");
         return om.readValue(is, new TypeReference<Set<Speaker>>() {
