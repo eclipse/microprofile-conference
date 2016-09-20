@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,15 +65,23 @@ public class SpeakerDAO {
             featured.addAll(venue.getSpeakers());
         }
 
+        final AtomicInteger idc = new AtomicInteger(0);
+
         this.bootstrapData.getSpeaker()
                 .forEach(bootstrap -> {
 
-                    final String id = String.valueOf(bootstrap.getId());
+                    final int intId = bootstrap.getId();
+
+                    if (intId > idc.get()) {
+                        idc.set(intId);
+                    }
+
+                    final String id = String.valueOf(intId);
                     final String[] names = bootstrap.getFullName().split(" ");
                     final Speaker sp = new Speaker();
                     sp.setId(id);
-                    sp.setNameFirst(names[0]);
-                    sp.setNameLast(names[1]);
+                    sp.setNameFirst(names[0].trim());
+                    sp.setNameLast(names[1].trim());
                     sp.setOrganization(bootstrap.getCompany());
                     sp.setBiography(bootstrap.getJobTitle());
 
@@ -83,6 +92,25 @@ public class SpeakerDAO {
                     this.speakers.put(id, sp);
                 });
 
+        for (final Speaker fs : featured) {
+
+            boolean found = false;
+
+            for (final Speaker sp : this.speakers.values()) {
+                if (fs.getNameFirst().toLowerCase().equals(sp.getNameFirst().toLowerCase())
+                        && fs.getNameLast().toLowerCase().equals(sp.getNameLast().toLowerCase())) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                fs.setId(String.valueOf(idc.incrementAndGet()));
+                this.speakers.put(fs.getId(), fs);
+            }
+        }
+
+        //TODO - Merge back to source json
     }
 
     private void appendFeatured(final Set<Speaker> featured, final Speaker sp) {
