@@ -24,9 +24,11 @@ import java.util.Collection;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -94,8 +96,9 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public Attendee updateAttendee(@PathParam("id") String id, Attendee attendee) {
-		attendee.setID(id);
-		Attendee updated = selectedAttendeeDAO.updateAttendee(attendee);
+		Attendee original = getAttendee(id);
+		original.setName(attendee.getName());
+		Attendee updated = selectedAttendeeDAO.updateAttendee(original);
 		return updated;
 	}
 
@@ -110,14 +113,23 @@ public class SessionVote {
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
 	public Attendee getAttendee(@PathParam("id") String id) {
-		return selectedAttendeeDAO.getAttendee(id);
+		Attendee attendee = selectedAttendeeDAO.getAttendee(id);
+		if(attendee == null){
+			throw new NotFoundException("Attendee not found: "+id);
+		}
+		return attendee;
 	}
 	
 	@DELETE
 	@Path("/attendee/{id}")
 	@Produces(APPLICATION_JSON)
 	public void deleteAttendee(@PathParam("id") String id) {
-		 selectedAttendeeDAO.deleteAttendee(id);
+		Attendee attendee = getAttendee(id);
+		Collection<SessionRating> ratings = votesByAttendee(attendee.getId());
+		for(SessionRating rating:ratings){
+			selectedSessionRatingDAO.deleteRating(rating.getId());
+		}
+		selectedAttendeeDAO.deleteAttendee(attendee.getId());
 	}
 	
 	@POST
@@ -125,6 +137,12 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public SessionRating rateSession(SessionRating sessionRating) {
+		String attendeeId = sessionRating.getAttendeeId();
+		Attendee attendee = selectedAttendeeDAO.getAttendee(attendeeId);
+		if(attendee == null){
+			throw new BadRequestException("Invalid attendee id: "+attendeeId);
+		}
+		
 		SessionRating rating = selectedSessionRatingDAO.rateSession(sessionRating);
 		return rating;
 	}
@@ -141,24 +159,41 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public SessionRating updateRating(@PathParam("id") String id, SessionRating newRating) {
-		newRating.setId(id);
-		selectedSessionRatingDAO.updateRating(newRating);
 		
-		return newRating;
+		SessionRating original = selectedSessionRatingDAO.getRating(id);
+		if(original == null){
+			throw new NotFoundException("Session Rating not found: "+id);
+		}
+		original.setSession(newRating.getSession());
+		original.setRating(newRating.getRating());
+		Attendee attendee = selectedAttendeeDAO.getAttendee(newRating.getAttendeeId());
+		if(attendee == null){
+			throw new BadRequestException("Invalid attendee id: "+newRating.getAttendeeId());
+		}
+		original.setAttendee(attendee.getId());
+		
+		SessionRating updated = selectedSessionRatingDAO.updateRating(original);
+		
+		return updated;
 	}
 	
 	@GET
 	@Path("/rate/{id}")
 	@Produces(APPLICATION_JSON)
 	public SessionRating getRating(@PathParam("id") String id) {
-		return selectedSessionRatingDAO.getRating(id);
+		SessionRating rating = selectedSessionRatingDAO.getRating(id);
+		if(rating == null){
+			throw new NotFoundException("Rating not found: "+id);
+		}
+		return rating;
 	}
 	
 	@DELETE
 	@Path("/rate/{id}")
 	@Produces(APPLICATION_JSON)
 	public void deleteRating(@PathParam("id") String id) {
-		selectedSessionRatingDAO.deleteRating(id);
+		SessionRating rating = getRating(id);
+		selectedSessionRatingDAO.deleteRating(rating.getId());
 	}
 
 	@GET
@@ -188,6 +223,10 @@ public class SessionVote {
 	@Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
 	public Collection<SessionRating> votesByAttendee(@QueryParam("attendeeId") String attendeeId) {
+		Attendee attendee = selectedAttendeeDAO.getAttendee(attendeeId);
+		if(attendee == null){
+			throw new BadRequestException("Invalid attendee id: "+attendeeId);
+		}
 		return selectedSessionRatingDAO.getRatingsByAttendee(attendeeId);
 	}
 	

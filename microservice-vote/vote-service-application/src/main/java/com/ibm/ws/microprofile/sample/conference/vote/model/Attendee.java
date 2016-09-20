@@ -55,4 +55,13 @@ public class Attendee {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Attendee) {
+			Attendee other = (Attendee) o;
+			return id == other.getId() && name.equals(other.getName());
+		}
+		return false;
+	}
 }

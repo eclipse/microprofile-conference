@@ -46,15 +46,10 @@ public class CouchAttendeeDAO implements AttendeeDAO {
 	public void connect(){
 		this.connected = couch.connect("attendees");
 		
-		try{
-			couch.request("_design/attendees", RequestType.GET, null, null, null, 200);
-		}
-		catch(RequestStatusException e){
-			if(e.getCode() == 404){
+		if(this.connected){
+			String design = couch.request("_design/attendees", RequestType.GET, null, String.class, null, 200, true);
+			if(design == null){
 				couch.request("_design/attendees", RequestType.PUT, designDoc, null, null, 201);
-			}
-			else{
-				throw e;
 			}
 		}
 	}
@@ -106,7 +101,7 @@ public class CouchAttendeeDAO implements AttendeeDAO {
 
 	@Override
 	public Attendee getAttendee(String id) {
-		Attendee attendee = couch.request(id, RequestType.GET, null, Attendee.class, null, 200);
+		Attendee attendee = couch.request(id, RequestType.GET, null, Attendee.class, null, 200, true);
 		return attendee;
 	}
 

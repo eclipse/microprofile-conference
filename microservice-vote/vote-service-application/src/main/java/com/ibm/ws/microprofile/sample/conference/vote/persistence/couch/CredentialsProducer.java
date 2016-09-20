@@ -66,14 +66,10 @@ public class CredentialsProducer {
 		String password = System.getenv("dbPassword");
 		String url = System.getenv("dbUrl");
 		
-		//TEMP for testing only
-				if(url == null){
-					username="0cbcf4ec-681d-4267-b8b2-63495750b883-bluemix";
-					password="b2701582580bff41f9c9912b3c320f2407b2819a1704b0996543148abed1a52a";
-					url="https://0cbcf4ec-681d-4267-b8b2-63495750b883-bluemix.cloudant.com";
-				}
-		
-		return new Credentials(username, password, url);		
+		if(username != null && password != null && url != null){
+			return new Credentials(username, password, url);
+		}
+		else return null;
 	}
 	
 }

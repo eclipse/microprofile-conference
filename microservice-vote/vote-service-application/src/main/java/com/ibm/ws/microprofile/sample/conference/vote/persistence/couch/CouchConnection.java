@@ -16,9 +16,6 @@
 
 package com.ibm.ws.microprofile.sample.conference.vote.persistence.couch;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
@@ -26,7 +23,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import com.ibm.ws.microprofile.sample.conference.vote.api.AttendeeProvider;
@@ -55,7 +51,7 @@ public class CouchConnection {
 	private String url;
 	
 	public boolean connect(String dbName){
-		if(!connected){
+		if(!connected && credentials != null){
 			this.dbName = dbName;
 			this.url = credentials.getUrl();
 			this.usernameAndPassword = credentials.getUsername() + ":" + credentials.getPassword();
@@ -104,7 +100,6 @@ public class CouchConnection {
 //					}
 					connected = true;
 				}
-				
 				if(connected){
 					System.out.println("Connected to Couch DB: "+dbName);
 				}
@@ -118,10 +113,18 @@ public class CouchConnection {
 	}
 	
 	public <T, R> R request(String path, RequestType requestType, T payload, Class<R> returnType, String etag, int expectedStatus) {
-		return request(path, null, null, requestType, payload, returnType, etag, expectedStatus);
+		return request(path, null, null, requestType, payload, returnType, etag, expectedStatus, false);
 	}
 	
 	public <T, R> R request(String path, String queryName, String queryValue, RequestType requestType, T payload, Class<R> returnType, String etag, int expectedStatus) {
+		return request(path, queryName, queryValue, requestType, payload, returnType, etag, expectedStatus, false);
+	}
+	
+	public <T, R> R request(String path, RequestType requestType, T payload, Class<R> returnType, String etag, int expectedStatus, boolean nullNotFound) {
+		return request(path, null, null, requestType, payload, returnType, etag, expectedStatus, nullNotFound);
+	}
+	
+	public <T, R> R request(String path, String queryName, String queryValue, RequestType requestType, T payload, Class<R> returnType, String etag, int expectedStatus, boolean nullNotFound) {
 		
 		WebTarget target = client.target(url);
 		target = target.path(dbName);
@@ -158,15 +161,21 @@ public class CouchConnection {
 			break;
 		}
         
+        R returnedPayload = null;
 		int code = response.getStatus();
 	    if(code != expectedStatus){
-	    	String error = response.readEntity(String.class);
-	    	throw new RequestStatusException("Unable to execute request: "+code+" : "+error, code);
+	    	if(code == 404 && nullNotFound){
+	    		returnedPayload = null;
+	    	}
+	    	else{
+		    	String error = response.readEntity(String.class);
+		    	throw new RequestStatusException("Unable to execute request: "+code+" : "+error, code);
+	    	}
 		}
-	    
-	    R returnedPayload = null;
-	    if(returnType != null){
-	    	returnedPayload = response.readEntity(returnType);
+	    else{
+		    if(returnType != null){
+		    	returnedPayload = response.readEntity(returnType);
+		    }
 	    }
 		
 		return returnedPayload;

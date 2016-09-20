@@ -22,7 +22,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.ibm.ws.microprofile.sample.conference.vote.model.Attendee;
 import com.ibm.ws.microprofile.sample.conference.vote.model.SessionRating;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.Persistent;
 import com.ibm.ws.microprofile.sample.conference.vote.persistence.SessionRatingDAO;
@@ -52,15 +51,10 @@ public class CouchSessionRatingDAO implements SessionRatingDAO{
 	public void connect(){
 		this.connected = couch.connect("ratings");
 		
-		try{
-			couch.request("_design/ratings", RequestType.GET, null, null, null, 200);
-		}
-		catch(RequestStatusException e){
-			if(e.getCode() == 404){
+		if(this.connected){
+			String design = couch.request("_design/ratings", RequestType.GET, null, String.class, null, 200, true);
+			if(design == null){
 				couch.request("_design/ratings", RequestType.PUT, designDoc, null, null, 201);
-			}
-			else{
-				throw e;
 			}
 		}
 	}
@@ -100,7 +94,7 @@ public class CouchSessionRatingDAO implements SessionRatingDAO{
 
   	@Override
 	public SessionRating getRating(String id) {
-  		SessionRating sessionRating = couch.request(id, RequestType.GET, null, SessionRating.class, null, 200);
+  		SessionRating sessionRating = couch.request(id, RequestType.GET, null, SessionRating.class, null, 200, true);
 		return sessionRating;
 	}
 

@@ -21,8 +21,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
+
+import javax.ws.rs.NotFoundException;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -82,7 +85,7 @@ public class SessionVoteTest {
 		// Now verify that there is only one attendee in the system, and that it is the correct one:
 		Collection<Attendee> attendees = sessionVote.getAllAttendees();
 		assertEquals("An unexpected number of attendees have been registered", 1, attendees.size());
-		assertTrue("The session vote service is missing the updated attendee", attendees.contains(jonDoe));
+		assertTrue("The session vote service is missing the updated attendee", attendees.contains(attendee));
 	}
 	
 	@Test
@@ -112,7 +115,13 @@ public class SessionVoteTest {
 		
 		// API method under test:
 		sessionVote.deleteAttendee(id);
-		assertNull("Attendee's name was not retrieved as expected", sessionVote.getAttendee(id));
+		try{
+			sessionVote.getAttendee(id);
+			fail("Attendee was not deleted as expected");
+		}
+		catch(NotFoundException e){
+			//expected
+		}
 		
 
 		// Now verify that there are no attendees in the system
@@ -124,13 +133,15 @@ public class SessionVoteTest {
 
 	@Test
 	public void testRateSession() {
-		SessionRating sessionRating = new SessionRating("session1", "200", 5);
+		Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
+		String id = jonathanDoe.getId();
+		SessionRating sessionRating = new SessionRating("session1", id, 5);
 		
 		// API method under test:
 		sessionRating = sessionVote.rateSession(sessionRating);
 
 		assertEquals("Returned SessionRating's session name does not match expected session name", "session1", sessionRating.getSession());
-		assertEquals("Returned SessionRating's attendee ID does not match expected attendee ID", "200", sessionRating.getAttendeeId());
+		assertEquals("Returned SessionRating's attendee ID does not match expected attendee ID", id, sessionRating.getAttendeeId());
 		assertEquals("Returned SessionRating's rating value does not match expected value", 5, sessionRating.getRating());
 
 		// Now check that the SessionRating stored in the system matches what was returned
@@ -139,16 +150,21 @@ public class SessionVoteTest {
 
 	@Test
 	public void testUpdateRating() {
-		SessionRating originalRating = new SessionRating("session1", "200", 5);
+		Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
+		String id = jonathanDoe.getId();
+		SessionRating originalRating = new SessionRating("session1", id, 5);
 		originalRating = sessionVote.rateSession(originalRating);
 
-		SessionRating updatedRating = new SessionRating(originalRating.getId(), originalRating.getRevision(), "session2", "300", 7);
+		Attendee jonathanDoe2 = sessionVote.registerAttendee("Jonathan Doe2");
+		String id2 = jonathanDoe2.getId();
+		
+		SessionRating updatedRating = new SessionRating(originalRating.getId(), originalRating.getRevision(), "session2", id2, 7);
 
 		// API method under test
 		updatedRating = sessionVote.updateRating(updatedRating.getId(), updatedRating);
 
 		assertEquals("Unexpected session in updated rating", "session2", updatedRating.getSession());
-		assertEquals("Unexpected attendee ID in updated rating", "300", updatedRating.getAttendeeId());
+		assertEquals("Unexpected attendee ID in updated rating", id2, updatedRating.getAttendeeId());
 		assertEquals("Unexpected rating value in updated rating", 7, updatedRating.getRating());
 
 		// Now check that the SessionRating stored in the system matches the updated SessionRating that was returned
@@ -187,11 +203,17 @@ public class SessionVoteTest {
 
 	@Test
 	public void testAllSessionVotes() {
+		
+		Attendee attendee1= sessionVote.registerAttendee("Jon Don");
+		Attendee attendee2 = sessionVote.registerAttendee("Do Doo");
+		Attendee attendee3= sessionVote.registerAttendee("Jo Do");
+		Attendee attendee4 = sessionVote.registerAttendee("Bo Jo");
+		
 		// submit 4 votes - 3 for session1, and 1 for session2
-		SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", "100", 3));
-		SessionRating sr2 = sessionVote.rateSession(new SessionRating("session1", "200", 4));
-		SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", "300", 8));
-		SessionRating sr4 = sessionVote.rateSession(new SessionRating("session1", "400", 9));
+		SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", attendee1.getId(), 3));
+		SessionRating sr2 = sessionVote.rateSession(new SessionRating("session1", attendee2.getId(), 4));
+		SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", attendee3.getId(), 8));
+		SessionRating sr4 = sessionVote.rateSession(new SessionRating("session1", attendee4.getId(), 9));
 
 		// API method under test
 		Collection<SessionRating> session1Ratings = sessionVote.allSessionVotes("session1");
@@ -204,11 +226,16 @@ public class SessionVoteTest {
 
 	@Test
 	public void testSessionRatingAverage() {
+		Attendee attendee1= sessionVote.registerAttendee("Jon Don");
+		Attendee attendee2 = sessionVote.registerAttendee("Do Doo");
+		Attendee attendee3= sessionVote.registerAttendee("Jo Do");
+		Attendee attendee4 = sessionVote.registerAttendee("Bo Jo");
+		
 		// submit 4 votes - 3 for session1, and 1 for session2
-		SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", "101", 3));
-		SessionRating sr2 = sessionVote.rateSession(new SessionRating("session1", "201", 8));
-		SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", "301", 8));
-		SessionRating sr4 = sessionVote.rateSession(new SessionRating("session1", "401", 10));
+		SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", attendee1.getId(), 3));
+		SessionRating sr2 = sessionVote.rateSession(new SessionRating("session1", attendee2.getId(), 8));
+		SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", attendee3.getId(), 8));
+		SessionRating sr4 = sessionVote.rateSession(new SessionRating("session1", attendee4.getId(), 10));
 
 		// API method under test
 		double avg = sessionVote.sessionRatingAverage("session1");
