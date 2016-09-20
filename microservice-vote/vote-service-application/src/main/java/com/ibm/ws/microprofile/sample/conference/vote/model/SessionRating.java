@@ -18,24 +18,36 @@ package com.ibm.ws.microprofile.sample.conference.vote.model;
 
 public class SessionRating {
 	
-	private long id = -1;
+	private String id;
+	private String revision;
 	private String session;
-	private long attendeeId;
+	private String attendeeId;
 	private int rating;
 
-	public SessionRating(long id, String session, long attendeeId, int rating) {
-		this(session, attendeeId, rating);
-		this.id = id;
-	}
 	
-	public SessionRating(String session, long attendeeId, int rating) {
+	
+	public SessionRating(String session, String attendeeId, int rating) {
+		this(null, null, session, attendeeId, rating);
+	}
+
+	public SessionRating(String id, String revision, String session, String attendeeId, int rating) {
+		this.id = id;
+		this.revision = revision;
 		this.session = session;
 		this.attendeeId = attendeeId;
 		this.rating = rating;
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public String getRevision() {
+		return revision;
 	}
 
 	public String getSession() {
@@ -44,10 +56,10 @@ public class SessionRating {
 	public void setSession(String session) {
 		this.session = session;
 	}
-	public long getAttendeeId() {
+	public String getAttendeeId() {
 		return attendeeId;
 	}
-	public void setAttendee(long attendeeId) {
+	public void setAttendee(String attendeeId) {
 		this.attendeeId = attendeeId;
 	}
 	public int getRating() {

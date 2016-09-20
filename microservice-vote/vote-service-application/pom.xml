@@ -4,19 +4,51 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+        <groupId>microprofile-conference</groupId>
         <artifactId>microservice-vote</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>microprofile-conference</groupId>
     <artifactId>vote-service-application</artifactId>
     <name>Conference :: Vote :: Application</name>
     <packaging>war</packaging>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties> 
 
     <dependencies>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+           <groupId>javax.annotation</groupId>
+           <artifactId>javax.annotation-api</artifactId>
+           <version>1.2</version>
+           <scope>provided</scope>
+        </dependency>
+        <dependency>
+           <groupId>org.glassfish.jersey.core</groupId>
+           <artifactId>jersey-common</artifactId>
+           <version>2.23.2</version>
+           <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -40,6 +72,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1-beta-1</version>
+                <configuration>
+                    <attachClasses>true</attachClasses>
+                </configuration>
+            </plugin -->
         </plugins>
     </build>
 </project>
+

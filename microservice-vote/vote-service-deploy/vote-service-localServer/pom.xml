@@ -4,13 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+        <groupId>microprofile-conference</groupId>
         <artifactId>vote-service-deploy</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.ibm.ws.microprofile.sample.conferenceDeploy</groupId>
+    <groupId>microprofile-conference</groupId>
     <artifactId>vote-service-localServer</artifactId>
+    <name>Conference :: Vote :: Deploy :: Local Server</name>
     <packaging>pom</packaging>
 
     <dependencies>
@@ -22,10 +23,10 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
+    <!-- <build>
+        <plugins> -->
             <!-- Enable liberty-maven plugin -->
-            <plugin>
+           <!--  <plugin>
                 <groupId>net.wasdev.wlp.maven.plugins</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>1.2.1</version>
@@ -43,7 +44,7 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build> -->
 
 
     <profiles>

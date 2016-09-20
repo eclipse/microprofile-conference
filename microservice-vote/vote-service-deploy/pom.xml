@@ -4,11 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+        <groupId>microprofile-conference</groupId>
         <artifactId>microservice-vote</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-
+    
+    <groupId>microprofile-conference</groupId>
     <artifactId>vote-service-deploy</artifactId>
     <name>Conference :: Vote :: Deploy</name>
     <packaging>pom</packaging>
@@ -17,6 +18,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
