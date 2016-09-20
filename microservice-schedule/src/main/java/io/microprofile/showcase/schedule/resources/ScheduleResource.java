@@ -17,7 +17,6 @@ package io.microprofile.showcase.schedule.resources;
 
 import io.microprofile.showcase.schedule.model.Schedule;
 import io.microprofile.showcase.schedule.persistence.ScheduleDAO;
-import io.swagger.annotations.Api;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -32,7 +31,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Path("/")
-@Api(description = "Schedule REST Endpoint")
 @RequestScoped
 @Produces("application/json")
 public class ScheduleResource {
