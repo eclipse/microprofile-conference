@@ -9,7 +9,6 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>microprofile-conference</groupId>
     <artifactId>vote-service-localServer</artifactId>
     <name>Conference :: Vote :: Deploy :: Local Server</name>
     <packaging>pom</packaging>
@@ -61,6 +60,7 @@
 
 
         <profile>
+            <id>use-serverHome</id>
             <activation>
                 <property>
                     <name>serverHome</name>

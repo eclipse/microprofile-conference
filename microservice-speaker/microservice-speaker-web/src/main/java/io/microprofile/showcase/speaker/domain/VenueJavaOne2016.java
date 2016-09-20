@@ -66,21 +66,23 @@ public class VenueJavaOne2016 extends Venue {
 
     private Set<Speaker> getSpeakersOnline() {
 
-        if (null == System.getProperty("microprofile.speaker.scrape")) {
-            return new TreeSet<>();
-        }
-
         final Set<Speaker> speakers = new TreeSet<>((left, that) -> {
 
-            if (left.getNameFirst().compareTo(that.getNameFirst()) < 0) {
+            final String nameFirst = left.getNameFirst().toLowerCase();
+            final String thatNameFirst = that.getNameFirst().toLowerCase();
+
+            if (nameFirst.compareTo(thatNameFirst) < 0) {
                 return -1;
-            } else if (left.getNameFirst().compareTo(that.getNameFirst()) > 0) {
+            } else if (nameFirst.compareTo(thatNameFirst) > 0) {
                 return 1;
             }
 
-            if (left.getNameLast().compareTo(that.getNameLast()) < 0) {
+            final String nameLast = left.getNameLast().toLowerCase();
+            final String thatNameLast = that.getNameLast().toLowerCase();
+
+            if (nameLast.compareTo(thatNameLast) < 0) {
                 return -1;
-            } else if (left.getNameLast().compareTo(that.getNameLast()) > 0) {
+            } else if (nameLast.compareTo(thatNameLast) > 0) {
                 return 1;
             }
 
@@ -107,6 +109,10 @@ public class VenueJavaOne2016 extends Venue {
             }
             return 0;
         });
+
+        if (null == System.getProperty("microprofile.speaker.scrape")) {
+            return speakers;
+        }
 
         InputStream is = null;
 

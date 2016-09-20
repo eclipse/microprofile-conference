@@ -15,7 +15,6 @@
  */
 package io.microprofile.showcase.speaker.persistence;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.microprofile.showcase.bootstrap.BootstrapData;
 import io.microprofile.showcase.speaker.domain.Venue;
 import io.microprofile.showcase.speaker.domain.VenueList;
@@ -27,8 +26,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -75,7 +72,7 @@ public class SpeakerDAO {
 
                     final int intId = bootstrap.getId();
 
-                    if(intId > idc.get()){
+                    if (intId > idc.get()) {
                         idc.set(intId);
                     }
 
@@ -83,8 +80,8 @@ public class SpeakerDAO {
                     final String[] names = bootstrap.getFullName().split(" ");
                     final Speaker sp = new Speaker();
                     sp.setId(id);
-                    sp.setNameFirst(names[0]);
-                    sp.setNameLast(names[1]);
+                    sp.setNameFirst(names[0].trim());
+                    sp.setNameLast(names[1].trim());
                     sp.setOrganization(bootstrap.getCompany());
                     sp.setBiography(bootstrap.getJobTitle());
 
@@ -99,9 +96,9 @@ public class SpeakerDAO {
 
             boolean found = false;
 
-            for (final Speaker s : this.speakers.values()) {
-                if(s.getNameLast().toLowerCase().equals(fs.getNameFirst().toLowerCase())
-                        && s.getNameLast().toLowerCase().equals(fs.getNameLast().toLowerCase())){
+            for (final Speaker sp : this.speakers.values()) {
+                if (fs.getNameFirst().toLowerCase().equals(sp.getNameFirst().toLowerCase())
+                        && fs.getNameLast().toLowerCase().equals(sp.getNameLast().toLowerCase())) {
                     found = true;
                     break;
                 }
