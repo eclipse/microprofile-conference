@@ -25,14 +25,14 @@ mvn clean install -DskipTests
 * Build the projects using Maven (`mvn clean install`) or (`mvn -fn clean install`) to skip over failed tests.
 * To get the technical documentation, just `mvn clean generate-resources` under the `docs` directory. You will get a PDF and HTML version of the documentation under `docs/target/generated-docs`
 
-=== Run Services
+== Run Services
 
 Each service can run on any container (this is the Microprofile guarantee),
 but the service projects have been written by vendors to use their container.
 
 The following sections describe vendor specifics:
 
-==== `microservice-schedule`
+=== microservice-schedule
 The Schedule service is provided using a special microprofile release of link:http://www.payara.fish/payara_micro[Payara Micro] which can be downloaded from link:http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22payara-microprofile%22[Maven Central]
 
 *Build and run the service*
@@ -48,7 +48,7 @@ By default the microservice will bind to port 8080, if this is not available it 
 
 To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options. 
 
-==== `microservice-session`
+=== microservice-session
 
 Provided using link:http://wildfly-swarm.io[WildFly Swarm]
 
@@ -81,10 +81,39 @@ java -jar target/microservice-session-swarm.jar [-D<OPTION>]
 
 For a full set of configuration options please see link:https://wildfly-swarm.gitbooks.io/wildfly-swarm-users-guide/content/[the Wildfly Swarm Userguide]
 
-==== `microservice-speaker`
-TBC
+=== microservice-speaker
+Provided using link:http://tomee.apache.org/[Apache TomEE 7.x]
 
-==== `microservice-vote`
+*Build and run the service*
+[source,sh]
+----
+cd microservice-speaker
+cd microservice-speaker-web
+mvn clean package
+mvn tomee:exec [-D<OPTION>]
+java -jar target/microservice-speaker-web-exec.jar
+----
+
+*Address & Port Bindings*
+
+.Session Service Options
+|===
+|Flag |Description| Default
+
+| tomee-plugin.http=<port>
+| Sets the port for the HTTP server
+| 8080
+
+| tomee-plugin.ajp=<port>
+| Sets the port for the AJP protocol
+| 8009
+
+|===
+
+
+For a full set of configuration options please see link:http://tomee.apache.org/maven/index.html[TomEE Maven Plugin]
+
+=== microservice-vote
 TBC
 
 === Run the UI Web Application
