@@ -17,7 +17,7 @@ export class SessionFilter implements PipeTransform {
         return sessions.filter(session => this.likeSession(session, search));
     }
 
-    private likeSession(session: Session, search: string) : boolean {
+    private likeSession(session: Session, search: string): boolean {
 
         return session.title.toLowerCase().includes(search.toLowerCase()) || session.abstract.toLowerCase().includes(search.toLowerCase());
     }
