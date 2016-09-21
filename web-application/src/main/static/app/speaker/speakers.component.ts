@@ -19,14 +19,12 @@ export class SpeakersComponent implements OnInit {
     }
 
     getSpeakers(): void {
-        console.log("CALLBACK");
-        //noinspection TypeScriptUnresolvedFunction
-        this.speakerService.getSpeakers().then(speakers => this.speakers = speakers).catch(this.handleError);
+        this.speakerService.getSpeakers().then(speakers => this.speakers = speakers).catch(SpeakersComponent.handleError);
     }
 
     ngOnInit(): void {
         let _self = this;
-        this.speakerService.init(function(){
+        this.speakerService.init(function () {
             _self.getSpeakers();
         });
     }
@@ -44,7 +42,7 @@ export class SpeakersComponent implements OnInit {
     }
 
     //noinspection TypeScriptUnresolvedVariable
-    private handleError(error: any): Promise<any> {
+    private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // TODO - Display safe error
         //noinspection TypeScriptUnresolvedVariable
         return Promise.reject(error.message || error);
