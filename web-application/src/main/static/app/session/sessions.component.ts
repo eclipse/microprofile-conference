@@ -2,45 +2,39 @@ import {Component, enableProdMode, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {Session} from "./session";
 import {SessionService} from "./session.service";
-import {EndpointsService} from "../shared/endpoints.service";
-import {Endpoint} from "../shared/endpoint";
 
 enableProdMode();
 
 @Component({
     selector: 'sessions',
-    templateUrl: 'app/session/sessions.component.html'
+    templateUrl: 'app/session/sessions.component.html',
 })
-
 export class SessionsComponent implements OnInit {
     title = 'Sessions';
     sessions: Session[];
     selectedSession: Session;
-    endPoint: Endpoint;
+    search: string;
 
-    constructor(private router: Router, private sessionService: SessionService, private endpointsService: EndpointsService) {
-    }
-
-    getEndpoint(): void {
-        this.endpointsService.getEndpoint("session").then(endPoint => this.setEndpoint(endPoint));
-    }
-
-    setEndpoint(endPoint: Endpoint): void {
-        this.endPoint = endPoint;
-        this.getSessions();
+    constructor(private router: Router, private sessionService: SessionService) {
     }
 
     getSessions(): void {
-        //noinspection TypeScriptUnresolvedFunction
-        this.sessionService.getSessions(this.endPoint).then(sessions => this.sessions = sessions).catch(this.handleError);
+        this.sessionService.getSessions().then(sessions => this.sessions = sessions).catch(SessionsComponent.handleError);
     }
 
     ngOnInit(): void {
-        this.getEndpoint();
+        let _self = this;
+        this.sessionService.init(function () {
+            _self.getSessions();
+        });
     }
 
     onSelect(session: Session): void {
         this.selectedSession = session;
+    }
+
+    onSearch(search: string): void {
+        this.search = search;
     }
 
     gotoDetail(): void {
@@ -48,7 +42,7 @@ export class SessionsComponent implements OnInit {
     }
 
     //noinspection TypeScriptUnresolvedVariable
-    private handleError(error: any): Promise<any> {
+    private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // TODO - Display safe error
         //noinspection TypeScriptUnresolvedVariable
         return Promise.reject(error.message || error);

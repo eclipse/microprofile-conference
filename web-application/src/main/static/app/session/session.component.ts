@@ -1,5 +1,6 @@
 import {Component, Input, enableProdMode} from "@angular/core";
 import {Session} from "./session";
+import {SpeakerService} from "../speaker/speaker.service";
 
 enableProdMode();
 
@@ -12,4 +13,13 @@ export class SessionComponent {
     title = 'Conference Session';
     @Input()
     session: Session;
+
+    constructor(private speakerService: SpeakerService) {
+    }
+
+    getSpeaker(id: string): void {
+        this.speakerService.getSpeaker(id).then(function () {
+            console.log('Get speaker' + id)
+        });
+    }
 }

@@ -2,8 +2,6 @@ import {Component, enableProdMode, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {Speaker} from "./speaker";
 import {SpeakerService} from "./speaker.service";
-import {EndpointsService} from "../shared/endpoints.service";
-import {Endpoint} from "../shared/endpoint";
 
 enableProdMode();
 
@@ -16,27 +14,19 @@ export class SpeakersComponent implements OnInit {
     speakers: Speaker[];
     selectedSpeaker: Speaker;
     search: string;
-    private endPoint: Endpoint;
 
-    constructor(private router: Router, private speakerService: SpeakerService, private endpointsService: EndpointsService) {
-    }
-
-    getEndpoint(): void {
-        this.endpointsService.getEndpoint("speaker").then(endPoint => this.setEndpoint(endPoint));
-    }
-
-    setEndpoint(endPoint: Endpoint): void {
-        this.endPoint = endPoint;
-        this.getSpeakers();
+    constructor(private router: Router, private speakerService: SpeakerService) {
     }
 
     getSpeakers(): void {
-        //noinspection TypeScriptUnresolvedFunction
-        this.speakerService.getSpeakers(this.endPoint).then(speakers => this.speakers = speakers).catch(this.handleError);
+        this.speakerService.getSpeakers().then(speakers => this.speakers = speakers).catch(SpeakersComponent.handleError);
     }
 
     ngOnInit(): void {
-        this.getEndpoint();
+        let _self = this;
+        this.speakerService.init(function () {
+            _self.getSpeakers();
+        });
     }
 
     onSelect(speaker: Speaker): void {
@@ -52,7 +42,7 @@ export class SpeakersComponent implements OnInit {
     }
 
     //noinspection TypeScriptUnresolvedVariable
-    private handleError(error: any): Promise<any> {
+    private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // TODO - Display safe error
         //noinspection TypeScriptUnresolvedVariable
         return Promise.reject(error.message || error);
