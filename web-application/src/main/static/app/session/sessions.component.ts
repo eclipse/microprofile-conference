@@ -9,14 +9,14 @@ enableProdMode();
 
 @Component({
     selector: 'sessions',
-    templateUrl: 'app/session/sessions.component.html'
+    templateUrl: 'app/session/sessions.component.html',
 })
-
 export class SessionsComponent implements OnInit {
     title = 'Sessions';
     sessions: Session[];
     selectedSession: Session;
-    endPoint: Endpoint;
+    search: string;
+    private endPoint: Endpoint;
 
     constructor(private router: Router, private sessionService: SessionService, private endpointsService: EndpointsService) {
     }
@@ -41,6 +41,10 @@ export class SessionsComponent implements OnInit {
 
     onSelect(session: Session): void {
         this.selectedSession = session;
+    }
+
+    onSearch(search: string): void {
+        this.search = search;
     }
 
     gotoDetail(): void {
