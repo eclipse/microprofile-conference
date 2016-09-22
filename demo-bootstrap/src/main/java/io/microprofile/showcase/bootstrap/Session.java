@@ -15,10 +15,9 @@
  */
 package io.microprofile.showcase.bootstrap;
 
+import javax.json.JsonObject;
 import java.util.Collection;
 import java.util.Collections;
-
-import javax.json.JsonObject;
 
 /**
  * @author Ken Finnigan
@@ -26,11 +25,11 @@ import javax.json.JsonObject;
  */
 public class Session extends JsonWrapper {
 
-    private int schedule;
+    private String schedule;
 
-    private Collection<Integer> speakers = Collections.EMPTY_SET;
+    private Collection<String> speakers = Collections.EMPTY_SET;
 
-    Session(JsonObject underlying) {
+    Session(final JsonObject underlying) {
         super(underlying);
     }
 
@@ -50,25 +49,30 @@ public class Session extends JsonWrapper {
         return underlying.getString("type");
     }
 
-    void setSpeakers(Collection<Integer> speakers) {
+    void setSpeakers(final Collection<String> speakers) {
         this.speakers = speakers;
     }
 
-    public Collection<Integer> getSpeakers() {
+    public Collection<String> getSpeakers() {
         return speakers;
     }
 
-    void setSchedule(int schedule) {
+    void setSchedule(final String schedule) {
         this.schedule = schedule;
     }
 
-    public int getSchedule() {
+    public String getSchedule() {
         return schedule;
     }
 
     @Override
     public String toString() {
-        return getId() + "::"+getCode();
+        return new org.apache.commons.lang3.builder.ToStringBuilder(this)
+                .append("schedule", schedule)
+                .append("speakers", speakers)
+                .append("code", getCode())
+                .append("title", getTitle())
+                .append("type", getType())
+                .toString();
     }
-
 }

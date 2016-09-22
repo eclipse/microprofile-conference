@@ -9,9 +9,9 @@ import javax.json.JsonObject;
 public class Schedule extends JsonWrapper {
 
 
-    private int sessionId;
+    private String sessionId;
 
-    public Schedule(JsonObject underlying) {
+    public Schedule(final JsonObject underlying) {
         super(underlying);
     }
 
@@ -28,20 +28,20 @@ public class Schedule extends JsonWrapper {
     }
 
     public double getLength() {
-            return underlying.getJsonNumber("length").doubleValue();
-        }
+        return underlying.getJsonNumber("length").doubleValue();
+    }
 
-    public int getSessionId() {
+    public String getSessionId() {
         return sessionId;
     }
 
-    void setSessionId(int sessionId) {
+    void setSessionId(final String sessionId) {
         this.sessionId = sessionId;
     }
 
     @Override
     public String toString() {
-        return getId() + "::"+getDate() +"::"+getStartTime();
+        return getId() + "::" + getDate() + "::" + getStartTime();
     }
 
 }

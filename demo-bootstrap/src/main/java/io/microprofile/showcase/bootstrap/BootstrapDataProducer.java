@@ -16,11 +16,11 @@ public class BootstrapDataProducer {
 
     @Produces
     public BootstrapData load() {
-        URL resource = Thread.currentThread().getContextClassLoader().getResource("schedule.json");
+        final URL resource = Thread.currentThread().getContextClassLoader().getResource("schedule.json");
         assert resource !=null : "Failed to load 'schedule.json'";
 
-        Parser parser = new Parser();
-        BootstrapData data = parser.parse(resource);
+        final Parser parser = new Parser();
+        final BootstrapData data = parser.parse(resource);
 
         Logger.getLogger(BootstrapData.class.getName()).log(Level.INFO, "Schedule contains "+data.getSessions().size() + " sessions");
 
