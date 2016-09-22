@@ -10,9 +10,9 @@ public abstract class JsonWrapper {
 
     protected JsonObject underlying;
 
-    private int id;
+    private String id;
 
-    public JsonWrapper(JsonObject underlying) {
+    public JsonWrapper(final JsonObject underlying) {
         this.underlying = underlying;
     }
 
@@ -20,11 +20,11 @@ public abstract class JsonWrapper {
         return underlying;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    void setId(int id) {
+    void setId(final String id) {
         this.id = id;
     }
 }

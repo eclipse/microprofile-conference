@@ -8,13 +8,13 @@ import java.util.Collection;
  */
 public class BootstrapData {
 
-    private Collection<Session> sessions;
+    private final Collection<Session> sessions;
 
-    private Collection<Speaker> speakers;
+    private final Collection<Speaker> speakers;
 
-    private Collection<Schedule> schedules;
+    private final Collection<Schedule> schedules;
 
-    BootstrapData(Collection<Session> sessions, Collection<Speaker> speakers, Collection<Schedule> schedules) {
+    BootstrapData(final Collection<Session> sessions, final Collection<Speaker> speakers, final Collection<Schedule> schedules) {
         this.sessions = sessions;
         this.speakers = speakers;
         this.schedules = schedules;
@@ -25,10 +25,10 @@ public class BootstrapData {
     }
 
     public Collection<Speaker> getSpeaker() {
-            return speakers;
-        }
+        return speakers;
+    }
 
     public Collection<Schedule> getSchedules() {
-                return schedules;
-            }
+        return schedules;
+    }
 }

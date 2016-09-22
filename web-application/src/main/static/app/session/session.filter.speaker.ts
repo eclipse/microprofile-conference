@@ -24,9 +24,11 @@ export class SessionFilterSpeaker implements PipeTransform {
 
     private likeSession(session: Session, speaker: Speaker): boolean {
 
-        for (var s in session.speakers) {
-            if (speaker.id === s) {
+        for (var s of session.speakers) {
+            if (speaker.id == s) {
                 return true;
+            }else{
+                console.log("id "  + speaker.id + " != " + s)
             }
         }
 

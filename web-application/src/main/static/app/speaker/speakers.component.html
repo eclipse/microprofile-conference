@@ -34,7 +34,7 @@
                     *ngFor="let speaker of (speakers | speakerFilter: search)"
                     [class.selected]="speaker === selectedSpeaker"
                     (click)="onSelect(speaker)">
-                    {{speaker.id}} {{speaker.nameFirst}} {{speaker.nameLast}}
+                    {{speaker.nameFirst}} {{speaker.nameLast}}
                 </li>
             </ul>
         </div>

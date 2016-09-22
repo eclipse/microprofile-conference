@@ -23,7 +23,7 @@ import javax.json.JsonObject;
  */
 public class Speaker extends JsonWrapper {
 
-    public Speaker(JsonObject underlying) {
+    public Speaker(final JsonObject underlying) {
         super(underlying);
     }
 
