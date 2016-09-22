@@ -46,6 +46,8 @@ java -jar target/microservice-schedule.jar [Options]
 *Port Bindings*
 By default the microservice will bind to port 8080, if this is not available it will bind to the next available port e.g. 8081. To specify the port use --port as a command line option
 
+Click on link:http://localhost:8080/microservice-schedule/schedule/1
+
 To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options. 
 
 === microservice-session
