@@ -29,9 +29,9 @@
 
     <div class="row p-a-1">
         <div class="col-xs-5" style="background: rgba(29, 175, 86, 0.4)">
-            <ul class="list-group" style="overflow: scroll; overflow-x: hidden; min-height: 520px; max-height: 520px">
+            <ul class="list-group" style="overflow: scroll; overflow-y: auto; overflow-x: hidden; min-height: 520px; max-height: 520px">
                 <li class="list-group-item list-group-item-action milky" style="cursor:hand;cursor:pointer"
-                    *ngFor="let session of (sessions | sessionFilter: search)"
+                    *ngFor="let session of (sessions | sessionFilter: search | sessionFilterSpeaker: speaker)"
                     [class.selected]="session === selectedSession"
                     (click)="onSelect(session)">
                     {{session.id}} {{session.title}}
@@ -39,7 +39,7 @@
             </ul>
         </div>
         <div class="col-xs-7 p-a-1" style="background: rgba(120, 175, 166, 0.4)">
-            <session [session]="selectedSession"></session>
+            <session [session]="selectedSession" [speaker]="speaker"></session>
         </div>
     </div>
 </div>

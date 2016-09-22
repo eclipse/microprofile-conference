@@ -28,7 +28,7 @@
                         <!--<p class="text-justify"></p>-->
                     </div>
                 </div>
-                <div class="row p-a-1">
+                <div *ngIf="undefined == speaker" class="row p-a-1">
                     TODO - Speakers: {{session.speakers}}
                 </div>
                 <div class="row p-a-1">
