@@ -5,11 +5,13 @@
  */
 package io.microprofile.showcase.schedule.cdi;
 
+import io.microprofile.showcase.schedule.model.Schedule;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
+import javax.cache.configuration.MutableConfiguration;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
@@ -30,8 +32,8 @@ public class CacheProducer {
     @Produces
     @ApplicationScoped
     @ScheduleCache
-    public Cache getCache() {
-        return cm.getCache("schedule");
+    public Cache<Long, Schedule> getCache() {
+        return cm.createCache("schedule", new MutableConfiguration<Long, Schedule>());
     }
     
     @PreDestroy

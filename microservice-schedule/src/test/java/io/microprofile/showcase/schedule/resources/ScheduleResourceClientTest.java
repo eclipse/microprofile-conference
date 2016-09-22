@@ -15,6 +15,7 @@
  */
 package io.microprofile.showcase.schedule.resources;
 
+import io.microprofile.showcase.schedule.cdi.CacheProducer;
 import io.microprofile.showcase.schedule.model.Schedule;
 import io.microprofile.showcase.schedule.model.Session;
 import io.microprofile.showcase.schedule.model.Venue;
@@ -65,6 +66,7 @@ public class ScheduleResourceClientTest {
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "schedule-microservice.war")
                         .addPackage(Schedule.class.getPackage())
+                        .addPackage(CacheProducer.class.getPackage())
                         .addClasses(ScheduleResource.class, ScheduleDAO.class, Application.class);
     }
 

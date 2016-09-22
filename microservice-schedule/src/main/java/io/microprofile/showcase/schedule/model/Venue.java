@@ -15,6 +15,7 @@
  */
 package io.microprofile.showcase.schedule.model;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,7 +23,7 @@ import java.util.Objects;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Venue {
+public class Venue implements Serializable{
 
     private Long id;
     private String name;
