@@ -2,6 +2,7 @@ import {Component, enableProdMode, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {Speaker} from "./speaker";
 import {SpeakerService} from "./speaker.service";
+import {Input} from "@angular/core/src/metadata/directives";
 
 enableProdMode();
 

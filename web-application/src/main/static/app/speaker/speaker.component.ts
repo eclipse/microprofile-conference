@@ -5,11 +5,10 @@ enableProdMode();
 
 @Component({
     selector: 'speaker',
-    templateUrl: 'app/speaker/speaker.component.html'
+    templateUrl: 'app/speaker/speaker.component.html',
 })
 
 export class SpeakerComponent {
     title = 'Conference Speaker';
-    @Input()
-    speaker: Speaker;
+    @Input() speaker: Speaker;
 }

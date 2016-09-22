@@ -1,19 +1,21 @@
-import {Component, enableProdMode, OnInit} from "@angular/core";
+import {Component, enableProdMode, OnInit, Input} from "@angular/core";
 import {Router} from "@angular/router";
 import {Session} from "./session";
 import {SessionService} from "./session.service";
+import {Speaker} from "../speaker/speaker";
 
 enableProdMode();
 
 @Component({
     selector: 'sessions',
-    templateUrl: 'app/session/sessions.component.html',
+    templateUrl: 'app/session/sessions.component.html'
 })
 export class SessionsComponent implements OnInit {
     title = 'Sessions';
     sessions: Session[];
     selectedSession: Session;
     search: string;
+    @Input() speaker: Speaker;
 
     constructor(private router: Router, private sessionService: SessionService) {
     }
