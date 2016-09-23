@@ -17,7 +17,7 @@ export class SessionService {
     init(callback: () => void): void {
 
         if (undefined != this.endPoint) {
-            Promise.resolve(this.endPoint).then(callback);
+            callback();
         } else {
             this.endpointsService.getEndpoint("session").then(endPoint => this.setEndpoint(endPoint)).then(callback).catch(this.handleError);
         }

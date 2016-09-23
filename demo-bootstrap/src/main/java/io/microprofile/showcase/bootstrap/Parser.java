@@ -57,9 +57,11 @@ public class Parser {
                         .collect(Collectors.toCollection(HashSet<Speaker>::new));
 
                 assignedSpeakers.forEach(a -> {
+
                     boolean exists = false;
                     for (final Speaker s : speakers) {
-                        if (s.getFullName().equals(a.getFullName())) {
+                        if (s.getFullName().toLowerCase().equals(a.getFullName().toLowerCase())) {
+                            a.setId(s.getId());
                             exists = true;
                             break;
                         }
@@ -74,9 +76,8 @@ public class Parser {
                 final HashSet<String> ids = assignedSpeakers.stream()
                         .map(JsonWrapper::getId)
                         .collect(Collectors.toCollection(HashSet::new));
-                session.setSpeakers(ids);
 
-                this.log.info("Added session: " + session);
+                session.setSpeakers(ids);
 
                 // schedules
                 final JsonObject times = session.getUnderlying().getJsonArray("times").getJsonObject(0);

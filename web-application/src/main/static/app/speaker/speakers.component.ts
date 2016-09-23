@@ -21,10 +21,6 @@ export class SpeakersComponent implements OnInit, OnDestroy {
     constructor(private router: Router, private activatedRoute: ActivatedRoute, private speakerService: SpeakerService) {
     }
 
-    getSpeakers(): void {
-        this.speakerService.getSpeakers().then(speakers => this.speakers = speakers).catch(SpeakersComponent.handleError);
-    }
-
     ngOnInit(): void {
         let _self = this;
 
@@ -44,16 +40,16 @@ export class SpeakersComponent implements OnInit, OnDestroy {
         this.subscription.unsubscribe();
     }
 
+    getSpeakers(): void {
+        this.speakerService.getSpeakers().then(speakers => this.speakers = speakers).catch(SpeakersComponent.handleError);
+    }
+
     onSelect(speaker: Speaker): void {
         this.selectedSpeaker = speaker;
     }
 
     onSearch(search: string): void {
         this.search = search;
-    }
-
-    gotoDetail(): void {
-        this.router.navigate(['/detail', this.selectedSpeaker.id]);
     }
 
     //noinspection TypeScriptUnresolvedVariable
