@@ -29,10 +29,7 @@ export class SessionSpeakersComponent implements OnChanges {
                 var _self = this;
 
                 this.speakerService.init(function () {
-                    _self.speakerService.getSpeakers().then(speakers => {
-                        _self.speakerService.getSpeakersById(_self.speakerIds).then(speakers => _self.speakers = speakers)
-                    });
-                    //_self.speakerService.getSpeakersById(_self.speakerIds).then(speakers => _self.speakers = speakers);
+                    _self.speakerService.getSpeakersById(_self.speakerIds).then(speakers => _self.speakers = speakers)
                 });
             }
 
