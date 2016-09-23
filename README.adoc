@@ -50,6 +50,23 @@ Click on link:http://localhost:8080/microservice-schedule/schedule/1[http://loca
 
 To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options. 
 
+==== JCache proposal
+
+This is an example of using JCache to provide caching. 
+Payara Micro includes hazelcast that provides distributed cache across all connected cluster members. It also provides means to pass messages using cache listeners (example is not provided yet). 
+
+So far, the implementation relies on jcache-api provided by the runtime. CacheManager is created by a CDI producer when first needed, a cache is used to store data accessed by ScheduleDAO instead of a hashmap. Can easily be extended to cache persistence layer when persistence is added. Application behaves as behore, but the data can be replicated to more nodes if you run multiple nodes. Tested with Payara Micro.
+
+To see how it works, run `microservice-schedule.jar` multiple times on the same machine:
+
+```
+java -jar target/microservice-schedule.jar [Options]
+java -jar target/microservice-schedule.jar [Options]
+java -jar target/microservice-schedule.jar [Options]
+```
+
+When multiple instances are running, use `ScheduleResource` REST endpoint to store some data using one of the nodes (e.g. at port 8080). Then restart the node. After restart, the very same data should be available, as they are retrieved from the other nodes in the cluster.
+
 === microservice-session
 
 Provided using link:http://wildfly-swarm.io[WildFly Swarm]
