@@ -1,4 +1,4 @@
-import {Component, enableProdMode, OnInit, Input} from "@angular/core";
+import {Component, enableProdMode, OnInit, Input, OnChanges, SimpleChanges} from "@angular/core";
 import {Router} from "@angular/router";
 import {Session} from "./session";
 import {SessionService} from "./session.service";
@@ -10,7 +10,7 @@ enableProdMode();
     selector: 'sessions',
     templateUrl: 'app/session/sessions.component.html'
 })
-export class SessionsComponent implements OnInit {
+export class SessionsComponent implements OnInit, OnChanges  {
     title = 'Sessions';
     sessions: Session[];
     selectedSession: Session;
@@ -29,6 +29,13 @@ export class SessionsComponent implements OnInit {
         this.sessionService.init(function () {
             _self.getSessions();
         });
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes['speaker'].currentValue != changes['speaker'].previousValue){
+            console.log("Reset selected session");
+            this.selectedSession = null;
+        }
     }
 
     onSelect(session: Session): void {

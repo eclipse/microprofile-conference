@@ -1,8 +1,8 @@
-import {Component, enableProdMode, OnInit} from "@angular/core";
-import {Router} from "@angular/router";
+import {Component, Input, enableProdMode, OnInit, OnDestroy} from "@angular/core";
+import {Router, ActivatedRoute} from "@angular/router";
 import {Speaker} from "./speaker";
 import {SpeakerService} from "./speaker.service";
-import {Input} from "@angular/core/src/metadata/directives";
+import {Subscription} from "rxjs";
 
 enableProdMode();
 
@@ -10,13 +10,15 @@ enableProdMode();
     selector: 'speakers',
     templateUrl: 'app/speaker/speakers.component.html',
 })
-export class SpeakersComponent implements OnInit {
+export class SpeakersComponent implements OnInit, OnDestroy {
+
     title = 'Speakers';
     speakers: Speaker[];
-    selectedSpeaker: Speaker;
+    @Input() selectedSpeaker: Speaker;
     search: string;
+    private subscription: Subscription;
 
-    constructor(private router: Router, private speakerService: SpeakerService) {
+    constructor(private router: Router, private activatedRoute: ActivatedRoute, private speakerService: SpeakerService) {
     }
 
     getSpeakers(): void {
@@ -25,9 +27,21 @@ export class SpeakersComponent implements OnInit {
 
     ngOnInit(): void {
         let _self = this;
+
         this.speakerService.init(function () {
             _self.getSpeakers();
+
+            _self.subscription = _self.activatedRoute.params.subscribe(params => {
+                var s = params['selectedSpeaker'];
+                if (undefined != s) {
+                    _self.selectedSpeaker = s;
+                }
+            });
         });
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     onSelect(speaker: Speaker): void {
