@@ -2,6 +2,7 @@ package io.microprofile.showcase.bootstrap;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 import org.junit.Assert;
@@ -52,5 +53,11 @@ public class ParserTest {
         Assert.assertEquals("2016-09-21", schedule.get().getDate());
         Assert.assertEquals("16:30", schedule.get().getStartTime());
         Assert.assertEquals("60.0", String.valueOf(schedule.get().getLength()));
+
+        //Confirm no null elements
+        for (final Session session : sessions) {
+            //noinspection SuspiciousMethodCalls
+            Assert.assertTrue(!session.getSpeakers().removeAll(Collections.singleton(null)));
+        }
     }
 }
