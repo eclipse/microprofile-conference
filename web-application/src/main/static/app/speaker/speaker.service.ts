@@ -14,10 +14,14 @@ export class SpeakerService {
     constructor(private http: Http, private endpointsService: EndpointsService) {
     }
 
+    /**
+     * A service cannot have ngOnInit(), and so needs to be initialized
+     * @param callback
+     */
     init(callback: () => void): void {
 
         if (undefined != this.endPoint) {
-            Promise.resolve(this.endPoint).then(callback);
+            callback();
         } else {
             this.endpointsService.getEndpoint("speaker").then(endPoint => this.setEndpoint(endPoint)).then(callback).catch(this.handleError);
         }
@@ -25,7 +29,6 @@ export class SpeakerService {
 
     setEndpoint(endPoint: Endpoint): void {
         this.endPoint = endPoint;
-        this.getSpeakers();
     }
 
     //noinspection TypeScriptUnresolvedVariable
@@ -48,21 +51,21 @@ export class SpeakerService {
 
     getSpeakersById(ids: string[]): Promise<Speaker[]> {
 
-        if(undefined == this.endPoint){
+        if (undefined == this.endPoint) {
             console.error("init must be called at least once");
         }
 
-        var speaker: Speaker[] = [];
+        return this.getSpeakers().then(speakers => this.setSpeakers(speakers).filter(speaker => this.isIn(speaker, ids)));
+    }
 
+    private isIn(speaker: Speaker, ids: string[]): boolean {
         for (var id of ids) {
-            for (var s of this.speakers) {
-                if (s.id == id) {
-                    speaker.push(s);
-                }
+            if (speaker.id == id) {
+                return true;
             }
         }
 
-        return Promise.resolve(speaker);
+        return false;
     }
 
 
