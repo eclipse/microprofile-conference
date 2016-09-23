@@ -20,6 +20,7 @@ import {EndpointsService} from "./shared/endpoints.service";
 import {SpeakerFilter} from "./speaker/speaker.filter";
 import {SessionFilter} from "./session/session.filter";
 import {SessionFilterSpeaker} from "./session/session.filter.speaker";
+import {SessionSpeakersComponent} from "./session/session.speakers.component";
 
 @NgModule({
     imports: [
@@ -35,6 +36,7 @@ import {SessionFilterSpeaker} from "./session/session.filter.speaker";
         SpeakerComponent,
         SessionsComponent,
         SessionComponent,
+        SessionSpeakersComponent,
         SchedulesComponent,
         ScheduleComponent,
         VotesComponent,

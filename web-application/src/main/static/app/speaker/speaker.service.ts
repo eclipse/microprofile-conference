@@ -25,6 +25,7 @@ export class SpeakerService {
 
     setEndpoint(endPoint: Endpoint): void {
         this.endPoint = endPoint;
+        this.getSpeakers();
     }
 
     //noinspection TypeScriptUnresolvedVariable
@@ -45,10 +46,23 @@ export class SpeakerService {
         return this.speakers;
     }
 
-    getSpeaker(id: string): Promise<Speaker> {
-        let s = new Speaker();
-        s.id = id;
-        return Promise.resolve(s);
+    getSpeakersById(ids: string[]): Promise<Speaker[]> {
+
+        if(undefined == this.endPoint){
+            console.error("init must be called at least once");
+        }
+
+        var speaker: Speaker[] = [];
+
+        for (var id of ids) {
+            for (var s of this.speakers) {
+                if (s.id == id) {
+                    speaker.push(s);
+                }
+            }
+        }
+
+        return Promise.resolve(speaker);
     }
 
 
