@@ -20,7 +20,13 @@ import io.microprofile.showcase.schedule.persistence.ScheduleDAO;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -40,73 +46,74 @@ public class ScheduleResource {
 
     @POST
     @Consumes("application/json")
-    public Response add(Schedule schedule) {
-        Schedule created = scheduleDAO.addSchedule(schedule);
+    public Response add(final Schedule schedule) {
+        final Schedule created = scheduleDAO.addSchedule(schedule);
         return Response.created(URI.create("/" + created.getId()))
-            .entity(created)
-            .build();
+                .entity(created)
+                .build();
     }
 
     @GET
     @Path("/{id}")
-    public Response retrieve(@PathParam("id") Long id) {
+    public Response retrieve(@PathParam("id") final String id) {
         return scheduleDAO.findById(id)
-            .map(schedule -> Response.ok(schedule).build())
-            .orElse(Response.status(Response.Status.NOT_FOUND).build());
+                .map(schedule -> Response.ok(schedule).build())
+                .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
 
     @GET
     @Path("/all")
     public Response allSchedules() {
-        List<Schedule> allSchedules = scheduleDAO.getAllSchedules();
-        GenericEntity<List<Schedule>> entity = buildEntity(allSchedules);
+        final List<Schedule> allSchedules = scheduleDAO.getAllSchedules();
+        final GenericEntity<List<Schedule>> entity = buildEntity(allSchedules);
         return Response.ok(entity).build();
     }
 
     @GET
     @Path("/venue/{id}")
-    public Response allForVenue(@PathParam("id") String id) {
-        List<Schedule> schedulesByVenue = scheduleDAO.findByVenue(Long.valueOf(id));
-        GenericEntity<List<Schedule>> entity = buildEntity(schedulesByVenue);
+    public Response allForVenue(@PathParam("id") final String id) {
+        final List<Schedule> schedulesByVenue = scheduleDAO.findByVenue(id);
+        final GenericEntity<List<Schedule>> entity = buildEntity(schedulesByVenue);
         return Response.ok(entity).build();
     }
 
     @GET
     @Path("/active/{dateTime}")
-    public Response activeAtDate(@PathParam("dateTime") String dateTimeString) {
-        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString);
-        List<Schedule> schedulesByDate = scheduleDAO.findByDate(dateTime.toLocalDate());
-        List<Schedule> activeAtTime = schedulesByDate.stream()
-            .filter(schedule -> isTimeInSchedule(dateTime.toLocalTime(), schedule))
-            .collect(Collectors.toList());
-        GenericEntity<List<Schedule>> entity = buildEntity(activeAtTime);
+    public Response activeAtDate(@PathParam("dateTime") final String dateTimeString) {
+        final LocalDateTime dateTime = LocalDateTime.parse(dateTimeString);
+        final List<Schedule> schedulesByDate = scheduleDAO.findByDate(dateTime.toLocalDate());
+        final List<Schedule> activeAtTime = schedulesByDate.stream()
+                .filter(schedule -> isTimeInSchedule(dateTime.toLocalTime(), schedule))
+                .collect(Collectors.toList());
+        final GenericEntity<List<Schedule>> entity = buildEntity(activeAtTime);
         return Response.ok(entity).build();
     }
 
     @GET
     @Path("/all/{date}")
-    public Response allForDay(@PathParam("date") String dateString) {
-        LocalDate date = LocalDate.parse(dateString);
-        List<Schedule> schedulesByDate = scheduleDAO.findByDate(date);
-        GenericEntity<List<Schedule>> entity = buildEntity(schedulesByDate);
+    public Response allForDay(@PathParam("date") final String dateString) {
+        final LocalDate date = LocalDate.parse(dateString);
+        final List<Schedule> schedulesByDate = scheduleDAO.findByDate(date);
+        final GenericEntity<List<Schedule>> entity = buildEntity(schedulesByDate);
         return Response.ok(entity).build();
     }
 
     @DELETE
     @Path("/{scheduleId}")
-    public Response remove(@PathParam("scheduleId") Long scheduleId) {
+    public Response remove(@PathParam("scheduleId") final String scheduleId) {
         scheduleDAO.deleteSchedule(scheduleId);
         return Response.noContent().build();
     }
 
     private GenericEntity<List<Schedule>> buildEntity(final List<Schedule> scheduleList) {
-        return new GenericEntity<List<Schedule>>(scheduleList) {};
+        return new GenericEntity<List<Schedule>>(scheduleList) {
+        };
     }
 
-    private boolean isTimeInSchedule(LocalTime currentTime, Schedule schedule) {
-        LocalTime scheduleStartTime = schedule.getStartTime();
-        LocalTime scheduleEndTime = scheduleStartTime.plus(schedule.getDuration());
+    private boolean isTimeInSchedule(final LocalTime currentTime, final Schedule schedule) {
+        final LocalTime scheduleStartTime = schedule.getStartTime();
+        final LocalTime scheduleEndTime = scheduleStartTime.plus(schedule.getDuration());
         return scheduleStartTime.isBefore(currentTime) &&
-            scheduleEndTime.isAfter(currentTime);
+                scheduleEndTime.isAfter(currentTime);
     }
 }

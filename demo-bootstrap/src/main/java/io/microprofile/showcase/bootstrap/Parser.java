@@ -76,8 +76,6 @@ public class Parser {
                         .collect(Collectors.toCollection(HashSet::new));
                 session.setSpeakers(ids);
 
-                this.log.info("Added session: " + session);
-
                 // schedules
                 final JsonObject times = session.getUnderlying().getJsonArray("times").getJsonObject(0);
                 final Schedule schedule = new Schedule(times);

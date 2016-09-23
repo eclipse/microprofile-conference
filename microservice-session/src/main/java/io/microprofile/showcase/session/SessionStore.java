@@ -2,6 +2,7 @@ package io.microprofile.showcase.session;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,22 +24,12 @@ public class SessionStore {
     @Inject
     BootstrapData bootstrapData;
 
-    private ConcurrentHashMap<Integer, Session> storage = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Session> storage = new ConcurrentHashMap<>();
 
-    public Session save(Session session) {
-        session.setId(nextKey());
+    public Session save(final Session session) {
+        session.setId(UUID.randomUUID().toString());
         storage.put(session.getId(), session);
         return session;
-    }
-
-    private int nextKey() {
-        Optional<Integer> max = storage.keySet().stream()
-            .max(Integer::compareTo);
-
-        if(!max.isPresent())
-            throw new IllegalStateException("Session store not initialised");
-
-        return max.get();
     }
 
     @PostConstruct
@@ -46,7 +37,7 @@ public class SessionStore {
         Logger.getLogger(SessionStore.class.getName()).log(Level.INFO, "Initialise sessions from bootstrap data");
 
         bootstrapData.getSessions()
-            .forEach(bootstrap -> storage.put(Integer.valueOf(bootstrap.getId()), SessionFactory.fromBootstrap(bootstrap)));
+            .forEach(bootstrap -> storage.put(bootstrap.getId(), SessionFactory.fromBootstrap(bootstrap)));
 
     }
 
@@ -54,13 +45,13 @@ public class SessionStore {
         return storage.values();
     }
 
-    public Optional<Session> find(Integer sessionId) {
-        Session result = storage.get(sessionId);
+    public Optional<Session> find(final String sessionId) {
+        final Session result = storage.get(sessionId);
         return result!=null ? Optional.of(result) : Optional.empty();
     }
 
-    public Optional<Session> update(Integer sessionId, Session session) {
-        Optional<Session> existing = find(sessionId);
+    public Optional<Session> update(final String sessionId, final Session session) {
+        final Optional<Session> existing = find(sessionId);
         if(existing.isPresent()) {
             session.setId(sessionId);
             storage.put(sessionId, session);
@@ -68,8 +59,8 @@ public class SessionStore {
         return existing;
     }
 
-    public Optional<Session> remove(Integer sessionId) {
-        Optional<Session> existing = find(sessionId);
+    public Optional<Session> remove(final String sessionId) {
+        final Optional<Session> existing = find(sessionId);
         if(existing.isPresent()) {
             storage.remove(existing.get().getId());
         }

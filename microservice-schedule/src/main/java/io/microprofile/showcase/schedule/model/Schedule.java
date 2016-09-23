@@ -32,10 +32,10 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Schedule {
 
-    private Long id;
-    private Long sessionId;
+    private String id;
+    private String sessionId;
     private String venue;
-    private Long venueId;
+    private String venueId;
 
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate date;
@@ -49,11 +49,11 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(Long sessionId, String venue, Long venueId, LocalDate date, LocalTime startTime, Duration duration) {
+    public Schedule(final String sessionId, final String venue, final String venueId, final LocalDate date, final LocalTime startTime, final Duration duration) {
         this(null, sessionId, venue, venueId, date, startTime, duration);
     }
 
-    public Schedule(Long id, Long sessionId, String venue, Long venueId, LocalDate date, LocalTime startTime, Duration duration) {
+    public Schedule(final String id, final String sessionId, final String venue, final String venueId, final LocalDate date, final LocalTime startTime, final Duration duration) {
         this.id = id;
         this.sessionId = sessionId;
         this.venue = venue;
@@ -63,23 +63,27 @@ public class Schedule {
         this.duration = duration;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
-    public Long getSessionId() {
+    public String getSessionId() {
         return sessionId;
+    }
+
+    public void setSessionId(final String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getVenue() {
         return venue;
     }
 
-    public Long getVenueId() {
+    public String getVenueId() {
         return venueId;
     }
 
@@ -96,15 +100,15 @@ public class Schedule {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Schedule schedule = (Schedule) o;
+        final Schedule schedule = (Schedule) o;
         return Objects.equals(sessionId, schedule.sessionId) &&
-            Objects.equals(venue, schedule.venue) &&
-            Objects.equals(date, schedule.date) &&
-            Objects.equals(startTime, schedule.startTime) &&
-            Objects.equals(duration, schedule.duration);
+                Objects.equals(venue, schedule.venue) &&
+                Objects.equals(date, schedule.date) &&
+                Objects.equals(startTime, schedule.startTime) &&
+                Objects.equals(duration, schedule.duration);
     }
 
     @Override
@@ -115,15 +119,11 @@ public class Schedule {
     @Override
     public String toString() {
         return "Schedule{" +
-            "session=" + sessionId +
-            ", venue='" + venue + '\'' +
-            ", date=" + date +
-            ", startTime=" + startTime +
-            ", duration=" + duration +
-            '}';
-    }
-
-    public void setSessionId(long sessionId) {
-        this.sessionId = sessionId;
+                "session=" + sessionId +
+                ", venue='" + venue + '\'' +
+                ", date=" + date +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
+                '}';
     }
 }

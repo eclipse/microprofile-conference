@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -41,66 +42,66 @@ public class ScheduleDAO {
     @Inject
     BootstrapData bootstrapData;
 
-    private long sequence = 11L;
+    private final AtomicInteger sequence = new AtomicInteger(0);
 
-    private Map<Long, Schedule> scheduleMap = new ConcurrentHashMap<>();
-    private Map<Long, String> venues = new ConcurrentHashMap<>();
+    private final Map<String, Schedule> scheduleMap = new ConcurrentHashMap<>();
+    private final Map<String, String> venues = new ConcurrentHashMap<>();
 
     @PostConstruct
     private void initStore() {
         Logger.getLogger(ScheduleDAO.class.getName()).log(Level.INFO, "Initialise schedule DAO from bootstrap data");
 
-        LocalDateAdapter dateAdapter = new LocalDateAdapter();
-        LocalTimeAdapter timeAdapter = new LocalTimeAdapter();
+        final LocalDateAdapter dateAdapter = new LocalDateAdapter();
+        final LocalTimeAdapter timeAdapter = new LocalTimeAdapter();
 
         bootstrapData.getSchedules()
-            .forEach(bootstrap -> {
+                .forEach(bootstrap -> {
 
-                try {
+                    try {
 
-                    Long venueId = null;
-                    for(Long key : venues.keySet()) {
-                        String v = venues.get(key);
-                        if(v.equals(bootstrap.getVenue())) {
-                            // existing venue
-                            venueId = key;
-                            break;
+                        String venueId = null;
+                        for (final String key : venues.keySet()) {
+                            final String v = venues.get(key);
+                            if (v.equals(bootstrap.getVenue())) {
+                                // existing venue
+                                venueId = key;
+                                break;
+                            }
                         }
+
+                        // generate a new key
+                        if (null == venueId)
+                            venueId = String.valueOf(sequence.incrementAndGet());
+
+                        final Schedule sched = new Schedule(
+                                bootstrap.getId(),
+                                bootstrap.getSessionId(),
+                                bootstrap.getVenue(),
+                                venueId,
+                                dateAdapter.unmarshal(bootstrap.getDate()),
+                                timeAdapter.unmarshal(bootstrap.getStartTime()),
+                                Duration.ofMinutes(new Double(bootstrap.getLength()).longValue())
+                        );
+
+
+                        scheduleMap.put(bootstrap.getId(), sched);
+                        venues.put(venueId, sched.getVenue());
+
+                    } catch (final Exception e) {
+                        System.out.println("Failed to parse bootstrap data: " + e.getMessage());
                     }
 
-                    // generate a new key
-                    if(null==venueId)
-                        venueId = sequence++;
-
-                    Schedule sched = new Schedule(
-                        new Long(bootstrap.getId()),
-                        new Long(bootstrap.getSessionId()),
-                        bootstrap.getVenue(),
-                        venueId,
-                        dateAdapter.unmarshal(bootstrap.getDate()),
-                        timeAdapter.unmarshal(bootstrap.getStartTime()),
-                        Duration.ofMinutes(new Double(bootstrap.getLength()).longValue())
-                    );
-
-
-                    scheduleMap.put(new Long(bootstrap.getId()), sched);
-                    venues.put(venueId, sched.getVenue());
-
-                } catch (Exception e) {
-                    System.out.println("Failed to parse bootstrap data: "+ e.getMessage());
-                }
-
-            });
+                });
 
     }
 
-    public Schedule addSchedule(Schedule schedule) {
+    public Schedule addSchedule(final Schedule schedule) {
 
-        long id = sequence++;
+        final String id = String.valueOf(sequence.incrementAndGet());
         schedule.setId(id);
 
         if (schedule.getSessionId() == null) {
-            schedule.setSessionId(sequence++);
+            schedule.setSessionId(String.valueOf(sequence.incrementAndGet()));
         }
 
         scheduleMap.put(id, schedule);
@@ -112,11 +113,11 @@ public class ScheduleDAO {
         return new ArrayList<>(scheduleMap.values());
     }
 
-    public Optional<Schedule> findById(long id) {
+    public Optional<Schedule> findById(final String id) {
         return Optional.ofNullable(scheduleMap.get(id));
     }
 
-    public Schedule updateSchedule(Schedule schedule) {
+    public Schedule updateSchedule(final Schedule schedule) {
         if (schedule.getId() == null) {
             return addSchedule(schedule);
         }
@@ -125,20 +126,20 @@ public class ScheduleDAO {
         return schedule;
     }
 
-    public void deleteSchedule(Long scheduleId) {
+    public void deleteSchedule(final String scheduleId) {
         if (scheduleId != null) {
             scheduleMap.remove(scheduleId);
         }
     }
 
-    public List<Schedule> findByVenue(Long venueId) {
+    public List<Schedule> findByVenue(final String venueId) {
         return scheduleMap.values()
-            .stream()
-            .filter(schedule -> schedule.getVenueId().equals(venueId))
-            .collect(Collectors.toList());
+                .stream()
+                .filter(schedule -> schedule.getVenueId().equals(venueId))
+                .collect(Collectors.toList());
     }
 
-    public List<Schedule> findByDate(LocalDate date) {
+    public List<Schedule> findByDate(final LocalDate date) {
         return scheduleMap.values()
                 .stream()
                 .filter(schedule -> schedule.getDate().equals(date))

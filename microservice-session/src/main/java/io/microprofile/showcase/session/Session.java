@@ -32,11 +32,11 @@ public class Session {
 
     protected JsonObject underlying;
 
-    private int id;
+    private String id;
 
-    private Collection<Integer> speakers = Collections.EMPTY_SET;
+    private Collection<String> speakers = Collections.EMPTY_SET;
 
-    public Session(int id, JsonObject underlying) {
+    public Session(final String id, final JsonObject underlying) {
         this.id = id;
         this.underlying = underlying;
     }
@@ -46,13 +46,13 @@ public class Session {
         return underlying;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    void setId(int id) {
-           this.id = id;
-       }
+    void setId(final String id) {
+        this.id = id;
+    }
 
     public String getAbstract() {
         return underlying.getString("abstract");
@@ -70,15 +70,15 @@ public class Session {
         return underlying.getString("type");
     }
 
-    public void setSpeakers(Collection<Integer> speakers) {
+    public void setSpeakers(final Collection<String> speakers) {
         this.speakers = speakers;
     }
 
-    public Collection<Integer> getSpeakers() {
+    public Collection<String> getSpeakers() {
         return speakers;
     }
 
-    public void setSchedule(int schedule) {
+    public void setSchedule(final int schedule) {
         this.schedule = schedule;
     }
 

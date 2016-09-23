@@ -28,6 +28,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -50,20 +51,20 @@ public class SessionResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Session createSession(Session session) throws Exception {
+    public Session createSession(final Session session) throws Exception {
         return sessionStore.save(session);
     }
 
     @GET
     @Path("/{sessionId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveSession(@PathParam("sessionId") Integer sessionId) throws Exception {
-        Optional<Session> result = sessionStore.find(sessionId);
+    public Response retrieveSession(@PathParam("sessionId") final String sessionId) throws Exception {
+        final Optional<Session> result = sessionStore.find(sessionId);
 
-        if(result.isPresent())
+        if (result.isPresent())
             return Response.ok(result.get()).build();
         else
-           return Response.status(404).build();
+            return Response.status(404).build();
 
     }
 
@@ -71,9 +72,9 @@ public class SessionResource {
     @Path("/{sessionId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateSession(@PathParam("sessionId") Integer sessionId, Session session) throws Exception {
-        Optional<Session> updated = sessionStore.update(sessionId, session);
-        if(updated.isPresent())
+    public Response updateSession(@PathParam("sessionId") final String sessionId, final Session session) throws Exception {
+        final Optional<Session> updated = sessionStore.update(sessionId, session);
+        if (updated.isPresent())
             return Response.ok(updated.get()).build();
         else
             return Response.status(404).build();
@@ -81,9 +82,9 @@ public class SessionResource {
 
     @DELETE
     @Path("/{sessionId}")
-    public Response deleteSession(@PathParam("sessionId") Integer sessionId) throws Exception {
-        Optional<Session> removed = sessionStore.remove(sessionId);
-        if(removed.isPresent())
+    public Response deleteSession(@PathParam("sessionId") final String sessionId) throws Exception {
+        final Optional<Session> removed = sessionStore.remove(sessionId);
+        if (removed.isPresent())
             return Response.ok().build();
         else
             return Response.status(404).build();
@@ -95,13 +96,13 @@ public class SessionResource {
     @GET
     @Path("/{sessionId}/speakers")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response sessionSpeakers(@PathParam("sessionId") Integer sessionId) throws Exception {
+    public Response sessionSpeakers(@PathParam("sessionId") final String sessionId) throws Exception {
 
-        Optional<Session> session = sessionStore.getSessions().stream()
-            .filter(s -> s.getId() == sessionId)
-            .findFirst();
+        final Optional<Session> session = sessionStore.getSessions().stream()
+                .filter(s -> Objects.equals(s.getId(), sessionId))
+                .findFirst();
 
-        if(session.isPresent())
+        if (session.isPresent())
             return Response.ok(session.get().getSpeakers()).build();
         else
             return Response.status(404).build();
@@ -111,13 +112,13 @@ public class SessionResource {
     @PUT
     @Path("/{sessionId}/speakers/{speakerId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addSessionSpeaker(@PathParam("sessionId") Integer sessionId, @PathParam("speakerId") Integer speakerId) throws Exception {
+    public Response addSessionSpeaker(@PathParam("sessionId") final String sessionId, @PathParam("speakerId") final String speakerId) throws Exception {
 
-        Optional<Session> result = sessionStore.find(sessionId);
+        final Optional<Session> result = sessionStore.find(sessionId);
 
-        if(result.isPresent()) {
-            Session session = result.get();
-            Collection<Integer> speakers = session.getSpeakers();
+        if (result.isPresent()) {
+            final Session session = result.get();
+            final Collection<String> speakers = session.getSpeakers();
             speakers.add(speakerId);
             sessionStore.update(sessionId, session);
             return Response.ok(session).build();
@@ -128,12 +129,12 @@ public class SessionResource {
 
     @DELETE
     @Path("/{sessionId}/speakers/{speakerId}")
-    public Response removeSessionSpeaker(@PathParam("sessionId") Integer sessionId, @PathParam("speakerId") Integer speakerId) throws Exception {
-        Optional<Session> result = sessionStore.find(sessionId);
+    public Response removeSessionSpeaker(@PathParam("sessionId") final String sessionId, @PathParam("speakerId") final String speakerId) throws Exception {
+        final Optional<Session> result = sessionStore.find(sessionId);
 
-        if(result.isPresent()) {
-            Session session = result.get();
-            Collection<Integer> speakers = session.getSpeakers();
+        if (result.isPresent()) {
+            final Session session = result.get();
+            final Collection<String> speakers = session.getSpeakers();
             speakers.remove(speakerId);
             sessionStore.update(sessionId, session);
             return Response.ok(session).build();
