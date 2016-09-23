@@ -70,7 +70,7 @@ public class SpeakerDAO {
         this.bootstrapData.getSpeaker()
                 .forEach(bootstrap -> {
 
-                    final int intId = bootstrap.getId();
+                    final int intId = Integer.valueOf(bootstrap.getId());
 
                     if (intId > idc.get()) {
                         idc.set(intId);

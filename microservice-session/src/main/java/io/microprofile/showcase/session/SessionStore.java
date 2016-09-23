@@ -46,7 +46,7 @@ public class SessionStore {
         Logger.getLogger(SessionStore.class.getName()).log(Level.INFO, "Initialise sessions from bootstrap data");
 
         bootstrapData.getSessions()
-            .forEach(bootstrap -> storage.put(bootstrap.getId(), SessionFactory.fromBootstrap(bootstrap)));
+            .forEach(bootstrap -> storage.put(Integer.valueOf(bootstrap.getId()), SessionFactory.fromBootstrap(bootstrap)));
 
     }
 
