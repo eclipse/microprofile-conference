@@ -67,12 +67,6 @@ public class Session extends JsonWrapper {
 
     @Override
     public String toString() {
-        return new org.apache.commons.lang3.builder.ToStringBuilder(this)
-                .append("schedule", schedule)
-                .append("speakers", speakers)
-                .append("code", getCode())
-                .append("title", getTitle())
-                .append("type", getType())
-                .toString();
+        return getId() + "::" + getCode();
     }
 }
