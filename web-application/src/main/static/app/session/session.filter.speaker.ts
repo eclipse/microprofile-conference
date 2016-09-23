@@ -18,7 +18,6 @@ export class SessionFilterSpeaker implements PipeTransform {
             return sessions;
         }
 
-        console.log('Sessions filtered in speaker id: ' + speaker.id);
         return sessions.filter(session => this.likeSession(session, speaker));
     }
 
@@ -27,8 +26,6 @@ export class SessionFilterSpeaker implements PipeTransform {
         for (var s of session.speakers) {
             if (speaker.id == s) {
                 return true;
-            }else{
-                console.log("id "  + speaker.id + " != " + s)
             }
         }
 

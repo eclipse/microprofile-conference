@@ -14,13 +14,4 @@ export class SessionComponent {
     title = 'Conference Session';
     @Input() session: Session;
     @Input() speaker: Speaker;
-
-    constructor(private speakerService: SpeakerService) {
-    }
-
-    getSpeaker(id: string): void {
-        this.speakerService.getSpeaker(id).then(function () {
-            console.log('Get speaker' + id)
-        });
-    }
 }
