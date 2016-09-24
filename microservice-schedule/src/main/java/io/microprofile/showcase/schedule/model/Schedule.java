@@ -18,6 +18,7 @@ package io.microprofile.showcase.schedule.model;
 import io.microprofile.showcase.schedule.model.adapters.DurationAdapter;
 import io.microprofile.showcase.schedule.model.adapters.LocalDateAdapter;
 import io.microprofile.showcase.schedule.model.adapters.LocalTimeAdapter;
+import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -30,7 +31,7 @@ import java.util.Objects;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Schedule {
+public class Schedule implements Serializable {
 
     private Long id;
     private Long sessionId;
