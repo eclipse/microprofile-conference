@@ -53,29 +53,29 @@ import static org.junit.Assert.assertEquals;
 @RunAsClient
 public class ScheduleResourceClientTest {
 
-    private static final Long TEST_SESSION = new Long(12);
+    private static final String TEST_SESSION = String.valueOf(12);
     private static final String TEST_VENUE = "Metropolis";
 
     @ArquillianResource
     private URL base;
 
-    private static Long scheduleId;
+    private static String scheduleId;
 
     @Deployment
     public static WebArchive createDeployment() {
 
-        File bootstrapLib = Maven.resolver().resolve("io.microprofile.showcase:demo-bootstrap:1.0.0-SNAPSHOT").withoutTransitivity().asSingleFile();
+        final File bootstrapLib = Maven.resolver().resolve("io.microprofile.showcase:demo-bootstrap:1.0.0-SNAPSHOT").withoutTransitivity().asSingleFile();
 
         return ShrinkWrap.create(WebArchive.class, "schedule-microservice.war")
-                        .addPackage(Schedule.class.getPackage())
-                        .addClasses(ScheduleResource.class, ScheduleDAO.class, Application.class)
-            .addAsLibraries(bootstrapLib);
+                .addPackage(Schedule.class.getPackage())
+                .addClasses(ScheduleResource.class, ScheduleDAO.class, Application.class)
+                .addAsLibraries(bootstrapLib);
     }
 
     @Test
     @InSequence(1)
     public void shouldCreateSchedule() throws Exception {
-        Response response = createScheduledSession(TEST_SESSION, TEST_VENUE, 400l, LocalDate.now(), LocalTime.now());
+        final Response response = createScheduledSession(TEST_SESSION, TEST_VENUE, String.valueOf(400), LocalDate.now(), LocalTime.now());
         assertEquals(201, response.getStatus());
         scheduleId = getScheduleId(response);
     }
@@ -83,108 +83,108 @@ public class ScheduleResourceClientTest {
     @Test
     @InSequence(2)
     public void shouldGetAlreadyCreatedSchedule() throws Exception {
-        URL url = new URL(base, "schedule/" + scheduleId);
-        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
-        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+        final URL url = new URL(base, "schedule/" + scheduleId);
+        final WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        final Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
         assertEquals(200, response.getStatus());
-        JsonObject jsonObject = readJsonContent(response);
-        assertEquals(scheduleId.intValue(), jsonObject.getInt("id"));
-        assertEquals(TEST_SESSION, new Long(jsonObject.getJsonNumber("sessionId").longValue()));
+        final JsonObject jsonObject = readJsonContent(response);
+        assertEquals(scheduleId, jsonObject.getString("id"));
+        assertEquals(TEST_SESSION, jsonObject.getString("sessionId"));
         assertEquals(TEST_VENUE, jsonObject.getString("venue"));
     }
 
     @Test
     @InSequence(3)
     public void shouldGetScheduledSessionsForVenue() throws Exception {
-        Long microprofile = new Long(20);
-        Long javaeeNext = new Long(40);
-        Long payaraMicro = new Long(60);
+        final String microprofile = String.valueOf(20);
+        final String javaeeNext = String.valueOf(40);
+        final String payaraMicro = String.valueOf(60);
 
-        createScheduledSession(microprofile, "Hilton", 500l, LocalDate.now(), LocalTime.now());
-        createScheduledSession(javaeeNext, "Moscone", 600l, LocalDate.now(), LocalTime.now());
-        createScheduledSession(payaraMicro, "Hilton", 500l, LocalDate.now(), LocalTime.now());
+        createScheduledSession(microprofile, "Hilton", String.valueOf(500), LocalDate.now(), LocalTime.now());
+        createScheduledSession(javaeeNext, "Moscone", String.valueOf(600), LocalDate.now(), LocalTime.now());
+        createScheduledSession(payaraMicro, "Hilton", String.valueOf(500), LocalDate.now(), LocalTime.now());
 
-        URL url = new URL(base, "schedule/venue/500");
-        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
-        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+        final URL url = new URL(base, "schedule/venue/500");
+        final WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        final Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
         assertEquals(200, response.getStatus());
-        JsonArray jsonArray = readJsonArray(response);
+        final JsonArray jsonArray = readJsonArray(response);
         assertEquals(2, jsonArray.size());
     }
 
     @Test
     @InSequence(4)
     public void shouldGetActiveScheduledSessions() throws Exception {
-        Long webServices = new Long(100);
-        Long designPatterns = new Long(120);
-        Long java = new Long(140);
+        final String webServices = String.valueOf(100);
+        final String designPatterns = String.valueOf(120);
+        final String java = String.valueOf(140);
 
-        createScheduledSession(webServices, "Moscone", 600l, LocalDate.of(1995, 9, 20), LocalTime.of(16, 0));
-        createScheduledSession(designPatterns, "Moscone", 600l, LocalDate.of(1995, 9, 20), LocalTime.of(17, 0));
-        createScheduledSession(java, "Moscone", 600l, LocalDate.of(1995, 9, 21), LocalTime.of(16, 0));
+        createScheduledSession(webServices, "Moscone", String.valueOf(600), LocalDate.of(1995, 9, 20), LocalTime.of(16, 0));
+        createScheduledSession(designPatterns, "Moscone", String.valueOf(600), LocalDate.of(1995, 9, 20), LocalTime.of(17, 0));
+        createScheduledSession(java, "Moscone", String.valueOf(600), LocalDate.of(1995, 9, 21), LocalTime.of(16, 0));
 
-        URL url = new URL(base, "schedule/active/" + LocalDateTime.of(1995, 9, 20, 17, 34, 29));
-        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
-        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+        final URL url = new URL(base, "schedule/active/" + LocalDateTime.of(1995, 9, 20, 17, 34, 29));
+        final WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        final Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
         assertEquals(200, response.getStatus());
-        JsonArray jsonArray = readJsonArray(response);
+        final JsonArray jsonArray = readJsonArray(response);
         assertEquals(1, jsonArray.size());
     }
 
     @Test
     @InSequence(5)
     public void shouldGetScheduledSessionsByDate() throws Exception {
-        URL url = new URL(base, "schedule/all/" + LocalDate.of(1995, 9, 20));
-        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
-        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+        final URL url = new URL(base, "schedule/all/" + LocalDate.of(1995, 9, 20));
+        final WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        final Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
         assertEquals(200, response.getStatus());
-        JsonArray jsonArray = readJsonArray(response);
+        final JsonArray jsonArray = readJsonArray(response);
         assertEquals(2, jsonArray.size());
     }
 
     @Test
     @InSequence(6)
     public void shouldRemoveSchedule() throws Exception {
-        Long removeMe = new Long(200);
-        Response createResponse = createScheduledSession(removeMe, "Far far away", 666l, LocalDate.now(), LocalTime.now());
-        Long removeId = getScheduleId(createResponse);
+        final String removeMe = String.valueOf(200);
+        final Response createResponse = createScheduledSession(removeMe, "Far far away", String.valueOf(666), LocalDate.now(), LocalTime.now());
+        final String removeId = getScheduleId(createResponse);
 
-        URL url = new URL(base, "schedule/" + removeId);
-        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
-        Response deleteResponse = target.request(MediaType.APPLICATION_JSON_TYPE).delete();
+        final URL url = new URL(base, "schedule/" + removeId);
+        final WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        final Response deleteResponse = target.request(MediaType.APPLICATION_JSON_TYPE).delete();
         assertEquals(204, deleteResponse.getStatus());
 
-        URL checkUrl = new URL(base, "schedule/" + removeId);
-        WebTarget checkTarget = ClientBuilder.newClient().target(checkUrl.toExternalForm());
-        Response checkResponse = checkTarget.request(MediaType.APPLICATION_JSON_TYPE).get();
+        final URL checkUrl = new URL(base, "schedule/" + removeId);
+        final WebTarget checkTarget = ClientBuilder.newClient().target(checkUrl.toExternalForm());
+        final Response checkResponse = checkTarget.request(MediaType.APPLICATION_JSON_TYPE).get();
         assertEquals(404, checkResponse.getStatus());
     }
 
-    private long getScheduleId(Response response) {
-        String location = response.getHeaderString("location");
-        return Long.parseLong(location.substring(location.lastIndexOf("/") + 1));
+    private String getScheduleId(final Response response) {
+        final String location = response.getHeaderString("location");
+        return location.substring(location.lastIndexOf("/") + 1);
     }
 
-    private static JsonObject readJsonContent(Response response) {
-        JsonReader jsonReader = readJsonStringFromResponse(response);
+    private static JsonObject readJsonContent(final Response response) {
+        final JsonReader jsonReader = readJsonStringFromResponse(response);
         return jsonReader.readObject();
     }
 
-    private static JsonArray readJsonArray(Response response) {
-        JsonReader jsonReader = readJsonStringFromResponse(response);
+    private static JsonArray readJsonArray(final Response response) {
+        final JsonReader jsonReader = readJsonStringFromResponse(response);
         return jsonReader.readArray();
     }
 
-    private static JsonReader readJsonStringFromResponse(Response response) {
-        String competitionJson = response.readEntity(String.class);
-        StringReader stringReader = new StringReader(competitionJson);
+    private static JsonReader readJsonStringFromResponse(final Response response) {
+        final String competitionJson = response.readEntity(String.class);
+        final StringReader stringReader = new StringReader(competitionJson);
         return Json.createReader(stringReader);
     }
 
-    private Response createScheduledSession(Long session, String venue, Long venueId,  LocalDate date, LocalTime time) throws MalformedURLException {
-        URL url = new URL(base, "schedule");
-        WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
-        Schedule schedule = new Schedule(session, venue, venueId, date, time, Duration.ofHours(1L));
+    private Response createScheduledSession(final String session, final String venue, final String venueId, final LocalDate date, final LocalTime time) throws MalformedURLException {
+        final URL url = new URL(base, "schedule");
+        final WebTarget target = ClientBuilder.newClient().target(url.toExternalForm());
+        final Schedule schedule = new Schedule(session, venue, venueId, date, time, Duration.ofHours(1L));
         return target.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(schedule, MediaType.APPLICATION_JSON_TYPE));
     }
 }

@@ -24,3 +24,4 @@ git.pr.prepare.bat
 git.delete.branch.bat
 git.update.fork.bat
 nb-configuration.xml
+ui.bat

@@ -44,14 +44,14 @@
 
     <dependencies>
 
-        <dependency>
-            <!--TODO - Remove/update when released - Resolves Windows file locking issues during build-->
-            <groupId>org.jboss.shrinkwrap</groupId>
-            <artifactId>shrinkwrap-api</artifactId>
-            <version>1.2.7-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/shrinkwrap-api-1.2.7-SNAPSHOT.jar</systemPath>
-        </dependency>
+        <!--<dependency>-->
+            <!--&lt;!&ndash;TODO - Remove/update when released - Resolves Windows file locking issues during build&ndash;&gt;-->
+            <!--<groupId>org.jboss.shrinkwrap</groupId>-->
+            <!--<artifactId>shrinkwrap-api</artifactId>-->
+            <!--<version>1.2.7-SNAPSHOT</version>-->
+            <!--<scope>system</scope>-->
+            <!--<systemPath>${project.basedir}/lib/shrinkwrap-api-1.2.7-SNAPSHOT.jar</systemPath>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>javax</groupId>

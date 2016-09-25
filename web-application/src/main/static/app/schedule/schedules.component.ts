@@ -2,8 +2,6 @@ import {Component, enableProdMode, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {Schedule} from "./schedule";
 import {ScheduleService} from "./schedule.service";
-import {EndpointsService} from "../shared/endpoints.service";
-import {Endpoint} from "../shared/endpoint";
 
 enableProdMode();
 
@@ -16,27 +14,19 @@ export class SchedulesComponent implements OnInit {
     title = 'Schedules';
     schedules: Schedule[];
     selectedSchedule: Schedule;
-    endPoint: Endpoint;
 
-    constructor(private router: Router, private scheduleService: ScheduleService, private endpointsService: EndpointsService) {
-    }
-
-    getEndpoint(): void {
-        this.endpointsService.getEndpoint("schedule").then(endPoint => this.setEndpoint(endPoint));
-    }
-
-    setEndpoint(endPoint: Endpoint): void {
-        this.endPoint = endPoint;
-        this.getSchedules();
-    }
-
-    getSchedules(): void {
-        //noinspection TypeScriptUnresolvedFunction
-        this.scheduleService.getSchedules(this.endPoint).then(schedules => this.schedules = schedules).catch(this.handleError);
+    constructor(private router: Router, private scheduleService: ScheduleService) {
     }
 
     ngOnInit(): void {
-        this.getEndpoint();
+        let _self = this;
+        this.scheduleService.init(function () {
+            _self.getSchedules();
+        });
+    }
+
+    getSchedules(): void {
+        this.scheduleService.getSchedules().then(schedules => this.schedules = schedules).catch(SchedulesComponent.handleError);
     }
 
     onSelect(schedule: Schedule): void {
@@ -48,7 +38,7 @@ export class SchedulesComponent implements OnInit {
     }
 
     //noinspection TypeScriptUnresolvedVariable
-    private handleError(error: any): Promise<any> {
+    private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // TODO - Display safe error
         //noinspection TypeScriptUnresolvedVariable
         return Promise.reject(error.message || error);

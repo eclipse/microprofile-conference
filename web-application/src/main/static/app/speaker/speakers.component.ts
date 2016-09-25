@@ -1,8 +1,7 @@
 import {Component, Input, enableProdMode, OnInit, OnDestroy} from "@angular/core";
-import {Router, ActivatedRoute} from "@angular/router";
+import {Router, ActivatedRoute, Params} from "@angular/router";
 import {Speaker} from "./speaker";
 import {SpeakerService} from "./speaker.service";
-import {Subscription} from "rxjs";
 
 enableProdMode();
 
@@ -16,9 +15,8 @@ export class SpeakersComponent implements OnInit, OnDestroy {
     speakers: Speaker[];
     @Input() selectedSpeaker: Speaker;
     search: string;
-    private subscription: Subscription;
 
-    constructor(private router: Router, private activatedRoute: ActivatedRoute, private speakerService: SpeakerService) {
+    constructor(private router: Router, private route: ActivatedRoute, private speakerService: SpeakerService) {
     }
 
     ngOnInit(): void {
@@ -27,25 +25,29 @@ export class SpeakersComponent implements OnInit, OnDestroy {
         this.speakerService.init(function () {
             _self.getSpeakers();
 
-            _self.subscription = _self.activatedRoute.params.subscribe(params => {
-                var s = params['selectedSpeaker'];
-                if (undefined != s) {
-                    _self.selectedSpeaker = s;
-                }
+            _self.route.params.forEach((params: Params) => {
+                _self.onSelectId(params['id']);
             });
         });
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+
     }
 
     getSpeakers(): void {
         this.speakerService.getSpeakers().then(speakers => this.speakers = speakers).catch(SpeakersComponent.handleError);
     }
 
+    onSelectId(any: any): void {
+        this.speakerService.getSpeakersById([any as string]).then(speaker => this.onSelect(speaker[0]));
+    }
+
     onSelect(speaker: Speaker): void {
-        this.selectedSpeaker = speaker;
+
+        if (undefined != speaker && null != speaker) {
+            this.selectedSpeaker = speaker;
+        }
     }
 
     onSearch(search: string): void {
