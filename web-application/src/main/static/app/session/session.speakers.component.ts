@@ -37,7 +37,6 @@ export class SessionSpeakersComponent implements OnChanges {
     }
 
     onSelect(speaker: Speaker): void {
-        console.log("Clicked on: " + speaker);
-        //this.router.navigate(['/speakers', speaker]);
+        this.router.navigate(['/speakers', {id: speaker.id}]);
     }
 }
