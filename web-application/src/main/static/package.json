@@ -40,6 +40,7 @@
     "concurrently": "^2.2.0",
     "del": "^2.2.2",
     "event-stream": "^3.3.4",
+    "fs-sync": "^1.0.2",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^2.0.0",
     "gulp-autoprefixer": "^3.1.1",

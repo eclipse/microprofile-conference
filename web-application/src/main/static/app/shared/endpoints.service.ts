@@ -5,6 +5,10 @@ import {Endpoints} from "./endpoints";
 import {Endpoint} from "./endpoint";
 import "../rxjs-operators";
 
+/**
+ * This service is the doorway to endpoint discovery.
+ * It contacts the 'only' known relative endpoint and retrieves a list of 'unknown' mapped endpoints.
+ */
 @Injectable()
 export class EndpointsService {
 
@@ -15,16 +19,15 @@ export class EndpointsService {
     constructor(private http: Http) {
     }
 
-    //noinspection TypeScriptUnresolvedVariable
     private getEndpoints(): Promise<Endpoints> {
 
+        //TODO - Microservices 1.x - Define this endpoint as a standard/expected service discovery endpoint relative to the origin
         return this.http.get('/service/endpoints/conference')
             .toPromise()
             .then(response => response.json() as Endpoints)
             .catch(EndpointsService.handleError);
     }
 
-    //noinspection TypeScriptUnresolvedVariable
     getEndpoint(name: string): Promise<Endpoint> {
 
         var ep = this.map[name];
@@ -33,7 +36,6 @@ export class EndpointsService {
             return this.getEndpoints().then(endpoints => this.cacheEndpoint(endpoints, name)).catch(EndpointsService.handleError);
         }
 
-        //noinspection TypeScriptUnresolvedVariable
         return Promise.resolve(ep);
     }
 
@@ -53,7 +55,7 @@ export class EndpointsService {
     private static handleError(error: any) {
         // TODO - Global error service
         let errMsg = (error.message) ? error.message :
-            error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+            error.status ? `${error.status} - ${error.statusText}` : 'EndpointsService error';
         console.error(errMsg); // log to console instead
         return Observable.throw(errMsg);
     }

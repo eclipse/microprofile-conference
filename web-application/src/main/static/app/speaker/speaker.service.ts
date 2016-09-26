@@ -31,7 +31,6 @@ export class SpeakerService {
         this.endPoint = endPoint;
     }
 
-    //noinspection TypeScriptUnresolvedVariable
     getSpeakers(): Promise<Speaker[]> {
 
         if (undefined != this.speakers) {
@@ -68,11 +67,8 @@ export class SpeakerService {
         return false;
     }
 
-
-    //noinspection TypeScriptUnresolvedVariable
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // TODO - Display safe error
-        //noinspection TypeScriptUnresolvedVariable
         return Promise.reject(error.message || error);
     }
 }

@@ -27,7 +27,6 @@ export class SessionService {
         this.endPoint = endPoint;
     }
 
-    //noinspection TypeScriptUnresolvedVariable
     getSessions(): Promise<Session[]> {
 
         if (undefined != this.sessions) {
@@ -45,10 +44,8 @@ export class SessionService {
         return this.sessions;
     }
 
-    //noinspection TypeScriptUnresolvedVariable
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // TODO - Display safe error
-        //noinspection TypeScriptUnresolvedVariable
         return Promise.reject(error.message || error);
     }
 }

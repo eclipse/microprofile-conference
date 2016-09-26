@@ -90,30 +90,13 @@ Provided using link:http://tomee.apache.org/[Apache TomEE 7.x]
 [source,sh]
 ----
 cd microservice-speaker
+
 cd microservice-speaker-web
-mvn clean package
-mvn tomee:exec [-D<OPTION>]
-java -jar target/microservice-speaker-web-exec.jar
+
+mvn clean package tomee:exec -DskipTests
+
+java -DadditionalSystemProperties=”-Dport.http=9191 -Dport.ajp=9292 -Dport.shutdown=9393” -jar target/microservice-speaker-web-exec.jar
 ----
-
-*Address & Port Bindings*
-
-.Session Service Options
-|===
-|Flag |Description| Default
-
-| tomee-plugin.http=<port>
-| Sets the port for the HTTP server
-| 8080
-
-| tomee-plugin.ajp=<port>
-| Sets the port for the AJP protocol
-| 8009
-
-|===
-
-
-For a full set of configuration options please see link:http://tomee.apache.org/maven/index.html[TomEE Maven Plugin]
 
 === microservice-vote
 TBC
