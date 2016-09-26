@@ -2,27 +2,50 @@ import {Injectable} from "@angular/core";
 import {Endpoint} from "../shared/endpoint";
 import {Http} from "@angular/http";
 import "../rxjs-operators";
+import {EndpointsService} from "../shared/endpoints.service";
 import {Rating} from "./rating";
 
 @Injectable()
 export class VoteService {
 
-    constructor(private http: Http) {
+    private votes: Rating[];
+    private endPoint: Endpoint;
+
+    constructor(private http: Http, private endpointsService: EndpointsService) {
     }
 
-    //noinspection TypeScriptUnresolvedVariable
-    getRatings(endPoint: Endpoint, session: string): Promise<Rating[]> {
+    init(callback: () => void): void {
 
-        return this.http.post(endPoint.url + '/ratingsBySession', session)
+        if (undefined != this.endPoint) {
+            callback();
+        } else {
+            this.endpointsService.getEndpoint("vote").then(endPoint => this.setEndpoint(endPoint)).then(callback).catch(this.handleError);
+        }
+    }
+
+    setEndpoint(endPoint: Endpoint): void {
+        this.endPoint = endPoint;
+    }
+
+    getVotes(): Promise<Rating[]> {
+
+        if (undefined != this.votes) {
+            return Promise.resolve(this.votes);
+        }
+
+        return this.http.get(this.endPoint.url + '/rate')
             .toPromise()
-            .then(response => response.json() as Rating[])
-            .catch(VoteService.handleError);
+            .then(response => this.setVotes(response.json()))
+            .catch(this.handleError);
     }
 
-    //noinspection TypeScriptUnresolvedVariable
-    private static handleError(error: any): Promise<any> {
+    private setVotes(any: any): Rating[] {
+        this.votes = any as Rating[];
+        return this.votes;
+    }
+
+    private handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // TODO - Display safe error
-        //noinspection TypeScriptUnresolvedVariable
         return Promise.reject(error.message || error);
     }
 }

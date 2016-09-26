@@ -54,10 +54,8 @@ export class SpeakersComponent implements OnInit, OnDestroy {
         this.search = search;
     }
 
-    //noinspection TypeScriptUnresolvedVariable
     private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // TODO - Display safe error
-        //noinspection TypeScriptUnresolvedVariable
         return Promise.reject(error.message || error);
     }
 }

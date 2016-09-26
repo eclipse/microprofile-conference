@@ -2,9 +2,9 @@
 <div class="list-group">
     <a href="#" class="list-group-item list-group-item-action"
        *ngFor="let vote of votes"
-       [class.selected]="vote === selectedSession"
+       [class.selected]="vote === selectedVote"
        (click)="onSelect(vote)">
-        <span class="badge">{{vote.nextAttendeeId}}</span> {{vote.nextAttendeeId}}
+        <span class="badge">Session: {{vote.sessionId}}</span>, Venue: {{vote.venue}}, Date: {{vote.date}}, StartTime: {{vote.startTime}}
     </a>
 </div>
-<vote [vote]="selectedSession"></vote>
+<vote [vote]="selectedVote"></vote>

@@ -19,8 +19,6 @@ package io.microprofile.showcase.speaker.rest;
 import io.microprofile.showcase.speaker.model.Speaker;
 import io.microprofile.showcase.speaker.persistence.SpeakerDAO;
 
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -63,7 +61,6 @@ public class ResourceSpeaker {
     }
 
     @POST
-    @Lock(LockType.WRITE)
     @Path("/add")
     public Speaker add(final Speaker speaker) {
         return this.addHyperMedia(this.speakerDAO.persist(speaker));
@@ -76,7 +73,6 @@ public class ResourceSpeaker {
     }
 
     @PUT
-    @Lock(LockType.WRITE)
     @Path("/update")
     public Speaker update(final Speaker speaker) {
         return this.addHyperMedia(this.speakerDAO.update(speaker));

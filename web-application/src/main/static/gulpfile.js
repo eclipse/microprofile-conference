@@ -35,6 +35,7 @@ const gutil = require('gulp-util');
 const tscConfig = require('./tsconfig.json');
 const tsProject = ts.createProject('./tsconfig.json');
 const babel = require('gulp-babel');
+const fs = require('fs');
 
 /**
  * Run all css & image tasks
@@ -118,15 +119,24 @@ gulp.task('js-third-party', function () {
     var tasks = [];
     var s;
     for (s in scripts) {
-        tasks.push(buildTask(scripts[s]));
+
+        var src = scripts[s];
+        var dest = target + '/' + resources + '/assets/js' + src.substr(1, src.lastIndexOf('/'));
+        var file = dest + src.substr(src.lastIndexOf('/') + 1);
+
+        try {
+            fs.accessSync(file, fs.F_OK);
+        } catch (e) {
+            tasks.push(buildTask(src, dest));
+        }
     }
 
     return es.concat(tasks);
 });
 
-function buildTask(/*String*/path) {
-    console.log("" + path);
-    return gulp.src(path).pipe(gulp.dest(target + '/' + resources + '/assets/js/' + path.substr(0, path.lastIndexOf('/')) + '/'));
+function buildTask(/*String*/src, /*String*/dest) {
+    console.log("Copied: " + src);
+    return gulp.src(src).pipe(gulp.dest(dest));
 }
 
 gulp.task('js-bundles', function () {
@@ -171,9 +181,7 @@ gulp.task('copy-tomee', function () {
 
 gulp.task('clean-tomee', function (callback) {
     return del([
-        target + '/' + resources + '/',
-        target + '/apache-tomee/webapps/' + webapp + '/app/',
-        target + '/apache-tomee/webapps/' + webapp + '/components/'
+        target + '/apache-tomee/webapps/' + webapp + '/app/'
     ], {
         force: true
     }, callback);

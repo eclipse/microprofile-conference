@@ -1,10 +1,10 @@
 <div *ngIf="vote">
-    <h2>{{vote.nextAttendeeId}} details!</h2>
+    <h2>{{vote.nameLast}} details!</h2>
     <div>
-        <label>ID: </label>{{vote.nextAttendeeId}}
+        <label>ID: </label>{{vote.id}}
     </div>
     <div>
         <label>Surname: </label>
-        <input type="text" [(ngModel)]="vote.nextAttendeeId" placeholder="nameLast">
+        <input type="text" [(ngModel)]="vote.nameLast" placeholder="nameLast">
     </div>
 </div>

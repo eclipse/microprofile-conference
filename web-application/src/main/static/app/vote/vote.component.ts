@@ -1,5 +1,5 @@
 import {Component, Input, enableProdMode} from "@angular/core";
-import {Vote} from "./vote";
+import {Rating} from "./rating";
 
 enableProdMode();
 
@@ -11,5 +11,5 @@ enableProdMode();
 export class VoteComponent {
     title = 'Conference Vote';
     @Input()
-    vote: Vote;
+    vote: Rating;
 }

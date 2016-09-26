@@ -10,7 +10,7 @@ enableProdMode();
     selector: 'sessions',
     templateUrl: 'app/session/sessions.component.html'
 })
-export class SessionsComponent implements OnInit, OnChanges  {
+export class SessionsComponent implements OnInit, OnChanges {
     title = 'Sessions';
     sessions: Session[];
     selectedSession: Session;
@@ -32,7 +32,7 @@ export class SessionsComponent implements OnInit, OnChanges  {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if(changes['speaker'].currentValue != changes['speaker'].previousValue){
+        if (changes['speaker'].currentValue != changes['speaker'].previousValue) {
             console.log("Reset selected session");
             this.selectedSession = null;
         }
@@ -50,10 +50,8 @@ export class SessionsComponent implements OnInit, OnChanges  {
         this.router.navigate(['/detail', this.selectedSession.id]);
     }
 
-    //noinspection TypeScriptUnresolvedVariable
     private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // TODO - Display safe error
-        //noinspection TypeScriptUnresolvedVariable
         return Promise.reject(error.message || error);
     }
 }

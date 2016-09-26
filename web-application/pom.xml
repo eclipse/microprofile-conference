@@ -169,13 +169,13 @@
                         <artifactId>tomee-maven-plugin</artifactId>
                         <configuration>
                             <tomeeVersion>${version.tomee}</tomeeVersion>
-                            <tomeeClassifier>plus</tomeeClassifier>
+                            <tomeeClassifier>webprofile</tomeeClassifier>
                             <!--@formatter:off-->
                             <webapps>
                                 <webapp>${project.groupId}:microservice-speaker-web:${project.version}</webapp>
                                 <webapp>${project.groupId}:microservice-session:${project.version}</webapp>
                                 <webapp>${project.groupId}:microservice-schedule:${project.version}</webapp>
-                                <webapp>com.ibm.ws.microprofile.sample.conference:vote-service-application:${project.version}</webapp>
+                                <webapp>microprofile-conference:vote-service-application:${project.version}</webapp>
                             </webapps>
                             <!--@formatter:on-->
                         </configuration>
