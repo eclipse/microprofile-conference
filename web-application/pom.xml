@@ -30,83 +30,13 @@
 
     <packaging>war</packaging>
 
-    <dependencies>
-
-        <!--PROVIDED-->
-        <dependency>
-            <groupId>org.apache.tomee</groupId>
-            <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--SERVICES-->
-        <!--These are here to enforce the build order. The UI is independent of the Microprofile Services-->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>microservice-speaker-web</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>microservice-schedule</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>microservice-session</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
-            <artifactId>vote-service-application</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--TEST-->
-        <dependency>
-            <groupId>org.apache.tomee</groupId>
-            <artifactId>arquillian-tomee-embedded</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomee</groupId>
-            <artifactId>tomee-jaxrs</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <properties>
+        <src.dir>src/main/java</src.dir>
+    </properties>
 
     <build>
-        <finalName>ROOT</finalName>
+        <sourceDirectory>${src.dir}</sourceDirectory>
         <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <attachClasses>true</attachClasses>
-                    <webResources>
-                        <resource>
-                            <directory>target/static-resources</directory>
-                        </resource>
-                    </webResources>
-                    <warName>ROOT</warName>
-                </configuration>
-            </plugin>
-
             <!--Deals with npm, bower and gulp-->
             <plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -162,8 +92,60 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
 
+            <properties>
+                <src.dir>src/main/local/java</src.dir>
+            </properties>
             <build>
+                <finalName>ROOT</finalName>
+                <testResources>
+                    <testResource>
+                        <directory>src/test/local/java</directory>
+                    </testResource>
+                    <testResource>
+                        <directory>src/test/local/resources</directory>
+                    </testResource>
+                </testResources>
                 <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-endpoint-service</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/src/main/static</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/local/static</directory>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <attachClasses>true</attachClasses>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/local/webapp</directory>
+                                </resource>
+                                <resource>
+                                    <directory>target/static-resources</directory>
+                                </resource>
+                            </webResources>
+                            <warName>ROOT</warName>
+                        </configuration>
+                    </plugin>
+
                     <plugin>
                         <groupId>org.apache.tomee.maven</groupId>
                         <artifactId>tomee-maven-plugin</artifactId>
@@ -179,6 +161,92 @@
                             </webapps>
                             <!--@formatter:on-->
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+
+                <!--PROVIDED-->
+                <dependency>
+                    <groupId>org.apache.tomee</groupId>
+                    <artifactId>javaee-api</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+
+                <!--SERVICES-->
+                <!--These are here to enforce the build order. The UI is independent of the Microprofile Services-->
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>microservice-speaker-web</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>microservice-schedule</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>microservice-session</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.ibm.ws.microprofile.sample.conference</groupId>
+                    <artifactId>vote-service-application</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                    <scope>provided</scope>
+                </dependency>
+
+                <!--TEST-->
+                <dependency>
+                    <groupId>org.apache.tomee</groupId>
+                    <artifactId>arquillian-tomee-embedded</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.tomee</groupId>
+                    <artifactId>tomee-jaxrs</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>start</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-endpoint-service</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/src/main/static</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/start/static</directory>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

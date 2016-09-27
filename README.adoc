@@ -48,7 +48,7 @@ By default the microservice will bind to port 8080, if this is not available it 
 
 Click on link:http://localhost:8080/microservice-schedule/schedule/1[http://localhost:8080/microservice-schedule/schedule/1]
 
-To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options. 
+To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options.
 
 === microservice-session
 
@@ -120,6 +120,22 @@ $ mvn frontend:gulp
 ----
 
 Open a browser at http://localhost:8080/
+
+=== Run all services and UI in separate runtimes
+
+This will run each service in the runtime container that its setup for and the UI in a Node.js server to interact with them.
+
+Build, package and run all services and the UI:
+
+----
+mvn clean package -Pstart
+----
+
+Run all services and the UI:
+
+----
+mvn package -Pstart -pl :microservice-start
+----
 
 == Tests
 

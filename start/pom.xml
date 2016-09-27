@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 Microprofile.io
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <parent>
+        <artifactId>microprofile-conference</artifactId>
+        <groupId>io.microprofile.showcase</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>microservice-start</artifactId>
+    <name>Conference :: Start</name>
+
+    <profiles>
+        <profile>
+            <id>start</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>speaker-buildexec</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>mvn</executable>
+                                    <workingDirectory>../microservice-speaker/microservice-speaker-web</workingDirectory>
+                                    <arguments>
+                                        <argument>tomee:exec</argument>
+                                        <argument>-Dtomee-plugin.http=9100</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>speaker</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>java</executable>
+                                    <workingDirectory>../microservice-speaker/microservice-speaker-web</workingDirectory>
+                                    <arguments>
+                                        <argument>-jar</argument>
+                                        <argument>target/microservice-speaker-web-exec.jar</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>session</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>java</executable>
+                                    <workingDirectory>../microservice-session</workingDirectory>
+                                    <arguments>
+                                        <argument>-jar</argument>
+                                        <argument>target/microservice-session-swarm.jar</argument>
+                                        <argument>-Dswarm.http.port=9110</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>schedule</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>java</executable>
+                                    <workingDirectory>../microservice-schedule</workingDirectory>
+                                    <arguments>
+                                        <argument>-jar</argument>
+                                        <argument>target/microservice-schedule.jar</argument>
+                                        <argument>--port</argument>
+                                        <argument>9120</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <!--<execution>-->
+                                <!--<id>vote</id>-->
+                                <!--<phase>package</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>exec</goal>-->
+                                <!--</goals>-->
+                                <!--<configuration>-->
+                            <!--<async>true</async>-->
+                                    <!--<executable>exec</executable>-->
+                                    <!--<workingDirectory>../microservice-vote</workingDirectory>-->
+                                    <!--<arguments>-->
+                                        <!--<argument>java</argument>-->
+                                        <!--<argument></argument>-->
+                                    <!--</arguments>-->
+                                <!--</configuration>-->
+                            <!--</execution>-->
+                            <execution>
+                                <id>ui</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <workingDirectory>../web-application/src/main/static</workingDirectory>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>lite</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

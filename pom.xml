@@ -454,4 +454,18 @@
         <!--</plugins>-->
     </build>
 
+    <profiles>
+        <profile>
+            <id>start</id>
+            <modules>
+                <module>demo-bootstrap</module>
+                <module>microservice-session</module>
+                <module>microservice-vote</module>
+                <module>microservice-speaker</module>
+                <module>microservice-schedule</module>
+                <module>web-application</module>
+                <module>start</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

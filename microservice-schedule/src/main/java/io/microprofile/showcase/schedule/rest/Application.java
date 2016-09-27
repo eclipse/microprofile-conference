@@ -15,6 +15,7 @@
  */
 package io.microprofile.showcase.schedule.rest;
 
+import io.microprofile.showcase.schedule.CORSFilter;
 import io.microprofile.showcase.schedule.resources.ScheduleResource;
 
 import javax.ws.rs.ApplicationPath;
@@ -29,6 +30,7 @@ public class Application extends javax.ws.rs.core.Application {
         final Set<Class<?>> resources = new HashSet();
 
         resources.add(ScheduleResource.class);
+        resources.add(CORSFilter.class);
         return resources;
     }
 }
