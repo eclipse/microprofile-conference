@@ -8,13 +8,7 @@ import "../rxjs-operators";
 @Injectable()
 export class EndpointsService {
 
-    map: {[name: string]: Endpoint} =
-    {
-        'speaker': <Endpoint> { name: 'speaker', url: 'http://localhost:9100/microservice-speaker-web/speaker' },
-        'session': <Endpoint> { name: 'session', url: 'http://localhost:9110/sessions' },
-        'schedule': <Endpoint> { name: 'schedule', url: 'http://localhost:9120/microservice-schedule/schedule' },
-        'vote': <Endpoint> { name: 'vote', url: 'http://localhost:9130' }
-    };
+    map: {[name: string]: Endpoint} = {};
     error: string;
     endpoints: Endpoints;
 
@@ -34,6 +28,7 @@ export class EndpointsService {
     getEndpoint(name: string): Promise<Endpoint> {
 
         var ep = this.map[name];
+
         if (undefined == ep) {
             return this.getEndpoints().then(endpoints => this.cacheEndpoint(endpoints, name)).catch(EndpointsService.handleError);
         }
