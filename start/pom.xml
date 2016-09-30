@@ -105,22 +105,22 @@
                                     </arguments>
                                 </configuration>
                             </execution>
-                            <!--<execution>-->
-                                <!--<id>vote</id>-->
-                                <!--<phase>package</phase>-->
-                                <!--<goals>-->
-                                    <!--<goal>exec</goal>-->
-                                <!--</goals>-->
-                                <!--<configuration>-->
-                            <!--<async>true</async>-->
-                                    <!--<executable>exec</executable>-->
-                                    <!--<workingDirectory>../microservice-vote</workingDirectory>-->
-                                    <!--<arguments>-->
-                                        <!--<argument>java</argument>-->
-                                        <!--<argument></argument>-->
-                                    <!--</arguments>-->
-                                <!--</configuration>-->
-                            <!--</execution>-->
+                            <execution>
+                            <id>vote</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>java</executable>
+                                    <workingDirectory>../microservice-vote/</workingDirectory>
+                                    <arguments>
+                                        <argument>-jar</argument>
+                                        <argument>vote-service-wlpcfg/target/libertyProject.jar</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
                             <execution>
                                 <id>ui</id>
                                 <phase>package</phase>
