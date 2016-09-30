@@ -13,7 +13,7 @@ export class EndpointsService {
         'speaker': <Endpoint> { name: 'speaker', url: 'http://localhost:9100/microservice-speaker-web/speaker' },
         'session': <Endpoint> { name: 'session', url: 'http://localhost:9110/sessions' },
         'schedule': <Endpoint> { name: 'schedule', url: 'http://localhost:9120/microservice-schedule/schedule' },
-        'vote': <Endpoint> { name: 'vote', url: 'http://localhost:9130' }
+        'vote': <Endpoint> { name: 'vote', url: 'http://localhost:9130/vote' }
     };
     error: string;
     endpoints: Endpoints;
