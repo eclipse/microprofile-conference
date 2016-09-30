@@ -15,7 +15,7 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
-        <testServerHttpPort>9080</testServerHttpPort>
+        <testServerHttpPort>9130</testServerHttpPort>
         <testServerHttpsPort>9443</testServerHttpsPort>
     </properties>
 
@@ -134,6 +134,31 @@
                     </bootstrapProperties>
                     <install/>
                 </configuration>
+            </plugin>
+            <plugin>
+              <artifactId>maven-resources-plugin</artifactId>
+              <version>3.0.1</version>
+              <executions>
+                <execution>
+                  <id>copy-resources</id>
+                  <phase>process-resources</phase>
+                  <goals>
+                    <goal>copy-resources</goal>
+                  </goals>
+                  <configuration>
+                    <overwrite>true</overwrite>
+                    <outputDirectory>
+                        ${project.build.directory}/wlp/usr/servers/${wlpServerName}
+                    </outputDirectory>
+                    <resources>          
+                      <resource>
+                        <directory>servers/VoteServiceServer</directory>
+                        <filtering>false</filtering>
+                      </resource>
+                    </resources>              
+                  </configuration>            
+                </execution>
+              </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
