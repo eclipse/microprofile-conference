@@ -36,8 +36,6 @@
     <properties>
         <!-- Liberty server properties -->
         <wlpServerName>VoteServer</wlpServerName>
-        <testServerHttpPort>9080</testServerHttpPort>
-        <testServerHttpsPort>9443</testServerHttpsPort>
         <warName>vote-service-application</warName>
         <warVersion>1.0.0-SNAPSHOT</warVersion>
         <!--This is set in the ibm-web-ext.xml file -->
@@ -74,28 +72,15 @@
     <modules>
         <module>vote-service-application</module>
         <module>vote-service-wlpcfg</module>
-        <module>vote-service-deploy</module>
     </modules>
     
     
     <profiles>
         <profile>
-            <id>localServer</id>
-            <modules>
-                <module>vote-service-deploy/vote-service-localServer</module>
-            </modules>
-        <activation>
+            <id>runnable</id>
+            <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-        </profile>
-        <profile>
-            <id>bluemix</id>
-            <modules>
-                <module>vote-service-deploy/vote-service-bluemix</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>runnable</id>
             <properties>
                 <package.file>${project.build.directory}/${app.name}.jar</package.file>
                 <packaging.type>runnable</packaging.type>
