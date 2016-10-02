@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>microprofile-conference</groupId>
+        <groupId>io.microprofile.showcase</groupId>
         <artifactId>microservice-vote</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -150,13 +150,13 @@
                     <outputDirectory>
                         ${project.build.directory}/wlp/usr/servers/${wlpServerName}
                     </outputDirectory>
-                    <resources>          
+                    <resources>
                       <resource>
                         <directory>servers/VoteServiceServer</directory>
                         <filtering>false</filtering>
                       </resource>
-                    </resources>              
-                  </configuration>            
+                    </resources>
+                  </configuration>
                 </execution>
               </executions>
             </plugin>
