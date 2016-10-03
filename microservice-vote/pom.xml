@@ -26,11 +26,10 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>microprofile-conference</groupId>    
     <artifactId>microservice-vote</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    
+
     <name>Conference :: Vote</name>
 
     <properties>
@@ -42,7 +41,7 @@
         <warContext>vote</warContext>
         <package.file>${project.build.directory}/${app.name}.zip</package.file>
         <packaging.type>usr</packaging.type>
-        
+
         <!-- Cloud Foundry/Bluemix properties -->
         <cf.context>mybluemix.net</cf.context>
         <cf.target>https://api.ng.bluemix.net</cf.target>
@@ -52,15 +51,15 @@
 
         <!-- This is the host for your app in Bluemix and what it will be called in the dashboard. -->
         <cf.host>microprofile-vote</cf.host>
-        
-        <!-- The Cloud Foundry or Bluemix username and password can be 
+
+        <!-- The Cloud Foundry or Bluemix username and password can be
             entered here. -->
        <!-- <cf.username></cf.username>
         <cf.password></cf.password> -->
-        
+
         <app.name>libertyProject</app.name>
     </properties>
-    
+
     <repositories>
         <repository>
             <id>liberty-starter-maven-repo</id>
@@ -73,8 +72,8 @@
         <module>vote-service-application</module>
         <module>vote-service-wlpcfg</module>
     </modules>
-    
-    
+
+
     <profiles>
         <profile>
             <id>runnable</id>
@@ -110,7 +109,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <pluginManagement>
             <plugins>
