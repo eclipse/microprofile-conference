@@ -21,7 +21,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>microprofile-conference</groupId>
+            <groupId>io.microprofile.showcase</groupId>
             <artifactId>${warName}</artifactId>
             <version>${warVersion}</version>
             <type>war</type>
@@ -39,7 +39,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>microprofile-conference</groupId>
+            <groupId>io.microprofile.showcase</groupId>
             <artifactId>${warName}</artifactId>
             <version>${warVersion}</version>
             <classifier>classes</classifier>
