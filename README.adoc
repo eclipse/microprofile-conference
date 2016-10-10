@@ -99,7 +99,22 @@ java -DadditionalSystemProperties=”-Dport.http=9191 -Dport.ajp=9292 -Dport.shu
 ----
 
 === microservice-vote
-TBC
+Provided using link:https://developer.ibm.com/wasdev/[WebSphere Liberty]
+
+*Build and run the service*
+```
+cd microservice-vote
+mvn clean install
+java -jar vote-service-wlpcfg/target/libertyProject.jar
+```
+
+Access the app at link:http://localhost:9130/vote
+
+*Port Bindings*
+By default the microservice will start on port 9130. To set it to a different port use the following Maven properties:
+```
+-DtestServerHttpPort=9080 -DtestServerHttpsPort=9443
+```
 
 === Run the UI Web Application
 
@@ -170,7 +185,7 @@ typings install --global
 
 This application is a collaborative demonstration application by:
 
-* Liberty Profile
+* WebSphere Liberty
 * London Java Community
 * Red Hat
 * Tomitribe
