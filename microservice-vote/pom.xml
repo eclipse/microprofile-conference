@@ -171,7 +171,13 @@
                     <version>1.2.1</version>
                     <extensions>true</extensions>
                     <configuration>
-                            <serverName>${wlpServerName}</serverName>
+						<serverName>${wlpServerName}</serverName>
+						<assemblyArtifact>
+							<groupId>com.ibm.websphere.appserver.runtime</groupId>
+							<artifactId>wlp-webProfile7</artifactId>
+							<version>16.0.0.3</version>
+							<type>zip</type>
+                        </assemblyArtifact>
                     </configuration>
                 </plugin>
                 <plugin>
