@@ -46,6 +46,9 @@ public class CredentialsProducer {
 		
 		JsonObject vcapServicesJson = Json.createReader(new StringReader(vcapServices)).readObject();
 		JsonArray cloudantObjectArray = vcapServicesJson.getJsonArray("cloudantNoSQLDB");
+		if (cloudantObjectArray == null) {
+			return useEnv();
+		}
 		JsonObject cloudantObject = cloudantObjectArray.getJsonObject(0);
 		JsonObject cloudantCredentials = cloudantObject.getJsonObject("credentials");
 		JsonString cloudantUsername = cloudantCredentials.getJsonString("username");
