@@ -238,6 +238,7 @@
                                 </goals>
                                 <configuration>
                                     <outputDirectory>${basedir}/src/main/static</outputDirectory>
+                                    <overwrite>true</overwrite>
                                     <resources>
                                         <resource>
                                             <directory>src/main/start/static</directory>
