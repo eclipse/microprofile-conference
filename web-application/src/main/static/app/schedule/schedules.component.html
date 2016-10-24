@@ -1,10 +1,12 @@
 <h3>{{title}}</h3>
-<div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action"
-       *ngFor="let schedule of schedules"
-       [class.selected]="schedule === selectedSchedule"
-       (click)="onSelect(schedule)">
-        <span class="badge">Session: {{schedule.sessionId}}</span>, Venue: {{schedule.venue}}, Date: {{schedule.date}}, StartTime: {{schedule.startTime}}
-    </a>
-</div>
-<schedule [schedule]="selectedSchedule"></schedule>
+<!--<div class="list-group">-->
+    <!--<a href="#" class="list-group-item list-group-item-action"-->
+       <!--*ngFor="let schedule of schedules"-->
+       <!--[class.selected]="schedule === selectedSchedule"-->
+       <!--(click)="onSelect(schedule)">-->
+        <!--<span class="badge">Session: {{schedule.sessionId}}</span>, Venue: {{schedule.venue}}, Date: {{schedule.date}}, StartTime: {{schedule.startTime}}-->
+    <!--</a>-->
+<!--</div>-->
+<!--<schedule [schedule]="selectedSchedule"></schedule>-->
+
+<schedules [events]="events"></schedules>

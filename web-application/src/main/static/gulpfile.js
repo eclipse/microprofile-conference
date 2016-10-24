@@ -23,17 +23,15 @@ const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
 const cleanCSS = require('gulp-clean-css');
 const concat = require('gulp-concat');
+const debug = require('gulp-debug');
 const del = require('del');
 const gulpsync = require('gulp-sync')(gulp);
-const jade = require('gulp-pug');
 const sass = require('gulp-sass');
 const es = require('event-stream');
 const autoprefixer = require('gulp-autoprefixer');
 const KarmaServer = require('karma').Server;
-const angularTemplateCache = require('gulp-angular-templatecache');
 const gutil = require('gulp-util');
-const tscConfig = require('./tsconfig.json');
-const tsProject = ts.createProject('./tsconfig.json');
+const tsProject = ts.createProject('tsconfig.json', {});
 const babel = require('gulp-babel');
 const fs = require('fs');
 
@@ -77,9 +75,11 @@ gulp.task('lint-ts', function () {
 });
 
 gulp.task('compile-ts', function () {
+
     return tsProject.src()
+        .pipe(debug({title: 'input'}))
         .pipe(sourcemaps.init())
-        .pipe(ts(tscConfig.compilerOptions))
+        .pipe(tsProject())
         .pipe(babel({
             presets: ['es2015']
         }))
@@ -104,6 +104,7 @@ gulp.task('js-third-party', function () {
         './node_modules/jquery-easing/dist/jquery.easing.1.3.umd.min.js',
         './node_modules/bootstrap/dist/js/bootstrap.min.js',
         './node_modules/tether/dist/js/tether.min.js',
+        './node_modules/primeng/components/schedule/schedule.js',
         // angular2
         './node_modules/@angular/core/bundles/core.umd.js',
         './node_modules/@angular/common/bundles/common.umd.js',

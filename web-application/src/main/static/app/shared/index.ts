@@ -1,1 +1,1 @@
-export { EndpointsService } from './endpoints.service.ts';
+export { EndpointsService } from './endpoints.service';
