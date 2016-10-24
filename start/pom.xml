@@ -29,8 +29,30 @@
 
     <artifactId>microservice-start</artifactId>
     <name>Conference :: Start</name>
-
+    
     <profiles>
+    	<profile>
+    		<id>windowsExtensions</id>
+    		<activation>
+      			<os>
+        			<family>Windows</family>
+      			</os>
+    		</activation>
+    		<properties>
+      			<command.extension>.cmd</command.extension>
+    		</properties>
+    	</profile>
+    	<profile>
+    		<id>nonWindowsExtensions</id>
+    		<activation>
+      			<os>
+        			<family>!Windows</family>
+      			</os>
+    		</activation>
+    		<properties>
+      			<command.extension></command.extension>
+    		</properties>
+    	</profile>
         <profile>
             <id>start</id>
             <build>
@@ -46,7 +68,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>mvn</executable>
+                                    <executable>mvn${command.extension}</executable>
                                     <workingDirectory>../microservice-speaker/microservice-speaker-web</workingDirectory>
                                     <arguments>
                                         <argument>tomee:exec</argument>
@@ -128,7 +150,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>npm</executable>
+                                    <executable>npm${command.extension}</executable>
                                     <workingDirectory>../web-application/src/main/static</workingDirectory>
                                     <arguments>
                                         <argument>run</argument>
