@@ -95,7 +95,7 @@ cd microservice-speaker-web
 
 mvn clean package tomee:exec -DskipTests
 
-java -DadditionalSystemProperties=”-Dport.http=9191 -Dport.ajp=9292 -Dport.shutdown=9393” -jar target/microservice-speaker-web-exec.jar
+java -DadditionalSystemProperties="-Dport.http=9191 -Dport.ajp=9292 -Dport.shutdown=9393" -jar target/microservice-speaker-web-exec.jar
 ----
 
 === microservice-vote
