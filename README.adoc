@@ -16,6 +16,22 @@ The application consists of several Microservices and a Web-Application managing
 * Micro Profile
 * JAX-RS 2.0 / JSON-P 1.0 / CDI 1.1
 
+== Quickstart - Run all services and UI in separate runtimes
+
+This will run each service in the runtime container that its setup for and the UI in a Node.js server to interact with them.
+
+Build, package and run all services and the UI:
+
+----
+mvn clean package -Pstart
+----
+
+Run all services and the UI:
+
+----
+mvn package -Pstart -pl :microservice-start
+----
+
 == Development Build
 
 ----
@@ -25,7 +41,11 @@ mvn clean install -DskipTests
 * Build the projects using Maven (`mvn clean install`) or (`mvn -fn clean install`) to skip over failed tests.
 * To get the technical documentation, just `mvn clean generate-resources` under the `docs` directory. You will get a PDF and HTML version of the documentation under `docs/target/generated-docs`
 
-== Run Services
+== Development Tests
+
+mvn clean test
+
+== Run Individual Services
 
 Each service can run on any container (this is the Microprofile guarantee),
 but the service projects have been written by vendors to use their container.
@@ -80,7 +100,6 @@ java -jar target/microservice-session-swarm.jar [-D<OPTION>]
 | 0
 |===
 
-
 For a full set of configuration options please see link:https://wildfly-swarm.gitbooks.io/wildfly-swarm-users-guide/content/[the Wildfly Swarm Userguide]
 
 === microservice-speaker
@@ -116,7 +135,7 @@ By default the microservice will start on port 9130. To set it to a different po
 -DtestServerHttpPort=9080 -DtestServerHttpsPort=9443
 ```
 
-=== Run the UI Web Application
+=== Web Application (UI)
 
 This starts the UI app and all services running in an embedded container.
 The landing page is http://localhost:8080
@@ -135,26 +154,6 @@ $ mvn frontend:gulp
 ----
 
 Open a browser at http://localhost:8080/
-
-=== Run all services and UI in separate runtimes
-
-This will run each service in the runtime container that its setup for and the UI in a Node.js server to interact with them.
-
-Build, package and run all services and the UI:
-
-----
-mvn clean package -Pstart
-----
-
-Run all services and the UI:
-
-----
-mvn package -Pstart -pl :microservice-start
-----
-
-== Tests
-
-mvn clean test
 
 == Common problems/bugs
 
@@ -177,7 +176,7 @@ npm install typings --global
 typings install --global
 ----
 
-== Access to staging/beta/production
+== Access to canonical source code
 
 * https://github.com/microprofile/microprofile-conference
 
@@ -187,6 +186,7 @@ This application is a collaborative demonstration application by:
 
 * WebSphere Liberty
 * London Java Community
+* SouJava
 * Red Hat
 * Tomitribe
 * Payara
