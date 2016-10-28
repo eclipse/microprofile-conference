@@ -39,8 +39,8 @@
         <warVersion>1.0.0-SNAPSHOT</warVersion>
         <!--This is set in the ibm-web-ext.xml file -->
         <warContext>vote</warContext>
-        <package.file>${project.build.directory}/${app.name}.zip</package.file>
-        <packaging.type>usr</packaging.type>
+        <package.file>${project.build.directory}/${app.name}.jar</package.file>
+        <packaging.type>runnable</packaging.type>
         <app.name>microprofile-vote</app.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -59,13 +59,11 @@
 
     <profiles>
         <profile>
-            <id>runnable</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+            <id>createZip</id>
+			<!-- Create a zip file containing app and server rather than a runnable jar -->
             <properties>
-                <package.file>${project.build.directory}/${app.name}.jar</package.file>
-                <packaging.type>runnable</packaging.type>
+                <package.file>${project.build.directory}/${app.name}.zip</package.file>
+                <packaging.type>usr</packaging.type>
             </properties>
         </profile>
         <profile>
@@ -107,7 +105,7 @@
     </profiles>
 
     <dependencies>
-    <dependency>
+        <dependency>
             <groupId>net.wasdev.wlp.starters.microprofile</groupId>
             <artifactId>provided-pom</artifactId>
             <version>0.0.1-SNAPSHOT</version>
@@ -238,20 +236,6 @@
                     <reportsDirectory>${project.build.directory}/test-reports/fvt</reportsDirectory>
                 </configuration>
             </plugin>
-            <!-- Enable liberty-maven plugin -->
-            <plugin>
-                <groupId>net.wasdev.wlp.maven.plugins</groupId>
-                <artifactId>liberty-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>install-liberty</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>install-server</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -295,6 +279,27 @@
                             </resource>
                           </resources>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Enable liberty-maven plugin -->
+            <plugin>
+                <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>install-liberty</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>install-server</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>package-app</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package-server</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
