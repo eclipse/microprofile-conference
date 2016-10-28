@@ -139,7 +139,7 @@
                                     <workingDirectory>../microservice-vote/</workingDirectory>
                                     <arguments>
                                         <argument>-jar</argument>
-                                        <argument>vote-service-wlpcfg/target/libertyProject.jar</argument>
+                                        <argument>target/libertyProject.jar</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
