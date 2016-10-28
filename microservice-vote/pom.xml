@@ -84,16 +84,6 @@
                     <plugin>
                         <groupId>net.wasdev.wlp.maven.plugins</groupId>
                         <artifactId>liberty-maven-plugin</artifactId>
-                        <configuration>
-                            <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
-                            <configFile>src/main/liberty/config/server.xml</configFile>
-                            <packageFile>${package.file}</packageFile>
-                            <include>${packaging.type}</include>
-                            <bootstrapProperties>
-                                <default.http.port>${testServerHttpPort}</default.http.port>
-                                <default.https.port>${testServerHttpsPort}</default.https.port>
-                            </bootstrapProperties>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>start-server</id>
@@ -132,30 +122,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.json</groupId>
-            <artifactId>javax.json-api</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <version>1.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
            <groupId>javax.annotation</groupId>
            <artifactId>javax.annotation-api</artifactId>
            <version>1.2</version>
@@ -166,12 +132,6 @@
            <artifactId>jersey-common</artifactId>
            <version>2.23.2</version>
            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.microprofile.showcase</groupId>
-            <artifactId>${warName}</artifactId>
-            <version>${warVersion}</version>
-            <type>war</type>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -185,13 +145,6 @@
             <version>3.1.1</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>
-            <groupId>io.microprofile.showcase</groupId>
-            <artifactId>${warName}</artifactId>
-            <version>${warVersion}</version>
-            <classifier>classes</classifier>
-            <scope>test</scope>
-        </dependency>-->
     </dependencies>
 
     <build>
@@ -210,6 +163,14 @@
                             <version>16.0.0.3</version>
                             <type>zip</type>
                         </assemblyArtifact>
+                        <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
+                        <configFile>src/main/liberty/config/server.xml</configFile>
+                        <packageFile>${package.file}</packageFile>
+                        <include>${packaging.type}</include>
+                        <bootstrapProperties>
+                            <default.http.port>${testServerHttpPort}</default.http.port>
+                            <default.https.port>${testServerHttpsPort}</default.https.port>
+                        </bootstrapProperties>
                     </configuration>
                 </plugin>
             </plugins>
@@ -222,22 +183,9 @@
                 <version>2.6</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <!--<packagingExcludes>pom.xml</packagingExcludes>-->
+                    <packagingExcludes>pom.xml</packagingExcludes>
                 </configuration>
             </plugin>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <executions>
-                    <execution>
-                        <id>compile-test</id>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -294,16 +242,6 @@
             <plugin>
                 <groupId>net.wasdev.wlp.maven.plugins</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <configuration>
-                    <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
-                    <configFile>src/main/liberty/config/server.xml</configFile>
-                    <packageFile>${package.file}</packageFile>
-                    <include>${packaging.type}</include>
-                    <bootstrapProperties>
-                        <default.http.port>${testServerHttpPort}</default.http.port>
-                        <default.https.port>${testServerHttpsPort}</default.https.port>
-                    </bootstrapProperties>
-                </configuration>
                 <executions>
                     <execution>
                         <id>install-liberty</id>
