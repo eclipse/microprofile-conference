@@ -20,7 +20,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <packaging>war</packaging>
 
     <parent>
         <artifactId>microservice-speaker</artifactId>
@@ -31,6 +30,63 @@
     <artifactId>microservice-speaker-web</artifactId>
     <name>Conference :: Speaker :: Web</name>
     <description>The Speaker microservice resource</description>
+    <packaging>war</packaging>
+
+    <properties>
+        <service.name>${project.artifactId}</service.name>
+        <service.name>${project.artifactId}</service.name>
+        <service.port>8080</service.port>
+        <docker.user>example</docker.user>
+        <icon>src/main/resources/tomee.ico</icon>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>fabric8</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>fabric8-maven-plugin</artifactId>
+                        <version>3.1.72</version>
+                        <configuration>
+                            <mode>kubernetes</mode>
+                            <images>
+                                <image>
+                                    <name>${docker.user}/${project.artifactId}:${project.version}</name>
+                                    <build>
+                                        <from>tomee:8-jdk-7.0.1-plus</from>
+                                        <assembly>
+                                            <!--<basedir>/opt/jboss/wildfly/standalone/deployments</basedir>-->
+                                            <descriptorRef>artifact</descriptorRef>
+                                        </assembly>
+                                    </build>
+                                    <watch>
+                                        <interval>5000</interval>
+                                    </watch>
+                                </image>
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>resource</goal>
+                                    <goal>build</goal>
+                                    <!--<goal>deploy</goal>-->
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
+    </profiles>
 
     <build>
         <finalName>${project.artifactId}</finalName>

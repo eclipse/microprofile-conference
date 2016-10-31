@@ -1,0 +1,8 @@
+
+metadata:
+  name: ${service.name}
+spec:
+  to:
+    kind: Service
+    name: ${service.name}
+
