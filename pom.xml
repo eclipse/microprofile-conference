@@ -106,7 +106,7 @@
         <version.jackson>2.8.2</version.jackson>
 
         <!-- App servers -->
-        <version.wildfly-swarm>2016.9</version.wildfly-swarm>
+        <version.wildfly-swarm>2016.10.0</version.wildfly-swarm>
         <version.payara>4.1.1.163</version.payara>
         <version.tomee>7.0.1</version.tomee>
         <version.wildfly>10.0.0.Final</version.wildfly>

@@ -38,7 +38,6 @@
             <plugin>
                 <groupId>org.wildfly.swarm</groupId>
                 <artifactId>wildfly-swarm-plugin</artifactId>
-                <version>2016.10-SNAPSHOT</version>
             </plugin>
         </plugins>
     </build>

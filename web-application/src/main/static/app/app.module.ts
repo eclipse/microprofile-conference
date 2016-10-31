@@ -4,6 +4,7 @@ import {FormsModule} from "@angular/forms";
 import {HttpModule, JsonpModule } from "@angular/http";
 import {AppComponent} from "./app.component";
 import {AppRouting} from "./app.routing";
+import {ScheduleModule} from 'primeng/primeng';
 import {SpeakersComponent} from "./speaker/speakers.component";
 import {SpeakerComponent} from "./speaker/speaker.component";
 import {SpeakerService} from "./speaker/speaker.service";
@@ -28,6 +29,7 @@ import {SessionSpeakersComponent} from "./session/session.speakers.component";
         FormsModule,
         HttpModule,
         JsonpModule,
+        ScheduleModule,
         AppRouting
     ],
     declarations: [

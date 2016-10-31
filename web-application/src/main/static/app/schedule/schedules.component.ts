@@ -12,6 +12,7 @@ enableProdMode();
 })
 
 export class SchedulesComponent implements OnInit {
+
     title = 'Schedules';
     schedules: Schedule[];
     selectedSchedule: Schedule;

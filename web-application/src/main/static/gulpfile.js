@@ -38,7 +38,7 @@ const fs = require('fs');
 /**
  * Run all css & image tasks
  */
-gulp.task('css', gulpsync.sync(['images', 'css-build']));
+gulp.task('css', gulpsync.sync(['images', 'css-build', 'css-third-party']));
 
 /**
  * Copy images from assets to
@@ -64,6 +64,32 @@ gulp.task('css-concat', function () {
     return gulp.src(target + '/scss/*.css')
         .pipe(concat('bootstrap.min.css'))
         .pipe(gulp.dest(target + '/' + resources + '/assets/css/'))
+});
+
+gulp.task('css-third-party', function () {
+
+    var scripts = [
+        './node_modules/font-awesome/css/font-awesome.min.css',
+        './node_modules/primeng/resources/themes/ui-darkness/theme.css',
+        './node_modules/primeng/resources/primeng.min.css'
+    ];
+
+    var tasks = [];
+    var s;
+    for (s in scripts) {
+
+        var src = scripts[s];
+        var dest = target + '/' + resources + '/assets/css' + src.substr(1, src.lastIndexOf('/'));
+        var file = dest + src.substr(src.lastIndexOf('/') + 1);
+
+        try {
+            fs.accessSync(file, fs.F_OK);
+        } catch (e) {
+            tasks.push(buildTask(src, dest));
+        }
+    }
+
+    return es.concat(tasks);
 });
 
 gulp.task('js', gulpsync.sync(['compile-ts', 'js-third-party', 'js-bundles']));
@@ -104,7 +130,7 @@ gulp.task('js-third-party', function () {
         './node_modules/jquery-easing/dist/jquery.easing.1.3.umd.min.js',
         './node_modules/bootstrap/dist/js/bootstrap.min.js',
         './node_modules/tether/dist/js/tether.min.js',
-        './node_modules/primeng/components/schedule/schedule.js',
+        './node_modules/fullcalendar/dist/js/fullcalendar.min.js',
         // angular2
         './node_modules/@angular/core/bundles/core.umd.js',
         './node_modules/@angular/common/bundles/common.umd.js',
@@ -141,6 +167,10 @@ function buildTask(/*String*/src, /*String*/dest) {
 }
 
 gulp.task('js-bundles', function () {
+
+    var primeng = gulp.src([
+        './node_modules/primeng/**/*.js'
+    ], {base: './node_modules/primeng/'}).pipe(gulp.dest(target + '/' + resources + '/assets/js/node_modules/primeng'));
 
     var rxjs = gulp.src([
         './node_modules/rxjs/**/*.js'
