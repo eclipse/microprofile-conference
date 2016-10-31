@@ -1,19 +1,18 @@
 /*
- * (C) Copyright IBM Corporation 2016
+ * Copyright 2016 Microprofile.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.microprofile.showcase.vote.persistence.couch;
 
 import static io.microprofile.showcase.vote.utils.Debug.isDebugEnabled;
@@ -38,33 +37,38 @@ import javax.ws.rs.ext.Provider;
 @Produces(MediaType.APPLICATION_JSON)
 public class AllDocsProvider implements MessageBodyReader<AllDocs>, MessageBodyWriter<AllDocs> {
 
-	@Override
-	public boolean isReadable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
-		if (isDebugEnabled()) System.out.println("AP.isReadable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(AllDocs.class));
-		return clazz.equals(AllDocs.class);
-	}
+    @Override
+    public boolean isReadable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
+        if (isDebugEnabled())
+            System.out.println("AP.isReadable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> "
+                               + clazz.equals(AllDocs.class));
+        return clazz.equals(AllDocs.class);
+    }
 
-	@Override
-	public AllDocs readFrom(Class<AllDocs> clazz, Type type, Annotation[] annotations, MediaType mediaType,
-			MultivaluedMap<String, String> map, InputStream is) throws IOException, WebApplicationException {
-		return AllDocs.fromJSON(is);
-	}
-	
-	@Override
-	public long getSize(AllDocs attendee, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
-		if (isDebugEnabled()) System.out.println("AP.getSize() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType);
-		return 0;
-	}
+    @Override
+    public AllDocs readFrom(Class<AllDocs> clazz, Type type, Annotation[] annotations, MediaType mediaType,
+                            MultivaluedMap<String, String> map, InputStream is) throws IOException, WebApplicationException {
+        return AllDocs.fromJSON(is);
+    }
 
-	@Override
-	public boolean isWriteable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
-		if (isDebugEnabled()) System.out.println("AP.isWriteable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> " + clazz.equals(AllDocs.class));
-		return clazz.equals(AllDocs.class);
-	}
+    @Override
+    public long getSize(AllDocs attendee, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
+        if (isDebugEnabled())
+            System.out.println("AP.getSize() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType);
+        return 0;
+    }
 
-	@Override
-	public void writeTo(AllDocs CouchAllDocs, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
-			MultivaluedMap<String, Object> map, OutputStream os) throws IOException, WebApplicationException {
-		CouchAllDocs.toJSON(os);
-	}
+    @Override
+    public boolean isWriteable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
+        if (isDebugEnabled())
+            System.out.println("AP.isWriteable() clazz=" + clazz + " type=" + type + " annotations=" + annotations + " mediaType=" + mediaType + " ==> "
+                               + clazz.equals(AllDocs.class));
+        return clazz.equals(AllDocs.class);
+    }
+
+    @Override
+    public void writeTo(AllDocs CouchAllDocs, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
+                        MultivaluedMap<String, Object> map, OutputStream os) throws IOException, WebApplicationException {
+        CouchAllDocs.toJSON(os);
+    }
 }

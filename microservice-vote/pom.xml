@@ -195,7 +195,6 @@
                         <configuration>
                             <excludes>
                                 <exclude>**/it/**</exclude>
-                                <exclude>**/client/**</exclude>
                             </excludes>
                             <reportsDirectory>${project.build.directory}/test-reports/unit</reportsDirectory>
                         </configuration>
@@ -221,6 +220,7 @@
                             <systemPropertyVariables>
                                 <liberty.test.port>${testServerHttpPort}</liberty.test.port>
                                 <war.name>${warContext}</war.name>
+								<vote.debug>true</vote.debug>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
@@ -232,8 +232,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <summaryFile>${project.build.directory}/test-reports/fvt/failsafe-summary.xml</summaryFile>
-                    <reportsDirectory>${project.build.directory}/test-reports/fvt</reportsDirectory>
+                    <summaryFile>${project.build.directory}/test-reports/it/failsafe-summary.xml</summaryFile>
+                    <reportsDirectory>${project.build.directory}/test-reports/it</reportsDirectory>
                 </configuration>
             </plugin>
             <plugin>
