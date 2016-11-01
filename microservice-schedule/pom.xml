@@ -30,6 +30,14 @@
     <name>Conference :: Schedule</name>
     <packaging>war</packaging>
 
+    <properties>
+        <service.name>${project.artifactId}</service.name>
+        <service.name>${project.artifactId}</service.name>
+        <service.port>9191</service.port>
+        <docker.user>example</docker.user>
+        <icon>http://microprofile.io/app/images/logo.png</icon>
+    </properties>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
@@ -126,6 +134,51 @@
                     <scope>test</scope>
                 </dependency>
             </dependencies>
+        </profile>
+
+        <profile>
+            <id>fabric8</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <!--This plugin requires that you Docker environment variables are defined correctly, check them with:-->
+                        <!--docker-machine env-->
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>fabric8-maven-plugin</artifactId>
+                        <configuration>
+                            <mode>kubernetes</mode>
+                            <images>
+                                <image>
+                                    <name>${docker.user}/${project.artifactId}:${project.version}</name>
+                                    <build>
+                                        <from>TODO DOCKER IMAGE</from>
+                                        <assembly>
+                                            <basedir>${project.build.directory}/deployment</basedir>
+                                            <descriptorRef>artifact</descriptorRef>
+                                        </assembly>
+                                    </build>
+                                    <watch>
+                                        <interval>5000</interval>
+                                    </watch>
+                                </image>
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>resource</goal>
+                                    <goal>build</goal>
+                                    <!--<goal>deploy</goal>-->
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>

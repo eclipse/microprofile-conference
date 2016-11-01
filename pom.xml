@@ -94,6 +94,7 @@
         <version.site.plugin>3.5.1</version.site.plugin>
         <version.surefire.plugin>2.19.1</version.surefire.plugin>
         <version.war.plugin>2.6</version.war.plugin>
+        <version.fabric8.plugin>3.1.83</version.fabric8.plugin>
 
         <!-- Test -->
         <version.arquillian>1.1.11.Final</version.arquillian>
@@ -417,6 +418,11 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>license-maven-plugin</artifactId>
                     <version>${version.license.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>fabric8-maven-plugin</artifactId>
+                    <version>${version.fabric8.plugin}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

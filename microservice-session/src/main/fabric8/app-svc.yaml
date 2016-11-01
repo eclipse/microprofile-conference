@@ -1,0 +1,9 @@
+
+metadata:
+  name: ${service.name}
+  labels:
+    expose: true
+spec:
+  ports:
+  - port: ${service.port}
+    name: http

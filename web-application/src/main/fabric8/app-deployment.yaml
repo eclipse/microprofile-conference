@@ -1,0 +1,22 @@
+
+metadata:
+  name:  ${service.name}
+  annotations:
+    fabric8.io/iconUrl: >-
+      ${icon}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        project: ${project.artifactId}
+        version: ${project.version}
+      annotations:
+        fabric8.io/iconUrl: >-
+          {icon}
+    spec:
+      containers:
+      - name: ${service.name}
+        ports:
+        - containerPort: ${service.port}
+          name: http
