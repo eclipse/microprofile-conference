@@ -1,10 +1,10 @@
 <div *ngIf="schedule">
-    <h2>{{schedule.nameLast}} details!</h2>
+    <h2>{{schedule.id}} details!</h2>
     <div>
         <label>ID: </label>{{schedule.id}}
     </div>
     <div>
         <label>Surname: </label>
-        <input type="text" [(ngModel)]="schedule.nameLast" placeholder="nameLast">
+        <input type="text" [(ngModel)]="schedule.id" placeholder="nameLast">
     </div>
 </div>

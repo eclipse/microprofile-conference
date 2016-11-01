@@ -23,24 +23,22 @@ const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
 const cleanCSS = require('gulp-clean-css');
 const concat = require('gulp-concat');
+const debug = require('gulp-debug');
 const del = require('del');
 const gulpsync = require('gulp-sync')(gulp);
-const jade = require('gulp-pug');
 const sass = require('gulp-sass');
 const es = require('event-stream');
 const autoprefixer = require('gulp-autoprefixer');
 const KarmaServer = require('karma').Server;
-const angularTemplateCache = require('gulp-angular-templatecache');
 const gutil = require('gulp-util');
-const tscConfig = require('./tsconfig.json');
-const tsProject = ts.createProject('./tsconfig.json');
+const tsProject = ts.createProject('tsconfig.json', {});
 const babel = require('gulp-babel');
 const fs = require('fs');
 
 /**
  * Run all css & image tasks
  */
-gulp.task('css', gulpsync.sync(['images', 'css-build']));
+gulp.task('css', gulpsync.sync(['images', 'css-build', 'css-third-party']));
 
 /**
  * Copy images from assets to
@@ -68,6 +66,34 @@ gulp.task('css-concat', function () {
         .pipe(gulp.dest(target + '/' + resources + '/assets/css/'))
 });
 
+gulp.task('css-third-party', function () {
+
+    var scripts = [
+        './node_modules/fullcalendar/dist/fullcalendar.min.css',
+        './node_modules/font-awesome/css/font-awesome.min.css',
+        './node_modules/primeng/resources/themes/afternoon/theme.css',
+        './node_modules/primeng/resources/themes/afternoon/images/*.png',
+        './node_modules/primeng/resources/primeng.min.css'
+    ];
+
+    var tasks = [];
+    var s;
+    for (s in scripts) {
+
+        var src = scripts[s];
+        var dest = target + '/' + resources + '/assets/css' + src.substr(1, src.lastIndexOf('/'));
+        var file = dest + src.substr(src.lastIndexOf('/') + 1);
+
+        try {
+            fs.accessSync(file, fs.F_OK);
+        } catch (e) {
+            tasks.push(buildTask(src, dest));
+        }
+    }
+
+    return es.concat(tasks);
+});
+
 gulp.task('js', gulpsync.sync(['compile-ts', 'js-third-party', 'js-bundles']));
 
 gulp.task('lint-ts', function () {
@@ -77,9 +103,11 @@ gulp.task('lint-ts', function () {
 });
 
 gulp.task('compile-ts', function () {
+
     return tsProject.src()
+        .pipe(debug({title: 'input'}))
         .pipe(sourcemaps.init())
-        .pipe(ts(tscConfig.compilerOptions))
+        .pipe(tsProject())
         .pipe(babel({
             presets: ['es2015']
         }))
@@ -102,8 +130,10 @@ gulp.task('js-third-party', function () {
         './node_modules/respond.js/dest/respond.min.js',
         './node_modules/jquery/dist/jquery.min.js',
         './node_modules/jquery-easing/dist/jquery.easing.1.3.umd.min.js',
+        './node_modules/moment/min/moment.min.js',
         './node_modules/bootstrap/dist/js/bootstrap.min.js',
         './node_modules/tether/dist/js/tether.min.js',
+        './node_modules/fullcalendar/dist/fullcalendar.min.js',
         // angular2
         './node_modules/@angular/core/bundles/core.umd.js',
         './node_modules/@angular/common/bundles/common.umd.js',
@@ -126,6 +156,7 @@ gulp.task('js-third-party', function () {
 
         try {
             fs.accessSync(file, fs.F_OK);
+            console.log("Synchronized: " + src + " to " + dest);
         } catch (e) {
             tasks.push(buildTask(src, dest));
         }
@@ -135,11 +166,15 @@ gulp.task('js-third-party', function () {
 });
 
 function buildTask(/*String*/src, /*String*/dest) {
-    console.log("Copied: " + src);
+    console.log("Copied: " + src + " to " + dest);
     return gulp.src(src).pipe(gulp.dest(dest));
 }
 
 gulp.task('js-bundles', function () {
+
+    var primeng = gulp.src([
+        './node_modules/primeng/**/*.js'
+    ], {base: './node_modules/primeng/'}).pipe(gulp.dest(target + '/' + resources + '/assets/js/node_modules/primeng'));
 
     var rxjs = gulp.src([
         './node_modules/rxjs/**/*.js'

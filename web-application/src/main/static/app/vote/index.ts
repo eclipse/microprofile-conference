@@ -1,4 +1,4 @@
-export {VotesComponent} from './votes.component.ts';
-export {VoteComponent} from './vote.component.ts';
-export {VoteService} from './vote.service.ts';
+export {VotesComponent} from './votes.component';
+export {VoteComponent} from './vote.component';
+export {VoteService} from './vote.service';
 export {Rating} from "./rating";

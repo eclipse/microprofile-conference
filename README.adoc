@@ -10,6 +10,26 @@ The application consists of several Microservices and a Web-Application managing
 * `microservice-vote` : Votes for each session
 * `web-application` : Frontend Angular2 | Bootstrap4
 
+The WebApp is a direct subscriber to the individual Microservices.
+This means that there is no aggregator / middle-man application.
+The WebApp itself provides a known relative EndPoint microservice that enables the lookup of
+URLs to the other services.
+
+If you would like to participate in the community effort to advance EE then by all
+means feel free to join us on the following sites:
+
+http://microprofile.io/[Microprofile.io]
+- The community landing site.
+
+https://groups.google.com/forum/#!forum/microprofile[Google+ Microprofile groups]
+- Public discussion lists (We do not have private lists).
+
+https://waffle.io/microprofile/microprofile-conference/join[Kanban board]
+- A nice Kanban integration for our GitHub issues.
+
+https://github.com/microprofile[All source code]
+- https://www.apache.org/licenses/LICENSE-2.0[Apache Licence V2] project OSS code.
+
 == Technologies
 
 * Java
@@ -39,7 +59,8 @@ mvn clean install -DskipTests
 ----
 
 * Build the projects using Maven (`mvn clean install`) or (`mvn -fn clean install`) to skip over failed tests.
-* To get the technical documentation, just `mvn clean generate-resources` under the `docs` directory. You will get a PDF and HTML version of the documentation under `docs/target/generated-docs`
+* To get the technical documentation, just `mvn clean generate-resources` under the `docs` directory.
+You will find a PDF and HTML version of the documentation under `docs/target/generated-docs`
 
 == Development Tests
 
@@ -190,3 +211,4 @@ This application is a collaborative demonstration application by:
 * Red Hat
 * Tomitribe
 * Payara
+
