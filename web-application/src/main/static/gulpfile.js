@@ -69,8 +69,10 @@ gulp.task('css-concat', function () {
 gulp.task('css-third-party', function () {
 
     var scripts = [
+        './node_modules/fullcalendar/dist/fullcalendar.min.css',
         './node_modules/font-awesome/css/font-awesome.min.css',
-        './node_modules/primeng/resources/themes/ui-darkness/theme.css',
+        './node_modules/primeng/resources/themes/afternoon/theme.css',
+        './node_modules/primeng/resources/themes/afternoon/images/*.png',
         './node_modules/primeng/resources/primeng.min.css'
     ];
 
@@ -128,9 +130,10 @@ gulp.task('js-third-party', function () {
         './node_modules/respond.js/dest/respond.min.js',
         './node_modules/jquery/dist/jquery.min.js',
         './node_modules/jquery-easing/dist/jquery.easing.1.3.umd.min.js',
+        './node_modules/moment/min/moment.min.js',
         './node_modules/bootstrap/dist/js/bootstrap.min.js',
         './node_modules/tether/dist/js/tether.min.js',
-        './node_modules/fullcalendar/dist/js/fullcalendar.min.js',
+        './node_modules/fullcalendar/dist/fullcalendar.min.js',
         // angular2
         './node_modules/@angular/core/bundles/core.umd.js',
         './node_modules/@angular/common/bundles/common.umd.js',
@@ -153,6 +156,7 @@ gulp.task('js-third-party', function () {
 
         try {
             fs.accessSync(file, fs.F_OK);
+            console.log("Synchronized: " + src + " to " + dest);
         } catch (e) {
             tasks.push(buildTask(src, dest));
         }
@@ -162,7 +166,7 @@ gulp.task('js-third-party', function () {
 });
 
 function buildTask(/*String*/src, /*String*/dest) {
-    console.log("Copied: " + src);
+    console.log("Copied: " + src + " to " + dest);
     return gulp.src(src).pipe(gulp.dest(dest));
 }
 

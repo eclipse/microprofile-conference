@@ -17,6 +17,7 @@ export class SchedulesComponent implements OnInit {
     schedules: Schedule[];
     selectedSchedule: Schedule;
     events: any[];
+    header: any;
 
     constructor(private router: Router, private scheduleService: ScheduleService) {
     }
@@ -27,28 +28,36 @@ export class SchedulesComponent implements OnInit {
             _self.getSchedules();
         });
 
+        //No header
+        this.header = false;
+
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth();
+        var day = d.getDay();
+
         this.events = [
             {
                 "title": "All Day Event",
-                "start": "2016-01-01"
+                "start": new Date(year, month, day).toISOString().substring(0, 10)
             },
             {
                 "title": "Long Event",
                 "start": "2016-01-07",
-                "end": "2016-01-10"
+                "end": new Date(year, month, day++).toISOString().substring(0, 10)
             },
             {
                 "title": "Repeating Event",
-                "start": "2016-01-09T16:00:00"
+                "start": new Date(year, month, day++).toISOString().substring(0, 10) + "2016-11-03T16:00:00"
             },
             {
                 "title": "Repeating Event",
-                "start": "2016-01-16T16:00:00"
+                "start": new Date(year, month, day++).toISOString().substring(0, 10) + "2016-11-14T16:00:00"
             },
             {
                 "title": "Conference",
-                "start": "2016-01-11",
-                "end": "2016-01-13"
+                "start": new Date(year, month, day++).toISOString().substring(0, 10),
+                "end": new Date(year, month, day++).toISOString().substring(0, 10)
             }
         ];
     }
