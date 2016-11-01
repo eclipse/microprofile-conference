@@ -58,10 +58,10 @@ public class SessionVoteTest {
     @Test
     public void testRegisterAttendee() {
         // API method under test:
-        Attendee johnDoe = sessionVote.registerAttendee("John Doe");
+        Attendee johnDoe = sessionVote.registerAttendee(new Attendee("John Doe"));
         assertEquals("Unexpected name returned for registered attendee", "John Doe", johnDoe.getName());
 
-        Attendee janeDoe = sessionVote.registerAttendee("Jane Doe");
+        Attendee janeDoe = sessionVote.registerAttendee(new Attendee("Jane Doe"));
         assertEquals("Unexpected name returned for second registered attendee", "Jane Doe", janeDoe.getName());
         assertNotEquals("Both attendees have the same ID", johnDoe.getId(), janeDoe.getId());
 
@@ -74,7 +74,7 @@ public class SessionVoteTest {
 
     @Test
     public void testUpdateAttendee() {
-        Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
+        Attendee jonathanDoe = sessionVote.registerAttendee(new Attendee("Jonathan Doe"));
         String id = jonathanDoe.getId();
         Attendee jonDoe = new Attendee(id, "Jon Doe");
 
@@ -91,7 +91,7 @@ public class SessionVoteTest {
 
     @Test
     public void testGetAttendee() {
-        Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
+        Attendee jonathanDoe = sessionVote.registerAttendee(new Attendee("Jonathan Doe"));
         String id = jonathanDoe.getId();
 
         // API method under test:
@@ -107,7 +107,7 @@ public class SessionVoteTest {
 
     @Test
     public void testDeleteAttendee() {
-        Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
+        Attendee jonathanDoe = sessionVote.registerAttendee(new Attendee("Jonathan Doe"));
         String id = jonathanDoe.getId();
 
         Attendee attendee = sessionVote.getAttendee(id);
@@ -131,7 +131,7 @@ public class SessionVoteTest {
 
     @Test
     public void testRateSession() {
-        Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
+        Attendee jonathanDoe = sessionVote.registerAttendee(new Attendee("Jonathan Doe"));
         String id = jonathanDoe.getId();
         SessionRating sessionRating = new SessionRating("session1", id, 5);
 
@@ -148,12 +148,12 @@ public class SessionVoteTest {
 
     @Test
     public void testUpdateRating() {
-        Attendee jonathanDoe = sessionVote.registerAttendee("Jonathan Doe");
+        Attendee jonathanDoe = sessionVote.registerAttendee(new Attendee("Jonathan Doe"));
         String id = jonathanDoe.getId();
         SessionRating originalRating = new SessionRating("session1", id, 5);
         originalRating = sessionVote.rateSession(originalRating);
 
-        Attendee jonathanDoe2 = sessionVote.registerAttendee("Jonathan Doe2");
+        Attendee jonathanDoe2 = sessionVote.registerAttendee(new Attendee("Jonathan Doe2"));
         String id2 = jonathanDoe2.getId();
 
         SessionRating updatedRating = new SessionRating(originalRating.getId(), originalRating.getRevision(), "session2", id2, 7);
@@ -172,8 +172,8 @@ public class SessionVoteTest {
     @Test
     public void testDeleteRating() {
 
-        Attendee attendee1 = sessionVote.registerAttendee("Jon Don");
-        Attendee attendee2 = sessionVote.registerAttendee("Do Doo");
+        Attendee attendee1 = sessionVote.registerAttendee(new Attendee("Jon Don"));
+        Attendee attendee2 = sessionVote.registerAttendee(new Attendee("Do Doo"));
         SessionRating sessionRatingToDelete = new SessionRating("session1", attendee1.getId(), 5);
         sessionRatingToDelete = sessionVote.rateSession(sessionRatingToDelete);
         String ratingId = sessionRatingToDelete.getId();
@@ -201,10 +201,10 @@ public class SessionVoteTest {
     @Test
     public void testAllSessionVotes() {
 
-        Attendee attendee1 = sessionVote.registerAttendee("Jon Don");
-        Attendee attendee2 = sessionVote.registerAttendee("Do Doo");
-        Attendee attendee3 = sessionVote.registerAttendee("Jo Do");
-        Attendee attendee4 = sessionVote.registerAttendee("Bo Jo");
+        Attendee attendee1 = sessionVote.registerAttendee(new Attendee("Jon Don"));
+        Attendee attendee2 = sessionVote.registerAttendee(new Attendee("Do Doo"));
+        Attendee attendee3 = sessionVote.registerAttendee(new Attendee("Jo Do"));
+        Attendee attendee4 = sessionVote.registerAttendee(new Attendee("Bo Jo"));
 
         // submit 4 votes - 3 for session1, and 1 for session2
         SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", attendee1.getId(), 3));
@@ -223,10 +223,10 @@ public class SessionVoteTest {
 
     @Test
     public void testSessionRatingAverage() {
-        Attendee attendee1 = sessionVote.registerAttendee("Jon Don");
-        Attendee attendee2 = sessionVote.registerAttendee("Do Doo");
-        Attendee attendee3 = sessionVote.registerAttendee("Jo Do");
-        Attendee attendee4 = sessionVote.registerAttendee("Bo Jo");
+        Attendee attendee1 = sessionVote.registerAttendee(new Attendee("Jon Don"));
+        Attendee attendee2 = sessionVote.registerAttendee(new Attendee("Do Doo"));
+        Attendee attendee3 = sessionVote.registerAttendee(new Attendee("Jo Do"));
+        Attendee attendee4 = sessionVote.registerAttendee(new Attendee("Bo Jo"));
 
         // submit 4 votes - 3 for session1, and 1 for session2
         SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", attendee1.getId(), 3));
@@ -242,8 +242,8 @@ public class SessionVoteTest {
 
     @Test
     public void testVotesByAttendee() {
-        Attendee attendee1 = sessionVote.registerAttendee("John Doe");
-        Attendee attendee2 = sessionVote.registerAttendee("Jane Doe");
+        Attendee attendee1 = sessionVote.registerAttendee(new Attendee("John Doe"));
+        Attendee attendee2 = sessionVote.registerAttendee(new Attendee("Jane Doe"));
 
         // submit 4 votes - 3 for attendee1, and 1 for attendee2
         SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", attendee1.getId(), 3));

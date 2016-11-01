@@ -60,7 +60,7 @@
     <profiles>
         <profile>
             <id>createZip</id>
-			<!-- Create a zip file containing app and server rather than a runnable jar -->
+            <!-- Create a zip file containing app and server rather than a runnable jar -->
             <properties>
                 <package.file>${project.build.directory}/${app.name}.zip</package.file>
                 <packaging.type>usr</packaging.type>
@@ -141,6 +141,12 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-client</artifactId>
             <version>3.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

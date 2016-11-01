@@ -85,8 +85,8 @@ public class SessionVote {
     @Path("/attendee")
     @Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-    public Attendee registerAttendee(String name) {
-        Attendee attendee = selectedAttendeeDAO.createNewAttendee(new Attendee(name));
+    public Attendee registerAttendee(Attendee name) {
+        Attendee attendee = selectedAttendeeDAO.createNewAttendee(name);
         return attendee;
     }
 

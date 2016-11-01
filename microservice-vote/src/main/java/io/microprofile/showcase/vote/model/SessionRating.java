@@ -80,4 +80,11 @@ public class SessionRating {
         }
         return false;
     }
+    
+    @Override
+    public String toString() {
+        String result = "{\"id\":" + this.id + ",\"revision\":" + this.revision + ",\"session\":" + this.session +
+                ",\"attendeeId\":" + this.attendeeId + ",\"rating\":" + this.rating + "}";
+        return result;
+    }
 }

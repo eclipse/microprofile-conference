@@ -90,22 +90,7 @@ public class AttendeeProvider implements MessageBodyReader<Attendee>, MessageBod
     public static Attendee fromJSON(InputStream is) {
         JsonReader rdr = null;
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String line;
-			StringBuilder sb = new StringBuilder();
-            try {
-                line = br.readLine();
-                while (line != null) {
-                    System.out.println("Hello Kate:" + line);
-					sb.append(line);
-                    line = br.readLine();
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-			InputStream newIs = new ByteArrayInputStream(sb.toString().getBytes());
-            rdr = Json.createReader(newIs);
+            rdr = Json.createReader(is);
             JsonObject attendeeJson = rdr.readObject();
             Attendee attendee = fromJSON(attendeeJson);
             return attendee;
@@ -113,6 +98,7 @@ public class AttendeeProvider implements MessageBodyReader<Attendee>, MessageBod
             if (rdr != null) {
                 rdr.close();
             }
+
         }
 
     }

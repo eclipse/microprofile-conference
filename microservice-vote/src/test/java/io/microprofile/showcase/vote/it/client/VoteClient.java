@@ -19,11 +19,13 @@ package io.microprofile.showcase.vote.it.client;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -31,13 +33,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.microprofile.showcase.vote.api.AttendeeListProvider;
 import io.microprofile.showcase.vote.api.AttendeeProvider;
 import io.microprofile.showcase.vote.api.SessionRatingListProvider;
 import io.microprofile.showcase.vote.api.SessionRatingProvider;
 import io.microprofile.showcase.vote.model.Attendee;
 import io.microprofile.showcase.vote.model.SessionRating;
-
-import org.junit.Test;
 
 public class VoteClient {
 
@@ -49,67 +54,116 @@ public class VoteClient {
     private static String AVG_RATE_BY_SESSION_URL = ROOT_URL + "/averageRatingBySession";
     private static String RATE_BY_ATTENDEE_URL = ROOT_URL + "/ratingsByAttendee";
 
-    private final Client client;
+    private final Client attendeeClient;
+    private final Client ratingClient;
 
     public VoteClient() {
-        client = ClientBuilder.newBuilder().build();
-        client.register(AttendeeProvider.class);
-        client.register(SessionRatingProvider.class);
-        client.register(SessionRatingListProvider.class);
+        attendeeClient = ClientBuilder.newBuilder().build();
+        attendeeClient.register(AttendeeProvider.class);
+        attendeeClient.register(AttendeeListProvider.class);
+        ratingClient = ClientBuilder.newBuilder().build();
+        ratingClient.register(SessionRatingProvider.class);
+        ratingClient.register(SessionRatingListProvider.class);
+    }
+    
+    @Before
+    public void clearDatabase() {
+        deleteAllAttendees();
+        deleteAllRatings();
+    }
+    
+    private void deleteAllAttendees() {
+        UriBuilder uriBuilder = UriBuilder.fromPath(ATTENDEE_URL);
+        Response response = attendeeClient.target(uriBuilder).request(MediaType.APPLICATION_JSON).get();
+        @SuppressWarnings("unchecked")
+        List<Attendee> attendees = response.readEntity(List.class);
+        List<String> attendeeIds = new ArrayList<String>();
+        for (Attendee attendee : attendees) {
+            attendeeIds.add(attendee.getId());
+        }
+        for (String id : attendeeIds) {
+            deleteAttendee(id);
+        }
+    }
+    
+    private void deleteAttendee(String attendeeId) {
+        UriBuilder uriBuilder = UriBuilder.fromPath(ATTENDEE_URL + "/" + attendeeId);
+        Response response = attendeeClient.target(uriBuilder).request(MediaType.APPLICATION_JSON).delete();
+        assertEquals("Deletion of attendee " + attendeeId + " failed.", 204, response.getStatus());
+    }
+    
+    private void deleteAllRatings() {
+        UriBuilder uriBuilder = UriBuilder.fromPath(RATE_URL);
+        Response response = ratingClient.target(uriBuilder).request(MediaType.APPLICATION_JSON).get();
+        @SuppressWarnings("unchecked")
+        List<SessionRating> ratings = response.readEntity(List.class);
+        List<String> ratingIds = new ArrayList<String>();
+        for (SessionRating rating : ratings) {
+            ratingIds.add(rating.getId());
+        }
+        for (String id : ratingIds) {
+            deleteRating(id);
+        }
+    }
+    
+    private void deleteRating(String ratingId) {
+        UriBuilder uriBuilder = UriBuilder.fromPath(RATE_URL + "/" + ratingId);
+        Response response = ratingClient.target(uriBuilder).request(MediaType.APPLICATION_JSON).delete();
+        assertEquals("Deletion of attendee " + ratingId + " failed.", 204, response.getStatus());
     }
 
     private void checkResponseStatus(Response response) {
-        
-        assertEquals("Response status was " + response.getStatus() + " and response was " + response.readEntity(String.class), 200, response.getStatus());
+        assertEquals("Response status was " + response.getStatus(), 200, response.getStatus());
     }
 
     public Attendee registerAttendee(String name) {
         UriBuilder uriBuilder = UriBuilder.fromPath(ATTENDEE_URL);
-        Response r = client.target(uriBuilder).request(MediaType.APPLICATION_JSON).post(Entity.json(name));
+        JsonObject jsonName = Json.createObjectBuilder().add("name", name).build();
+        Response r = attendeeClient.target(uriBuilder).request(MediaType.APPLICATION_JSON).post(Entity.json(jsonName.toString()));
         checkResponseStatus(r);
         Attendee registeredAttendee = r.readEntity(Attendee.class);
         return registeredAttendee;
     }
 
     public Attendee updateAttendee(Attendee attendee) {
-        UriBuilder uriBuilder = UriBuilder.fromPath(ATTENDEE_URL);
-        Response r = client.target(uriBuilder).request(MediaType.APPLICATION_JSON).put(Entity.json(attendee));
+        UriBuilder uriBuilder = UriBuilder.fromPath(ATTENDEE_URL + "/" + attendee.getId());
+        Response r = attendeeClient.target(uriBuilder).request(MediaType.APPLICATION_JSON).put(Entity.json(attendee));
         Attendee updatedAttendee = r.readEntity(Attendee.class);
         return updatedAttendee;
     }
 
     public SessionRating rateSession(SessionRating rating) {
         UriBuilder uriBuilder = UriBuilder.fromPath(RATE_URL);
-        Response r = client.target(uriBuilder).request(MediaType.APPLICATION_JSON).post(Entity.json(rating));
+        Response r = ratingClient.target(uriBuilder).request(MediaType.APPLICATION_JSON).post(Entity.json(rating));
         SessionRating updatedRating = r.readEntity(SessionRating.class);
         return updatedRating;
     }
 
     public SessionRating updateRating(SessionRating rating) {
-        UriBuilder uriBuilder = UriBuilder.fromPath(RATE_URL);
-        Response r = client.target(uriBuilder).request(MediaType.APPLICATION_JSON).put(Entity.json(rating));
+        UriBuilder uriBuilder = UriBuilder.fromPath(RATE_URL + "/" + rating.getId());
+        Response r = ratingClient.target(uriBuilder).request(MediaType.APPLICATION_JSON).put(Entity.json(rating));
         SessionRating updatedRating = r.readEntity(SessionRating.class);
         return updatedRating;
     }
 
     public List<SessionRating> listAllRatingsBySession(String session) throws IOException {
-        UriBuilder uriBuilder = UriBuilder.fromPath(RATE_BY_SESSION_URL);
-        Response r = client.target(uriBuilder).request(MediaType.APPLICATION_JSON).post(Entity.json(session));
+        UriBuilder uriBuilder = UriBuilder.fromPath(RATE_BY_SESSION_URL).queryParam("sessionId", session);
+        Response r = ratingClient.target(uriBuilder).request(MediaType.APPLICATION_JSON).get();
         @SuppressWarnings("unchecked")
         List<SessionRating> ratings = r.readEntity(List.class);
         return ratings;
     }
 
     public double getAverageRatingsBySession(String session) throws IOException {
-        UriBuilder uriBuilder = UriBuilder.fromPath(AVG_RATE_BY_SESSION_URL);
-        Response r = client.target(uriBuilder).request().post(Entity.json(session));
+        UriBuilder uriBuilder = UriBuilder.fromPath(AVG_RATE_BY_SESSION_URL).queryParam("sessionId", session);
+        Response r = ratingClient.target(uriBuilder).request().get();
         double d = r.readEntity(Double.class);
         return d;
     }
 
     public List<SessionRating> listAllRatingsByAttendee(Attendee attendee) throws IOException {
-        UriBuilder uriBuilder = UriBuilder.fromPath(RATE_BY_ATTENDEE_URL);
-        Response r = client.target(uriBuilder).request(MediaType.APPLICATION_JSON).post(Entity.json(attendee));
+        UriBuilder uriBuilder = UriBuilder.fromPath(RATE_BY_ATTENDEE_URL).queryParam("attendeeId", attendee.getId());
+        Response r = ratingClient.target(uriBuilder).request(MediaType.APPLICATION_JSON).get();
         @SuppressWarnings("unchecked")
         List<SessionRating> ratings = r.readEntity(List.class);
         return ratings;
@@ -127,7 +181,6 @@ public class VoteClient {
     }
 
     @Test
-	@Ignore
     public void testUpdateAttendee() {
         // Register attendee with full name
         Attendee originalAttendee = registerAttendee("Josef Chechov");
@@ -137,11 +190,10 @@ public class VoteClient {
         updatedAttendee = updateAttendee(updatedAttendee);
 
         assertEquals("Unexpected name for updated attendee", "Joe Chechov", updatedAttendee.getName());
-        assertEquals("Unexpected change of ID when updating attendee name", originalAttendee.getId(), updatedAttendee.getName());
+        assertEquals("Unexpected change of ID when updating attendee name", originalAttendee.getId(), updatedAttendee.getId());
     }
 
     @Test
-	@Ignore
     public void testRateUpdateAndCheckSession() throws Exception {
         // Register attendees
         Attendee attendee1 = registerAttendee("Tyrone Watson");
@@ -157,16 +209,28 @@ public class VoteClient {
         SessionRating sr7 = rateSessionAndCheck(new SessionRating("What is WebSphere Liberty?", attendee2.getId(), 10));
 
         // Update a session
-        SessionRating originalSr5 = sr5;
-        sr5 = updateRating(new SessionRating(originalSr5.getId(), originalSr5.getRevision(), originalSr5.getSession(), originalSr5.getAttendeeId(), 6));
-        assertEquals("Unexpected rating value from udpated SessionRating", 6, sr5.getRating());
+        SessionRating newSr5 = updateRating(new SessionRating(sr5.getId(), sr5.getRevision(), sr5.getSession(), sr5.getAttendeeId(), 6));
+        assertEquals("Unexpected rating value from updated SessionRating", 6, newSr5.getRating());
 
         // Check rating for a given session
         List<SessionRating> ratingsForMicroprofile = listAllRatingsBySession("Microprofile: The Next Big Thing");
         assertEquals("The returned list of Microprofile session ratings contains an unexpected number of entries", 2,
                      ratingsForMicroprofile.size());
-        assertTrue("The returned ratings for the Microprofile session do not contain the expected ratings",
-                   ratingsForMicroprofile.contains(sr1) && ratingsForMicroprofile.contains(sr2));
+        boolean foundSr1 = false;
+        boolean foundSr2 = false;
+        for (SessionRating rating : ratingsForMicroprofile) {
+            if (rating.equals(sr1)) {
+                foundSr1 = true;
+            } else if (rating.equals(sr2)) {
+                foundSr2 = true;
+            } else {
+                System.out.println("Rating not found:" + sr1.toString());
+                System.out.println("Rating not found:" + sr2.toString());
+                Assert.fail("Unexpected rating found:" + rating.toString());
+            }
+        }
+        assertTrue("The returned ratings for the Microprofile session do not contain the expected ratings."
+                , foundSr1 && foundSr2);
 
         // Check the average rating for a different session
         double avg = getAverageRatingsBySession("What's coming in Java EE 8?");
