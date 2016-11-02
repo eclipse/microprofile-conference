@@ -33,7 +33,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,8 +45,7 @@ import io.microprofile.showcase.vote.model.SessionRating;
 
 public class VoteClient {
 
-    //private static String ROOT_URL = "http://localhost:" + System.getProperty("liberty.test.port") + "/vote";
-    private static String ROOT_URL = "http://localhost:9130/vote";
+    private static String ROOT_URL = "http://localhost:" + System.getProperty("liberty.test.port") + "/vote";
     private static String ATTENDEE_URL = ROOT_URL + "/attendee";
     private static String RATE_URL = ROOT_URL + "/rate";
     private static String RATE_BY_SESSION_URL = ROOT_URL + "/ratingsBySession";
@@ -157,7 +155,8 @@ public class VoteClient {
     public double getAverageRatingsBySession(String session) throws IOException {
         UriBuilder uriBuilder = UriBuilder.fromPath(AVG_RATE_BY_SESSION_URL).queryParam("sessionId", session);
         Response r = ratingClient.target(uriBuilder).request().get();
-        double d = r.readEntity(Double.class);
+        String string = r.readEntity(String.class);
+        Double d = Double.parseDouble(string);
         return d;
     }
 
@@ -216,21 +215,9 @@ public class VoteClient {
         List<SessionRating> ratingsForMicroprofile = listAllRatingsBySession("Microprofile: The Next Big Thing");
         assertEquals("The returned list of Microprofile session ratings contains an unexpected number of entries", 2,
                      ratingsForMicroprofile.size());
-        boolean foundSr1 = false;
-        boolean foundSr2 = false;
-        for (SessionRating rating : ratingsForMicroprofile) {
-            if (rating.equals(sr1)) {
-                foundSr1 = true;
-            } else if (rating.equals(sr2)) {
-                foundSr2 = true;
-            } else {
-                System.out.println("Rating not found:" + sr1.toString());
-                System.out.println("Rating not found:" + sr2.toString());
-                Assert.fail("Unexpected rating found:" + rating.toString());
-            }
-        }
+        
         assertTrue("The returned ratings for the Microprofile session do not contain the expected ratings."
-                , foundSr1 && foundSr2);
+                , ratingsForMicroprofile.contains(sr1) && ratingsForMicroprofile.contains(sr2));
 
         // Check the average rating for a different session
         double avg = getAverageRatingsBySession("What's coming in Java EE 8?");

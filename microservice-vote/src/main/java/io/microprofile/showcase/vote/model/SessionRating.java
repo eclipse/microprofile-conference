@@ -73,18 +73,49 @@ public class SessionRating {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof SessionRating) {
-            SessionRating other = (SessionRating) o;
-            return id == other.id && session.equals(other.session) && attendeeId == other.attendeeId && rating == other.rating;
-        }
-        return false;
-    }
-    
-    @Override
-    public String toString() {
-        String result = "{\"id\":" + this.id + ",\"revision\":" + this.revision + ",\"session\":" + this.session +
-                ",\"attendeeId\":" + this.attendeeId + ",\"rating\":" + this.rating + "}";
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((attendeeId == null) ? 0 : attendeeId.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + rating;
+        result = prime * result + ((session == null) ? 0 : session.hashCode());
         return result;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SessionRating other = (SessionRating) obj;
+        if (attendeeId == null) {
+            if (other.attendeeId != null)
+                return false;
+        } else if (!attendeeId.equals(other.attendeeId))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (rating != other.rating)
+            return false;
+        if (session == null) {
+            if (other.session != null)
+                return false;
+        } else if (!session.equals(other.session))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "SessionRating [id=" + id + ", revision=" + revision + ", session=" + session + ", attendeeId="
+                + attendeeId + ", rating=" + rating + "]";
+    }
+    
 }
