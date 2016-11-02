@@ -139,7 +139,7 @@
                                     <workingDirectory>../microservice-vote/</workingDirectory>
                                     <arguments>
                                         <argument>-jar</argument>
-                                        <argument>target/libertyProject.jar</argument>
+                                        <argument>target/microprofile-vote.jar</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

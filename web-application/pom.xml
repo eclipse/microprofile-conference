@@ -163,7 +163,7 @@
                                 <webapp>${project.groupId}:microservice-speaker-web:${project.version}</webapp>
                                 <webapp>${project.groupId}:microservice-session:${project.version}</webapp>
                                 <webapp>${project.groupId}:microservice-schedule:${project.version}</webapp>
-                                <webapp>${project.groupId}:vote-service-application:${project.version}</webapp>
+                                <webapp>${project.groupId}:microservice-vote:${project.version}</webapp>
                             </webapps>
                             <!--@formatter:on-->
                         </configuration>
@@ -209,7 +209,7 @@
                 </dependency>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>vote-service-application</artifactId>
+                    <artifactId>microservice-vote</artifactId>
                     <version>${project.version}</version>
                     <type>war</type>
                     <scope>provided</scope>
