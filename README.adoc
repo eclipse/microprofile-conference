@@ -145,7 +145,7 @@ Provided using link:https://developer.ibm.com/wasdev/[WebSphere Liberty]
 ```
 cd microservice-vote
 mvn clean install
-java -jar vote-service-wlpcfg/target/libertyProject.jar
+java -jar target/microprofile-vote.jar
 ```
 
 Access the app at link:http://localhost:9130/vote[http://localhost:9130/vote].
