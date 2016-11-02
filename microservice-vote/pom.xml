@@ -28,7 +28,7 @@
 
     <artifactId>microservice-vote</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>war</packaging>
 
     <name>Conference :: Vote</name>
 
@@ -42,6 +42,10 @@
         <package.file>${project.build.directory}/${app.name}.zip</package.file>
         <packaging.type>usr</packaging.type>
         <app.name>microprofile-vote</app.name>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<testServerHttpPort>9130</testServerHttpPort>
+        <testServerHttpsPort>9443</testServerHttpsPort>
     </properties>
 
     <repositories>
@@ -51,11 +55,6 @@
             <url>http://liberty-app-accelerator.wasdev.developer.ibm.com/start/api/v1/repo</url>
         </repository>
     </repositories>
-
-    <modules>
-        <module>vote-service-application</module>
-        <module>vote-service-wlpcfg</module>
-    </modules>
 
 
     <profiles>
@@ -68,6 +67,52 @@
                 <package.file>${project.build.directory}/${app.name}.jar</package.file>
                 <packaging.type>runnable</packaging.type>
             </properties>
+        </profile>
+		<profile>
+            <id>liberty-test</id>
+
+            <!--Do not start the server unless testing-->
+
+            <activation>
+                <property>
+                    <name>!skipTests</name>
+                </property>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                        <artifactId>liberty-maven-plugin</artifactId>
+                        <configuration>
+                            <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
+                            <configFile>src/main/liberty/config/server.xml</configFile>
+                            <packageFile>${package.file}</packageFile>
+                            <include>${packaging.type}</include>
+                            <bootstrapProperties>
+                                <default.http.port>${testServerHttpPort}</default.http.port>
+                                <default.https.port>${testServerHttpsPort}</default.https.port>
+                            </bootstrapProperties>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-server</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start-server</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-server</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop-server</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
@@ -92,84 +137,224 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+		<dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+           <groupId>javax.annotation</groupId>
+           <artifactId>javax.annotation-api</artifactId>
+           <version>1.2</version>
+           <scope>provided</scope>
+        </dependency>
+        <dependency>
+           <groupId>org.glassfish.jersey.core</groupId>
+           <artifactId>jersey-common</artifactId>
+           <version>2.23.2</version>
+           <scope>test</scope>
+        </dependency>
+		<dependency>
+            <groupId>io.microprofile.showcase</groupId>
+            <artifactId>${warName}</artifactId>
+            <version>${warVersion}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-client</artifactId>
+            <version>3.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!--<dependency>
+            <groupId>io.microprofile.showcase</groupId>
+            <artifactId>${warName}</artifactId>
+            <version>${warVersion}</version>
+            <classifier>classes</classifier>
+            <scope>test</scope>
+        </dependency>-->
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>2.6</version>
-                    <configuration>
-                        <failOnMissingWebXml>false</failOnMissingWebXml>
-                        <packagingExcludes>pom.xml</packagingExcludes>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.3</version>
-                    <executions>
-                        <execution>
-                            <id>compile-test</id>
-                            <goals>
-                                <goal>testCompile</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.18.1</version>
-                </plugin>
-                <!-- Plugin to run functional tests -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>2.18.1</version>
-                    <executions>
-                        <execution>
-                            <phase>integration-test</phase>
-                            <id>integration-test</id>
-                            <goals>
-                                <goal>integration-test</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>verify-results</id>
-                            <goals>
-                                <goal>verify</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <summaryFile>${project.build.directory}/test-reports/fvt/failsafe-summary.xml</summaryFile>
-                        <reportsDirectory>${project.build.directory}/test-reports/fvt</reportsDirectory>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>net.wasdev.wlp.maven.plugins</groupId>
-                    <artifactId>liberty-maven-plugin</artifactId>
-                    <version>1.2.1</version>
-                    <extensions>true</extensions>
-                    <configuration>
+	    <pluginManagement>
+		    <plugins>
+				<plugin>
+					<groupId>net.wasdev.wlp.maven.plugins</groupId>
+					<artifactId>liberty-maven-plugin</artifactId>
+					<version>1.2.1</version>
+					<extensions>true</extensions>
+					<configuration>
 						<serverName>${wlpServerName}</serverName>
 						<assemblyArtifact>
 							<groupId>com.ibm.websphere.appserver.runtime</groupId>
 							<artifactId>wlp-webProfile7</artifactId>
 							<version>16.0.0.3</version>
 							<type>zip</type>
-                        </assemblyArtifact>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>2.10</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+						</assemblyArtifact>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<!--<packagingExcludes>pom.xml</packagingExcludes>-->
+				</configuration>
+			</plugin>
+			<!--<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<executions>
+					<execution>
+						<id>compile-test</id>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<id>default-test</id>
+						<configuration>
+						    <includes>
+						        <include>**/vote/**</include>
+							</includes>
+						    <excludes>
+                                <exclude>**/it/**</exclude>
+								<exclude>**/client/**</exclude>
+                            </excludes>
+							<reportsDirectory>${project.build.directory}/test-reports/unit</reportsDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Plugin to run functional tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.18.1</version>
+				<executions>
+					<execution>
+						<phase>integration-test</phase>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+						<configuration>
+                            <includes>
+                                <include>**/it/**</include>
+								<include>**/client/**</include>
+                            </includes>
+							<excludes>
+						        <exclude>**/vote/**</exclude>
+							</excludes>
+                            <systemPropertyVariables>
+                                <liberty.test.port>${testServerHttpPort}</liberty.test.port>
+                                <war.name>${warContext}</war.name>
+                            </systemPropertyVariables>
+                        </configuration>
+					</execution>
+					<execution>
+						<id>verify-results</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<summaryFile>${project.build.directory}/test-reports/fvt/failsafe-summary.xml</summaryFile>
+					<reportsDirectory>${project.build.directory}/test-reports/fvt</reportsDirectory>
+				</configuration>
+			</plugin>
+			<!-- Enable liberty-maven plugin -->
+            <plugin>
+                <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <configuration>
+                    <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
+                    <configFile>src/main/liberty/config/server.xml</configFile>
+                    <packageFile>${package.file}</packageFile>
+                    <include>${packaging.type}</include>
+                    <bootstrapProperties>
+                        <default.http.port>${testServerHttpPort}</default.http.port>
+                        <default.https.port>${testServerHttpsPort}</default.https.port>
+                    </bootstrapProperties>
+                </configuration>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+                    <execution>
+                        <id>copy-server-files</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includeArtifactIds>server-snippet</includeArtifactIds>
+                    <prependGroupId>true</prependGroupId>
+                    <outputDirectory>
+                        ${project.build.directory}/wlp/usr/servers/${wlpServerName}/configDropins/defaults
+                    </outputDirectory>
+                </configuration>
+			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+				    <execution>
+					    <id>copy-app</id>
+						<phase>prepare-package</phase>
+						<goals>
+						    <goal>copy-resources</goal>
+						</goals>
+						<configuration>
+						  <outputDirectory>${project.build.directory}/wlp/usr/servers/${wlpServerName}/dropins</outputDirectory>
+						  <resources>          
+							<resource>
+							  <directory>${project.build.directory}/${app.name}.war</directory>
+							</resource>
+						  </resources>              
+						</configuration>      
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
     </build>
 </project>
