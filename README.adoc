@@ -91,6 +91,17 @@ Click on link:http://localhost:8080/microservice-schedule/schedule/1[http://loca
 
 To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options.
 
+==== Running on Liberty
+
+Alternatively you can run this service on liberty by doing:
+
+```
+cd microservice-schedule
+mvn -Pliberty package
+java -jar target/microservice-schedule.liberty.jar
+```
+
+
 === microservice-session
 
 Provided using link:http://wildfly-swarm.io[WildFly Swarm]
