@@ -1,0 +1,9 @@
+<server description="Session server">
+    <featureManager>
+        <feature>microProfile-1.0</feature>
+    </featureManager>
+    
+    <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="9110" />
+    
+    <webApplication location="microservice-session.war" contextRoot="/"/>
+</server>

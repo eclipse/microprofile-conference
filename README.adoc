@@ -134,6 +134,16 @@ java -jar target/microservice-session-swarm.jar [-D<OPTION>]
 
 For a full set of configuration options please see link:https://wildfly-swarm.gitbooks.io/wildfly-swarm-users-guide/content/[the Wildfly Swarm Userguide]
 
+==== Running on Liberty
+
+Alternatively you can run this service on liberty by doing:
+
+```
+cd microservice-session
+mvn -Pliberty package
+java -jar target/microservice-session.liberty.jar
+```
+
 === microservice-speaker
 Provided using link:http://tomee.apache.org/[Apache TomEE 7.x]
 
