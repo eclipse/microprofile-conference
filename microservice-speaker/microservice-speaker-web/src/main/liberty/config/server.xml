@@ -1,0 +1,9 @@
+<server description="Speaker server">
+    <featureManager>
+        <feature>microProfile-1.0</feature>
+    </featureManager>
+    
+    <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="9100" />
+    
+    <webApplication location="microservice-speaker-web.war" contextRoot="/microservice-speaker-web"/>
+</server>

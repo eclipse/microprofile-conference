@@ -159,6 +159,17 @@ mvn clean package tomee:exec -DskipTests
 java -DadditionalSystemProperties="-Dport.http=9191 -Dport.ajp=9292 -Dport.shutdown=9393" -jar target/microservice-speaker-web-exec.jar
 ----
 
+==== Running on Liberty
+
+Alternatively you can run this service on liberty by doing:
+
+```
+cd microservice-speaker
+mvn -Pliberty package
+java -jar microservice-speaker-web/target/microservice-speaker.liberty.jar
+```
+
+
 === microservice-vote
 Provided using link:https://developer.ibm.com/wasdev/[WebSphere Liberty]
 
