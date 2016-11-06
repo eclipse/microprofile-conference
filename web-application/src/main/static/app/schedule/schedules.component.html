@@ -18,6 +18,7 @@
         </div>
     </div>
     <div class="row">
-        <p-schedule [events]="events" [header]="header"></p-schedule>
+        <p-schedule #schedule [events]="events" [header]="header" [defaultDate]="defaultDate" 
+            [defaultView]="defaultView" [allDaySlot]="allDaySlot" [minTime]="minTime" [maxTime]="maxTime"></p-schedule>
     </div>
 </div>
