@@ -45,18 +45,24 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
     @Inject
     BootstrapData bootstrapData;
 
-    private List<SessionRating> fakeData;
-
     @PostConstruct
     public void init() {
         System.out.println("Loaded "+bootstrapData.getSessions().size()+ " sessions");
 
-        fakeData = bootstrapData.getSessions().stream()
+        List<SessionRating> bootstrapData = this.bootstrapData.getSessions().stream()
             .map(bootstrap -> {
                 int rating = ThreadLocalRandom.current().nextInt(1, 10);
-                return new SessionRating(bootstrap.getId(), "12345", rating);
+                return new SessionRating(bootstrap.getId(), UUID.randomUUID().toString(), rating);
             })
             .collect(Collectors.toList());
+
+        int i=0;
+        for(SessionRating rating : bootstrapData) {
+            String id = String.valueOf(i);
+            rating.setId(id);
+            allRatings.put(id, rating);
+            i++;
+        };
     }
 
     @Override
@@ -160,8 +166,7 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
 
     @Override
     public Collection<SessionRating> getAllRatings() {
-        return fakeData;
-        //return allRatings.values();
+        return allRatings.values();
     }
 
     @Override
@@ -175,15 +180,7 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
     @Override
     public SessionRating getRating(String id) {
 
-        Optional<SessionRating> match = fakeData.stream()
-            .filter(r -> r.getSession().equals(id))
-            .findFirst();
-
-        if(!match.isPresent())
-            throw new RuntimeException("No session with id "+id);
-
-        return match.get();
-        //return allRatings.get(id);
+        return allRatings.get(id);
     }
 
 }
