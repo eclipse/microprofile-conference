@@ -43,7 +43,7 @@
         <app.name>microprofile-vote</app.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <testServerHttpPort>9130</testServerHttpPort>
+        <testServerHttpPort>7070</testServerHttpPort>
         <testServerHttpsPort>9443</testServerHttpsPort>
         <service.name>${project.artifactId}</service.name>
         <service.name>${project.artifactId}</service.name>

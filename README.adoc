@@ -180,10 +180,10 @@ mvn clean install
 java -jar target/microprofile-vote.jar
 ```
 
-Access the app at link:http://localhost:9130/vote[http://localhost:9130/vote].
+Access the app at link:http://localhost:7070/vote[http://localhost:7070/vote].
 
 *Port Bindings*
-By default the microservice will start on port 9130. To set it to a different port use the following Maven properties:
+By default the microservice will start on port 7070. To set it to a different port use the following Maven properties:
 ```
 -DtestServerHttpPort=9080 -DtestServerHttpsPort=9443
 ```
