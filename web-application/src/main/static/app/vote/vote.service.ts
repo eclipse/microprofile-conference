@@ -33,6 +33,7 @@ export class VoteService {
             return Promise.resolve(this.votes);
         }
 
+        console.info('Loading votes...');
         return this.http.get(this.endPoint.url + '/rate')
             .toPromise()
             .then(response => this.setVotes(response.json()))
