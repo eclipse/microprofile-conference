@@ -26,3 +26,4 @@ git.update.fork.bat
 nb-configuration.xml
 ui.bat
 .distribution
+.microprofile
