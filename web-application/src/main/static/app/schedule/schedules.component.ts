@@ -3,7 +3,9 @@ import {Router} from "@angular/router";
 import {Schedule} from "./schedule";
 import {ScheduleService} from "./schedule.service";
 import {ScheduleModule} from "primeng/primeng";
-import moment = require('moment');
+import * as moment from "moment";
+
+const momentConstructor: (value?: any) => moment.Moment = (<any>moment).default || moment;
 
 enableProdMode();
 
@@ -19,6 +21,10 @@ export class SchedulesComponent implements OnInit {
     selectedSchedule: Schedule;
     events: any[];
     header: any;
+    defaultView: string = "agendaWeek";
+    allDaySlot: boolean = false;
+    minTime: any = moment.duration(8, "hours");
+    maxTime: any = moment.duration(20, "hours");
 
     @ViewChild('schedule')
     private pSchedule: ScheduleModule;
@@ -32,8 +38,10 @@ export class SchedulesComponent implements OnInit {
             _self.getSchedules();
         });
 
-        //No header
-        this.header = false;
+        this.header = {left: '',
+            center: '',
+            right: 'agendaWeek, agendaDay, prev, next '
+        };
 
         var d = new Date();
         var year = d.getFullYear();
@@ -74,20 +82,32 @@ export class SchedulesComponent implements OnInit {
 
     setSchedules(schedules: Schedule[]): void {
         this.schedules = schedules;
-        this.updateEventsFromSchedules(this.schedules)
+        this.events = this.toEvents(this.schedules);
+
+        //this.pSchedule.gotoDate(this.events[0].start);
     }
 
-    updateEventsFromSchedules(schedules: Schedule[]): any[] {
+    toEvents(schedules: Schedule[]): any[] {
         var events = [];
-        // for (let s of schedules) {
-        //     var startTime = moment(s.date + "T" + s.startTime + ":00");
-        //     var endTime = moment(startTime).add(1, "hour");
-        //     events.push({
-        //         "title": s.venue,
-        //         "start": startTime,
-        //         "end": endTime
-        //     });
-        // }
+
+        schedules.forEach(function (s: Schedule) {
+
+            //date,duration,venue,venueId,startTime,id,sessionId
+            //dayOfWeek,month,dayOfMonth,dayOfYear,era,year,monthValue,chronology,leapYear
+
+            let d = new Date(s.date.monthValue + '/' + s.date.dayOfMonth + '/' + s.date.year);
+            // console.log('date: ' + d.toISOString().slice(0, 10));
+            var start = momentConstructor(d.toISOString().slice(0, 10)).add(s.startTime.hour, 'hours');
+            var end = start.add(1, 'hours');
+            // console.log("schedule: " + start.format());
+
+            events.push({
+                "title": s.venue,
+                "start": start,
+                "end": end,
+            });
+        });
+
         return events;
     }
 

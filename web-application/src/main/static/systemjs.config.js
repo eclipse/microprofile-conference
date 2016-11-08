@@ -40,7 +40,9 @@
             // other libraries
             'rxjs': 'npm:rxjs',
             'primeng': 'npm:primeng',
-            'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api'
+            'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
+            'moment': 'npm:moment',
+            'angular2-moment': 'npm:angular2-moment',
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {
@@ -55,6 +57,14 @@
                 defaultExtension: 'js'
             },
             'angular2-in-memory-web-api': {
+                main: './index.js',
+                defaultExtension: 'js'
+            },
+            'moment': {
+                main: './moment.js',
+                defaultExtension: 'js'
+            },
+            'angular2-moment': {
                 main: './index.js',
                 defaultExtension: 'js'
             }

@@ -22,6 +22,7 @@ import {SpeakerFilter} from "./speaker/speaker.filter";
 import {SessionFilter} from "./session/session.filter";
 import {SessionFilterSpeaker} from "./session/session.filter.speaker";
 import {SessionSpeakersComponent} from "./session/session.speakers.component";
+import {MomentModule} from 'angular2-moment';
 
 @NgModule({
     imports: [
@@ -30,7 +31,8 @@ import {SessionSpeakersComponent} from "./session/session.speakers.component";
         HttpModule,
         JsonpModule,
         ScheduleModule,
-        AppRouting
+        AppRouting,
+        MomentModule
     ],
     declarations: [
         AppComponent,
