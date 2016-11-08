@@ -10,10 +10,10 @@ export class EndpointsService {
 
     map: {[name: string]: Endpoint} =
     {
-        'speaker': <Endpoint> { name: 'speaker', url: 'http://localhost:9100/microservice-speaker-web/speaker' },
-        'session': <Endpoint> { name: 'session', url: 'http://localhost:9110/sessions' },
-        'schedule': <Endpoint> { name: 'schedule', url: 'http://localhost:9120/microservice-schedule/schedule' },
-        'vote': <Endpoint> { name: 'vote', url: 'http://localhost:9130/vote' }
+        'speaker': <Endpoint> { name: 'speaker', url: 'http://localhost:4040/microservice-speaker-web/speaker' },
+        'session': <Endpoint> { name: 'session', url: 'http://localhost:5050/sessions' },
+        'schedule': <Endpoint> { name: 'schedule', url: 'http://localhost:6060/microservice-schedule/schedule' },
+        'vote': <Endpoint> { name: 'vote', url: 'http://localhost:7070/vote' }
     };
     error: string;
     endpoints: Endpoints;
