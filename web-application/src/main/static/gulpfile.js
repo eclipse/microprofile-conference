@@ -156,7 +156,7 @@ gulp.task('js-third-party', function () {
 
         try {
             fs.accessSync(file, fs.F_OK);
-            console.log("Synchronized: " + src + " to " + dest);
+            //console.log("Synchronized: " + src + " to " + dest);
         } catch (e) {
             tasks.push(buildTask(src, dest));
         }
