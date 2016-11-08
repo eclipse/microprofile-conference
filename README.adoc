@@ -87,7 +87,7 @@ java -jar target/microservice-schedule.jar [Options]
 *Port Bindings*
 By default the microservice will bind to port 8080, if this is not available it will bind to the next available port e.g. 8081. To specify the port use --port as a command line option
 
-Click on link:http://localhost:8080/microservice-schedule/schedule/1[http://localhost:8080/microservice-schedule/schedule/1]
+To verify that the schedule microservice is running, click on the following link: http://localhost:8080/microservice-schedule/schedule/all[http://localhost:8080/microservice-schedule/schedule/all]
 
 To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options.
 
@@ -132,6 +132,14 @@ java -jar target/microservice-session-swarm.jar [-D<OPTION>]
 | 0
 |===
 
+For example, if you want to change the HTTP port to 9111, run the application like this:
+
+----
+java -jar target/microservice-session-swarm.jar -Dswarm.http.port=9111
+----
+
+Click on this link to verify that everything ran fine: http://localhost:9111/sessions[http://localhost:9111/sessions]
+
 For a full set of configuration options please see link:https://wildfly-swarm.gitbooks.io/wildfly-swarm-users-guide/content/[the Wildfly Swarm Userguide]
 
 ==== Running on Liberty
@@ -158,6 +166,18 @@ mvn clean package tomee:exec -DskipTests
 
 java -DadditionalSystemProperties="-Dport.http=9191 -Dport.ajp=9292 -Dport.shutdown=9393" -jar target/microservice-speaker-web-exec.jar
 ----
+
+If you look at the output, you will find messages like the following:
+
+----
+INFO - REST Application: http://localhost:9191/microservice-speaker-web/speaker               -> io.microprofile.showcase.speaker.rest.Application@68cda174
+INFO -      Service URI: http://localhost:9191/microservice-speaker-web/speaker/              -> Pojo io.microprofile.showcase.speaker.rest.ResourceSpeaker
+INFO -            DELETE http://localhost:9191/microservice-speaker-web/speaker/remove/{id}   ->      void remove(String)
+----
+
+There you can see the URLs of the endpoints exposed by TomEE for your application.
+
+To verify that everything worked fine, you can try to access http://localhost:9191/microservice-speaker-web/speaker[http://localhost:9191/microservice-speaker-web/speaker]
 
 ==== Running on Liberty
 
