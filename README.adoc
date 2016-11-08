@@ -40,16 +40,22 @@ https://github.com/microprofile[All source code]
 
 This will run each service in the runtime container that its setup for and the UI in a Node.js server to interact with them.
 
-Build, package and run all services and the UI:
+Build, package and run all microservices and the UI:
 
 ----
-mvn clean package -Pstart
+mvn clean package -P start,ui
 ----
 
-Run all services and the UI:
+Run just the microservices:
 
 ----
 mvn package -Pstart -pl :microservice-start
+----
+
+Run just the UI:
+
+----
+mvn package -Pui -pl :microservice-start
 ----
 
 == Development Build
