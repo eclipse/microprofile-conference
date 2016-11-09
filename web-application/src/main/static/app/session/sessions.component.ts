@@ -1,5 +1,5 @@
 import {Component, enableProdMode, OnInit, Input, OnChanges, SimpleChanges} from "@angular/core";
-import {Router} from "@angular/router";
+import {Router, ActivatedRoute, Params} from "@angular/router";
 import {Session} from "./session";
 import {SessionService} from "./session.service";
 import {Speaker} from "../speaker/speaker";
@@ -17,7 +17,7 @@ export class SessionsComponent implements OnInit, OnChanges {
     search: string;
     @Input() speaker: Speaker;
 
-    constructor(private router: Router, private sessionService: SessionService) {
+    constructor(private router: Router, private route: ActivatedRoute, private sessionService: SessionService) {
     }
 
     getSessions(): void {
@@ -28,6 +28,10 @@ export class SessionsComponent implements OnInit, OnChanges {
         let _self = this;
         this.sessionService.init(function () {
             _self.getSessions();
+
+            _self.route.params.forEach((params: Params) => {
+                _self.onSelectId(params['id']);
+            });
         });
     }
 
@@ -44,6 +48,10 @@ export class SessionsComponent implements OnInit, OnChanges {
 
     onSearch(search: string): void {
         this.search = search;
+    }
+
+    onSelectId(any: any): void {
+        this.sessionService.getSessionsById([any as string]).then(session => this.onSelect(session[0]));
     }
 
     gotoDetail(): void {

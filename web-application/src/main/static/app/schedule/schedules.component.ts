@@ -43,6 +43,7 @@ export class SchedulesComponent implements OnInit {
         });
         this.sessionService.init(function () {
             //no-op
+            console.log("Loaded sessions");
         });
 
         this.header = {
@@ -58,26 +59,8 @@ export class SchedulesComponent implements OnInit {
 
         this.events = [
             {
-                "title": "All Day Event",
+                "title": "Loading Events...",
                 "start": new Date(year, month, day).toISOString().substring(0, 10)
-            },
-            {
-                "title": "Long Event",
-                "start": "2016-01-07",
-                "end": new Date(year, month, day++).toISOString().substring(0, 10)
-            },
-            {
-                "title": "Repeating Event",
-                "start": new Date(year, month, day++).toISOString().substring(0, 10) + "2016-11-03T16:00:00"
-            },
-            {
-                "title": "Repeating Event",
-                "start": new Date(year, month, day++).toISOString().substring(0, 10) + "2016-11-14T16:00:00"
-            },
-            {
-                "title": "Conference",
-                "start": new Date(year, month, day++).toISOString().substring(0, 10),
-                "end": new Date(year, month, day++).toISOString().substring(0, 10)
             }
         ];
     }
@@ -91,12 +74,10 @@ export class SchedulesComponent implements OnInit {
     setSchedules(schedules: Schedule[]): void {
         this.schedules = schedules;
         this.events = this.toEvents(this.schedules);
-
-        //this.pSchedule.gotoDate(this.events[0].start);
     }
 
     toEvents(schedules: Schedule[]): any[] {
-        var events = [];
+        var events: any[] = [];
         var self = this;
 
         let begin = momentConstructor();
@@ -117,6 +98,7 @@ export class SchedulesComponent implements OnInit {
             self.sessionService.getSessionsById([s.sessionId]).then(function (sessions: Session[]) {
 
                 events.push({
+                    "id": sessions[0].id,
                     "title": sessions[0].title,
                     "start": start,
                     "end": end,
@@ -125,18 +107,38 @@ export class SchedulesComponent implements OnInit {
 
         });
 
-        console.log("schedule: " + Object.keys(this.pSchedule));
+        //Go to the first event
         this.pSchedule.gotoDate(this.defaultDate);
 
         return events;
+    }
+
+    handleEventClick(e: any) {
+        //e.calEvent = Selected event
+        //e.jsEvent = Browser click event
+        //e.view = Current view object
+
+        var self = this;
+
+        this.schedules.forEach(function (s: Schedule) {
+
+            if (s.sessionId === e.calEvent.id) {
+                self.onSelect(s);
+                self.gotoSession();
+            }
+        })
+    }
+
+    getType(o: any) {
+        return ({}).toString.call(o).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
     }
 
     onSelect(schedule: Schedule): void {
         this.selectedSchedule = schedule;
     }
 
-    gotoDetail(): void {
-        this.router.navigate(['/detail', this.selectedSchedule.id]);
+    gotoSession(): void {
+        this.router.navigate(['/sessions', {id: this.selectedSchedule.sessionId}]);
     }
 
     private static handleError(error: any): Promise<any> {
