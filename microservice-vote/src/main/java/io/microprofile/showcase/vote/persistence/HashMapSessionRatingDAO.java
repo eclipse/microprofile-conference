@@ -122,8 +122,8 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
 
         //Remove the rating from ratingIdsByAttendee
         Collection<String> ratingIdsPerAttendee = ratingIdsByAttendee.get(attendeeId);
-        ratingIdsPerAttendee.remove(id);
         if (ratingIdsPerAttendee != null) {
+            ratingIdsPerAttendee.remove(id);
             if (ratingIdsPerAttendee.isEmpty()) {
                 ratingIdsByAttendee.remove(attendeeId);
             } else {
