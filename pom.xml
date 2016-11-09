@@ -95,6 +95,7 @@
         <version.surefire.plugin>2.19.1</version.surefire.plugin>
         <version.war.plugin>2.6</version.war.plugin>
         <version.fabric8.plugin>3.1.83</version.fabric8.plugin>
+        <version.liberty.plugin>1.2.1</version.liberty.plugin>
 
         <!-- Test -->
         <version.arquillian>1.1.11.Final</version.arquillian>
@@ -425,6 +426,19 @@
                     <groupId>io.fabric8</groupId>
                     <artifactId>fabric8-maven-plugin</artifactId>
                     <version>${version.fabric8.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                    <artifactId>liberty-maven-plugin</artifactId>
+                    <version>${version.liberty.plugin}</version>
+                    <configuration>
+                        <assemblyArtifact>
+                            <groupId>com.ibm.websphere.appserver.runtime</groupId>
+                            <artifactId>wlp-microProfile1</artifactId>
+                            <version>${version.liberty}</version>
+                            <type>zip</type>
+                        </assemblyArtifact>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>

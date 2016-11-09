@@ -118,7 +118,6 @@
                     <plugin>
                         <groupId>net.wasdev.wlp.maven.plugins</groupId>
                         <artifactId>liberty-maven-plugin</artifactId>
-                        <version>1.2</version>
                         <executions>
                             <execution>
                                 <id>create-liberty-server</id>
@@ -144,12 +143,6 @@
                             <serverName>speakerServer</serverName>
                             <appArchive>${project.build.directory}/${project.artifactId}.war</appArchive>
                             <configFile>${basedir}/src/main/liberty/config/server.xml</configFile>
-                            <assemblyArtifact>
-                                <groupId>com.ibm.websphere.appserver.runtime</groupId>
-                                <artifactId>wlp-microProfile1</artifactId>
-                                <version>${version.liberty}</version>
-                                <type>zip</type>
-                            </assemblyArtifact>
                         </configuration>
                     </plugin>
                 </plugins>
