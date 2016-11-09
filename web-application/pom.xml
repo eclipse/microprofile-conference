@@ -160,10 +160,10 @@
                             <tomeeClassifier>webprofile</tomeeClassifier>
                             <!--@formatter:off-->
                             <webapps>
-                                <webapp>${project.groupId}:microservice-speaker-web:${project.version}</webapp>
-                                <webapp>${project.groupId}:microservice-session:${project.version}</webapp>
-                                <webapp>${project.groupId}:microservice-schedule:${project.version}</webapp>
-                                <webapp>${project.groupId}:microservice-vote:${project.version}</webapp>
+                                <webapp>${project.groupId}:microservice-speaker:${project.version}?name=microservice-speaker</webapp>
+                                <webapp>${project.groupId}:microservice-session:${project.version}?name=microservice-session</webapp>
+                                <webapp>${project.groupId}:microservice-schedule:${project.version}?name=microservice-schedule</webapp>
+                                <webapp>${project.groupId}:microservice-vote:${project.version}?name=microservice-vote</webapp>
                             </webapps>
                             <!--@formatter:on-->
                         </configuration>
@@ -188,7 +188,7 @@
                 <!--These are here to enforce the build order. The UI is independent of the Microprofile Services-->
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>microservice-speaker-web</artifactId>
+                    <artifactId>microservice-speaker</artifactId>
                     <version>${project.version}</version>
                     <type>war</type>
                     <scope>provided</scope>
