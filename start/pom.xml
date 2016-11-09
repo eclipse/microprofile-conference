@@ -29,7 +29,11 @@
 
     <artifactId>microservice-start</artifactId>
     <name>Conference :: Start</name>
-
+    
+    <properties>
+    	<skipDemoData>false</skipDemoData>
+    </properties>
+    
     <profiles>
         <profile>
             <id>windowsExtensions</id>
@@ -143,6 +147,9 @@
                                         <argument>-jar</argument>
                                         <argument>target/microprofile-vote.jar</argument>
                                     </arguments>
+                                    <environmentVariables>
+							  			<SKIP_DEMO_DATA>${skipDemoData}</SKIP_DEMO_DATA>
+							  		</environmentVariables> 
                                 </configuration>
                             </execution>
                         </executions>
