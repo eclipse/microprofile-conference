@@ -19,7 +19,6 @@ package io.microprofile.showcase.vote.api;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -31,7 +30,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import io.microprofile.showcase.vote.api.SessionVote;
 import io.microprofile.showcase.vote.model.Attendee;
 import io.microprofile.showcase.vote.model.SessionRating;
 import io.microprofile.showcase.vote.persistence.HashMapAttendeeDAO;
@@ -209,7 +207,8 @@ public class SessionVoteTest {
         // submit 4 votes - 3 for session1, and 1 for session2
         SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", attendee1.getId(), 3));
         SessionRating sr2 = sessionVote.rateSession(new SessionRating("session1", attendee2.getId(), 4));
-        SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", attendee3.getId(), 8));
+        @SuppressWarnings("unused")
+		SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", attendee3.getId(), 8));
         SessionRating sr4 = sessionVote.rateSession(new SessionRating("session1", attendee4.getId(), 9));
 
         // API method under test
@@ -229,10 +228,10 @@ public class SessionVoteTest {
         Attendee attendee4 = sessionVote.registerAttendee(new Attendee("Bo Jo"));
 
         // submit 4 votes - 3 for session1, and 1 for session2
-        SessionRating sr1 = sessionVote.rateSession(new SessionRating("session1", attendee1.getId(), 3));
-        SessionRating sr2 = sessionVote.rateSession(new SessionRating("session1", attendee2.getId(), 8));
-        SessionRating sr3 = sessionVote.rateSession(new SessionRating("session2", attendee3.getId(), 8));
-        SessionRating sr4 = sessionVote.rateSession(new SessionRating("session1", attendee4.getId(), 10));
+        sessionVote.rateSession(new SessionRating("session1", attendee1.getId(), 3));
+        sessionVote.rateSession(new SessionRating("session1", attendee2.getId(), 8));
+        sessionVote.rateSession(new SessionRating("session2", attendee3.getId(), 8));
+        sessionVote.rateSession(new SessionRating("session1", attendee4.getId(), 10));
 
         // API method under test
         double avg = sessionVote.sessionRatingAverage("session1");

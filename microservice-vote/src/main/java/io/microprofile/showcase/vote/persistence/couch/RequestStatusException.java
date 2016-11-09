@@ -18,7 +18,8 @@ package io.microprofile.showcase.vote.persistence.couch;
 
 public class RequestStatusException extends RuntimeException {
 
-    private int code;
+	private static final long serialVersionUID = -4483872063957679412L;
+	private int code;
 
     public RequestStatusException(String string) {
         super(string);

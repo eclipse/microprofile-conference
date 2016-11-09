@@ -54,10 +54,10 @@ public class SessionVote {
 
     private @Inject @NonPersistent SessionRatingDAO hashMapSessionRatingDAO;
     private @Inject @Persistent SessionRatingDAO couchDBSessionRatingDAO;
-
+    
     private AttendeeDAO selectedAttendeeDAO;
     private SessionRatingDAO selectedSessionRatingDAO;
-
+    
     @PostConstruct
     private void connectToDAO() {
         if (couchDBAttendeeDAO.isAccessible()) {
