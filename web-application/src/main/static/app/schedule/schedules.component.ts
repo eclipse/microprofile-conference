@@ -2,8 +2,10 @@ import {Component, enableProdMode, OnInit, ViewChild} from "@angular/core";
 import {Router} from "@angular/router";
 import {Schedule} from "./schedule";
 import {ScheduleService} from "./schedule.service";
-import {ScheduleModule} from "primeng/primeng";
+import {Schedule as NGShedule} from "primeng/primeng";
 import * as moment from "moment";
+import {SessionService} from "../session/session.service";
+import {Session} from "../session/session";
 
 const momentConstructor: (value?: any) => moment.Moment = (<any>moment).default || moment;
 
@@ -24,12 +26,14 @@ export class SchedulesComponent implements OnInit {
     defaultView: string = "agendaWeek";
     allDaySlot: boolean = false;
     minTime: any = moment.duration(8, "hours");
-    maxTime: any = moment.duration(20, "hours");
+    maxTime: any = moment.duration(21, "hours");
+    defaultDate: any = momentConstructor();
+    aspectRatio: number = 2.1;
 
     @ViewChild('schedule')
-    private pSchedule: ScheduleModule;
+    private pSchedule: NGShedule;
 
-    constructor(private router: Router, private scheduleService: ScheduleService) {
+    constructor(private router: Router, private scheduleService: ScheduleService, private sessionService: SessionService) {
     }
 
     ngOnInit(): void {
@@ -37,8 +41,12 @@ export class SchedulesComponent implements OnInit {
         this.scheduleService.init(function () {
             _self.getSchedules();
         });
+        this.sessionService.init(function () {
+            //no-op
+        });
 
-        this.header = {left: '',
+        this.header = {
+            left: '',
             center: '',
             right: 'agendaWeek, agendaDay, prev, next '
         };
@@ -89,6 +97,9 @@ export class SchedulesComponent implements OnInit {
 
     toEvents(schedules: Schedule[]): any[] {
         var events = [];
+        var self = this;
+
+        let begin = momentConstructor();
 
         schedules.forEach(function (s: Schedule) {
 
@@ -96,17 +107,26 @@ export class SchedulesComponent implements OnInit {
             //dayOfWeek,month,dayOfMonth,dayOfYear,era,year,monthValue,chronology,leapYear
 
             let d = new Date(s.date.monthValue + '/' + s.date.dayOfMonth + '/' + s.date.year);
-            // console.log('date: ' + d.toISOString().slice(0, 10));
-            var start = momentConstructor(d.toISOString().slice(0, 10)).add(s.startTime.hour, 'hours');
-            var end = start.add(1, 'hours');
-            // console.log("schedule: " + start.format());
+            let start = momentConstructor(d.toISOString().slice(0, 10)).add(s.startTime.hour, 'hours');
+            let end = start.add(1, 'hours');
 
-            events.push({
-                "title": s.venue,
-                "start": start,
-                "end": end,
+            if (self.defaultDate.isAfter(start)) {
+                self.defaultDate = start;
+            }
+
+            self.sessionService.getSessionsById([s.sessionId]).then(function (sessions: Session[]) {
+
+                events.push({
+                    "title": sessions[0].title,
+                    "start": start,
+                    "end": end,
+                });
             });
+
         });
+
+        console.log("schedule: " + Object.keys(this.pSchedule));
+        this.pSchedule.gotoDate(this.defaultDate);
 
         return events;
     }
