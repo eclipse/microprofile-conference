@@ -29,7 +29,7 @@
 
     <artifactId>microservice-start</artifactId>
     <name>Conference :: Start</name>
-    
+
     <profiles>
         <profile>
             <id>windowsExtensions</id>
@@ -69,10 +69,11 @@
                                 </goals>
                                 <configuration>
                                     <executable>mvn${command.extension}</executable>
-                                    <workingDirectory>../microservice-speaker/microservice-speaker-web</workingDirectory>
+                                    <workingDirectory>../microservice-speaker/microservice-speaker-web
+                                    </workingDirectory>
                                     <arguments>
                                         <argument>tomee:exec</argument>
-                                        <argument>-Dtomee-plugin.http=9100</argument>
+                                        <argument>-Dtomee-plugin.http=4040</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -85,7 +86,8 @@
                                 <configuration>
                                     <async>true</async>
                                     <executable>java</executable>
-                                    <workingDirectory>../microservice-speaker/microservice-speaker-web</workingDirectory>
+                                    <workingDirectory>../microservice-speaker/microservice-speaker-web
+                                    </workingDirectory>
                                     <arguments>
                                         <argument>-jar</argument>
                                         <argument>target/microservice-speaker-web-exec.jar</argument>
@@ -105,7 +107,7 @@
                                     <arguments>
                                         <argument>-jar</argument>
                                         <argument>target/microservice-session-swarm.jar</argument>
-                                        <argument>-Dswarm.http.port=9110</argument>
+                                        <argument>-Dswarm.http.port=5050</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -123,7 +125,7 @@
                                         <argument>-jar</argument>
                                         <argument>target/microservice-schedule.jar</argument>
                                         <argument>--port</argument>
-                                        <argument>9120</argument>
+                                        <argument>6060</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -145,6 +147,17 @@
                             </execution>
                         </executions>
                     </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>ui</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>

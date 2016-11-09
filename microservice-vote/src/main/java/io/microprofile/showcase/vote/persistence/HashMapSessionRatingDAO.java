@@ -15,16 +15,22 @@
  */
 package io.microprofile.showcase.vote.persistence;
 
+import io.microprofile.showcase.bootstrap.BootstrapData;
+import io.microprofile.showcase.vote.model.SessionRating;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-
-import javax.enterprise.context.ApplicationScoped;
-
-import io.microprofile.showcase.vote.model.SessionRating;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 @NonPersistent
@@ -35,6 +41,29 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
     private Map<String, Collection<String>> ratingIdsBySession = new HashMap<String, Collection<String>>();
 
     private Map<String, Collection<String>> ratingIdsByAttendee = new HashMap<String, Collection<String>>();
+
+    @Inject
+    BootstrapData bootstrapData;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Loaded "+bootstrapData.getSessions().size()+ " sessions");
+
+        List<SessionRating> bootstrapData = this.bootstrapData.getSessions().stream()
+            .map(bootstrap -> {
+                int rating = ThreadLocalRandom.current().nextInt(1, 10);
+                return new SessionRating(bootstrap.getId(), UUID.randomUUID().toString(), rating);
+            })
+            .collect(Collectors.toList());
+
+        int i=0;
+        for(SessionRating rating : bootstrapData) {
+            String id = String.valueOf(i);
+            rating.setId(id);
+            allRatings.put(id, rating);
+            i++;
+        };
+    }
 
     @Override
     public SessionRating rateSession(SessionRating sessionRating) {
@@ -137,7 +166,6 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
 
     @Override
     public Collection<SessionRating> getAllRatings() {
-
         return allRatings.values();
     }
 
@@ -151,6 +179,7 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
 
     @Override
     public SessionRating getRating(String id) {
+
         return allRatings.get(id);
     }
 
