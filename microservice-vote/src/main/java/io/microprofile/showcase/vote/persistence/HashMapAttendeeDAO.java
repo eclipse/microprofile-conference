@@ -16,9 +16,9 @@
 package io.microprofile.showcase.vote.persistence;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -28,7 +28,7 @@ import io.microprofile.showcase.vote.model.Attendee;
 @NonPersistent
 public class HashMapAttendeeDAO implements AttendeeDAO {
 
-    private Map<String, Attendee> attendees = new HashMap<String, Attendee>();
+    private ConcurrentMap<String, Attendee> attendees = new ConcurrentHashMap<String, Attendee>();
 
     @Override
     public Attendee createNewAttendee(Attendee attendee) {

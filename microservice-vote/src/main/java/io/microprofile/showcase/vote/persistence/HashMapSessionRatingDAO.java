@@ -16,12 +16,14 @@
 package io.microprofile.showcase.vote.persistence;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -36,11 +38,11 @@ import io.microprofile.showcase.vote.model.SessionRating;
 @NonPersistent
 public class HashMapSessionRatingDAO implements SessionRatingDAO {
 
-    private Map<String, SessionRating> allRatings = new HashMap<String, SessionRating>();
+    private ConcurrentMap<String, SessionRating> allRatings = new ConcurrentHashMap<String, SessionRating>();
 
-    private Map<String, Collection<String>> ratingIdsBySession = new HashMap<String, Collection<String>>();
+    private ConcurrentMap<String, Collection<String>> ratingIdsBySession = new ConcurrentHashMap<String, Collection<String>>();
 
-    private Map<String, Collection<String>> ratingIdsByAttendee = new HashMap<String, Collection<String>>();
+    private ConcurrentMap<String, Collection<String>> ratingIdsByAttendee = new ConcurrentHashMap<String, Collection<String>>();
 
     @Inject
     BootstrapData bootstrapData;
@@ -51,20 +53,20 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
 
         boolean skipDemoData = Boolean.getBoolean(System.getenv("SKIP_DEMO_DATA"));
         if (!skipDemoData) {
-        	List<SessionRating> bootstrapData = this.bootstrapData.getSessions().stream()
-        			.map(bootstrap -> {
-        				int rating = ThreadLocalRandom.current().nextInt(1, 10);
-        				return new SessionRating(bootstrap.getId(), UUID.randomUUID().toString(), rating);
-        			})
-        			.collect(Collectors.toList());
+            List<SessionRating> bootstrapData = this.bootstrapData.getSessions().stream()
+                    .map(bootstrap -> {
+                        int rating = ThreadLocalRandom.current().nextInt(1, 10);
+                        return new SessionRating(bootstrap.getId(), UUID.randomUUID().toString(), rating);
+                    })
+                    .collect(Collectors.toList());
         
-        	int i=0;
-        	for(SessionRating rating : bootstrapData) {
-        		String id = String.valueOf(i);
-        		rating.setId(id);
-        		allRatings.put(id, rating);
-        		i++;
-        	};
+            int i=0;
+            for(SessionRating rating : bootstrapData) {
+                String id = String.valueOf(i);
+                rating.setId(id);
+                allRatings.put(id, rating);
+                i++;
+            };
         }
     }
 
@@ -80,14 +82,14 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
         allRatings.put(sessionRating.getId(), sessionRating);
         Collection<String> sessionRatings = ratingIdsByAttendee.get(attendeeId);
         if (sessionRatings == null) {
-            sessionRatings = new HashSet<String>();
+            sessionRatings = new ConcurrentSkipListSet<String>();
             ratingIdsByAttendee.put(attendeeId, sessionRatings);
         }
         sessionRatings.add(sessionRating.getId());
 
         sessionRatings = ratingIdsBySession.get(session);
         if (sessionRatings == null) {
-            sessionRatings = new HashSet<String>();
+            sessionRatings = new ConcurrentSkipListSet<String>();
             ratingIdsBySession.put(session, sessionRatings);
         }
         sessionRatings.add(sessionRating.getId());
@@ -118,8 +120,6 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
             ratingIdsPerSession.remove(id);
             if (ratingIdsPerSession.isEmpty()) {
                 ratingIdsBySession.remove(sessionId);
-            } else {
-                ratingIdsBySession.put(sessionId, ratingIdsPerSession);
             }
         }
 
@@ -129,8 +129,6 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
             ratingIdsPerAttendee.remove(id);
             if (ratingIdsPerAttendee.isEmpty()) {
                 ratingIdsByAttendee.remove(attendeeId);
-            } else {
-                ratingIdsByAttendee.put(attendeeId, ratingIdsPerAttendee);
             }
         }
 
