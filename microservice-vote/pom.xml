@@ -319,7 +319,7 @@
                             <resource>
                               <directory>${project.build.directory}</directory>
                               <includes>
-                                <include>${project.artifactId}.war</include>
+                                <include>ROOT.war</include>
                               </includes>
                             </resource>
                           </resources>
