@@ -29,11 +29,11 @@
 
     <artifactId>microservice-start</artifactId>
     <name>Conference :: Start</name>
-    
+
     <properties>
-    	<skipDemoData>false</skipDemoData>
+        <skipDemoData>false</skipDemoData>
     </properties>
-    
+
     <profiles>
         <profile>
             <id>windowsExtensions</id>
@@ -59,6 +59,9 @@
         </profile>
         <profile>
             <id>start</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -148,8 +151,8 @@
                                         <argument>target/microprofile-vote.jar</argument>
                                     </arguments>
                                     <environmentVariables>
-							  			<SKIP_DEMO_DATA>${skipDemoData}</SKIP_DEMO_DATA>
-							  		</environmentVariables> 
+                                        <SKIP_DEMO_DATA>${skipDemoData}</SKIP_DEMO_DATA>
+                                    </environmentVariables>
                                 </configuration>
                             </execution>
                         </executions>
@@ -158,6 +161,7 @@
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>ui</id>
             <activation>
@@ -165,6 +169,28 @@
             </activation>
             <build>
                 <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-endpoint-service</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/src/main/static</outputDirectory>
+                                    <overwrite>true</overwrite>
+                                    <resources>
+                                        <resource>
+                                            <directory>../web-application/src/main/start/static</directory>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
