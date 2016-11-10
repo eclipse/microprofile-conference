@@ -1,4 +1,5 @@
-import {NgModule} from "@angular/core";
+import
+{NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {HttpModule, JsonpModule } from "@angular/http";
@@ -23,6 +24,7 @@ import {SessionFilter} from "./session/session.filter";
 import {SessionFilterSpeaker} from "./session/session.filter.speaker";
 import {SessionSpeakersComponent} from "./session/session.speakers.component";
 import {MomentModule} from 'angular2-moment';
+import {ChartModule} from 'primeng/primeng';
 
 @NgModule({
     imports: [
@@ -32,7 +34,8 @@ import {MomentModule} from 'angular2-moment';
         JsonpModule,
         ScheduleModule,
         AppRouting,
-        MomentModule
+        MomentModule,
+        ChartModule,
     ],
     declarations: [
         AppComponent,
