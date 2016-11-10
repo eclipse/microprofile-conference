@@ -69,7 +69,7 @@
                                 <argument>--autoBindHttp</argument>
                                 <argument>--logo</argument>
                                 <argument>--deploy</argument>
-                                <argument>${basedir}/target/${project.artifactId}.war</argument>
+                                <argument>${basedir}/target/ROOT.war</argument>
                                 <argument>--outputUberJar</argument>
                                 <argument>${basedir}/target/${project.artifactId}.jar</argument>
                             </arguments>
@@ -203,7 +203,7 @@
                                <resource>
                                  <directory>${project.build.directory}</directory>
                                  <includes>
-                                     <include>${project.artifactId}.war</include>
+                                     <include>ROOT.war</include>
                                  </includes>
                                </resource>
                            </resources>
@@ -234,7 +234,7 @@
                        </executions>
                        <configuration>
                            <serverName>scheduleServer</serverName>
-                           <appArchive>${project.build.directory}/${project.artifactId}.war</appArchive>
+                           <appArchive>${project.build.directory}/ROOT.war</appArchive>
                            <configFile>${basedir}/src/main/liberty/config/server.xml</configFile>
                        </configuration>
                    </plugin>

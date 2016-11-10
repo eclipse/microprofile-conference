@@ -5,5 +5,5 @@
     
     <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="6060" />
     
-    <webApplication location="microservice-schedule.war" contextRoot="/microservice-schedule"/>
+    <webApplication location="ROOT.war" contextRoot="/"/>
 </server>

@@ -87,13 +87,13 @@ When building the service Payara Microprofile packages both the war file and the
 ```
 cd microservice-schedule
 mvn clean package
-java -jar target/microservice-schedule.jar [Options]
+java -jar target\microservice-schedule.jar --port 6060
 ```
 
 *Port Bindings*
-By default the microservice will bind to port 8080, if this is not available it will bind to the next available port e.g. 8081. To specify the port use --port as a command line option
+By default the microservice would bind to port 8080, if this is not available it will bind to the next available port e.g. 8081. Specifying the port using --port as a command line option overrides this.
 
-To verify that the schedule microservice is running, click on the following link: http://localhost:8080/microservice-schedule/schedule/all[http://localhost:8080/microservice-schedule/schedule/all]
+To verify that the schedule microservice is running, use the following link: http://localhost:6060/schedule/all
 
 To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options.
 
