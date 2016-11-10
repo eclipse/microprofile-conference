@@ -134,6 +134,7 @@ gulp.task('js-third-party', function () {
         './node_modules/bootstrap/dist/js/bootstrap.min.js',
         './node_modules/tether/dist/js/tether.min.js',
         './node_modules/fullcalendar/dist/fullcalendar.min.js',
+        './node_modules/chart.js/dist/Chart.bundle.min.js',
         // angular2
         './node_modules/@angular/core/bundles/core.umd.js',
         './node_modules/@angular/common/bundles/common.umd.js',
