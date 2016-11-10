@@ -5,5 +5,5 @@
     
     <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="5050" />
     
-    <webApplication location="microservice-session.war" contextRoot="/"/>
+    <webApplication location="ROOT.war" contextRoot="/"/>
 </server>
