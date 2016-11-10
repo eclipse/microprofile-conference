@@ -75,7 +75,7 @@ export class VotesComponent implements OnInit {
         this.data = this.toData(this.votes);
     }
 
-    toData(votes: Rating[]): any[] {
+    toData(votes: Rating[]): any {
 
         var data = {
             labels: ['A', 'B', 'C'],
@@ -95,27 +95,23 @@ export class VotesComponent implements OnInit {
                 }]
         };
 
-        var events: any[] = [];
         var self = this;
 
         votes.forEach(function (v: Rating) {
 
             self.sessionService.getSessionsById([v.session]).then(function (sessions: Session[]) {
 
-                events.push({
-                    "id": sessions[0].id,
-                    "title": sessions[0].title,
-                    "start": start,
-                    "end": end,
-                });
+                // events.push({
+                //     "id": sessions[0].id,
+                //     "title": sessions[0].title,
+                //     "start": start,
+                //     "end": end,
+                // });
             });
 
         });
 
-        //Go to the first event
-        this.pSchedule.gotoDate(this.defaultDate);
-
-        return events;
+        return data;
     }
 
 
