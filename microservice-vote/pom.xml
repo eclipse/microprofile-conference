@@ -267,7 +267,7 @@
                             </includes>
                             <systemPropertyVariables>
                                 <liberty.test.port>${testServerHttpPort}</liberty.test.port>
-                                <war.name>${warContext}</war.name>
+                                <app.context.root>${warContext}</app.context.root>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
@@ -319,7 +319,7 @@
                             <resource>
                               <directory>${project.build.directory}</directory>
                               <includes>
-                                <include>${project.artifactId}.war</include>
+                                <include>ROOT.war</include>
                               </includes>
                             </resource>
                           </resources>

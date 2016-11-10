@@ -396,7 +396,8 @@
                                 <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
                             </manifestEntries>
                         </archive>
-                        <warName>${project.artifactId}</warName>
+                        <!--<warName>${project.artifactId}</warName>-->
+                        <warName>ROOT</warName>
                     </configuration>
                 </plugin>
                 <plugin>

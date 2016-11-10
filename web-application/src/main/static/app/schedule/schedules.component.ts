@@ -2,8 +2,12 @@ import {Component, enableProdMode, OnInit, ViewChild} from "@angular/core";
 import {Router} from "@angular/router";
 import {Schedule} from "./schedule";
 import {ScheduleService} from "./schedule.service";
-import {ScheduleModule} from "primeng/primeng";
-import moment = require('moment');
+import {Schedule as NGShedule} from "primeng/primeng";
+import * as moment from "moment";
+import {SessionService} from "../session/session.service";
+import {Session} from "../session/session";
+
+const momentConstructor: (value?: any) => moment.Moment = (<any>moment).default || moment;
 
 enableProdMode();
 
@@ -19,11 +23,17 @@ export class SchedulesComponent implements OnInit {
     selectedSchedule: Schedule;
     events: any[];
     header: any;
+    defaultView: string = "agendaWeek";
+    allDaySlot: boolean = false;
+    minTime: any = moment.duration(8, "hours");
+    maxTime: any = moment.duration(21, "hours");
+    defaultDate: any = momentConstructor();
+    aspectRatio: number = 2.1;
 
     @ViewChild('schedule')
-    private pSchedule: ScheduleModule;
+    private pSchedule: NGShedule;
 
-    constructor(private router: Router, private scheduleService: ScheduleService) {
+    constructor(private router: Router, private scheduleService: ScheduleService, private sessionService: SessionService) {
     }
 
     ngOnInit(): void {
@@ -31,9 +41,16 @@ export class SchedulesComponent implements OnInit {
         this.scheduleService.init(function () {
             _self.getSchedules();
         });
+        this.sessionService.init(function () {
+            //no-op
+            console.log("Loaded sessions");
+        });
 
-        //No header
-        this.header = false;
+        this.header = {
+            left: '',
+            center: '',
+            right: 'agendaWeek, agendaDay, prev, next '
+        };
 
         var d = new Date();
         var year = d.getFullYear();
@@ -42,26 +59,8 @@ export class SchedulesComponent implements OnInit {
 
         this.events = [
             {
-                "title": "All Day Event",
+                "title": "Loading Events...",
                 "start": new Date(year, month, day).toISOString().substring(0, 10)
-            },
-            {
-                "title": "Long Event",
-                "start": "2016-01-07",
-                "end": new Date(year, month, day++).toISOString().substring(0, 10)
-            },
-            {
-                "title": "Repeating Event",
-                "start": new Date(year, month, day++).toISOString().substring(0, 10) + "2016-11-03T16:00:00"
-            },
-            {
-                "title": "Repeating Event",
-                "start": new Date(year, month, day++).toISOString().substring(0, 10) + "2016-11-14T16:00:00"
-            },
-            {
-                "title": "Conference",
-                "start": new Date(year, month, day++).toISOString().substring(0, 10),
-                "end": new Date(year, month, day++).toISOString().substring(0, 10)
             }
         ];
     }
@@ -74,29 +73,72 @@ export class SchedulesComponent implements OnInit {
 
     setSchedules(schedules: Schedule[]): void {
         this.schedules = schedules;
-        this.updateEventsFromSchedules(this.schedules)
+        this.events = this.toEvents(this.schedules);
     }
 
-    updateEventsFromSchedules(schedules: Schedule[]): any[] {
-        var events = [];
-        // for (let s of schedules) {
-        //     var startTime = moment(s.date + "T" + s.startTime + ":00");
-        //     var endTime = moment(startTime).add(1, "hour");
-        //     events.push({
-        //         "title": s.venue,
-        //         "start": startTime,
-        //         "end": endTime
-        //     });
-        // }
+    toEvents(schedules: Schedule[]): any[] {
+        var events: any[] = [];
+        var self = this;
+
+        let begin = momentConstructor();
+
+        schedules.forEach(function (s: Schedule) {
+
+            //date,duration,venue,venueId,startTime,id,sessionId
+            //dayOfWeek,month,dayOfMonth,dayOfYear,era,year,monthValue,chronology,leapYear
+
+            let d = new Date(s.date.monthValue + '/' + s.date.dayOfMonth + '/' + s.date.year);
+            let start = momentConstructor(d.toISOString().slice(0, 10)).add(s.startTime.hour, 'hours');
+            let end = start.add(1, 'hours');
+
+            if (self.defaultDate.isAfter(start)) {
+                self.defaultDate = start;
+            }
+
+            self.sessionService.getSessionsById([s.sessionId]).then(function (sessions: Session[]) {
+
+                events.push({
+                    "id": sessions[0].id,
+                    "title": sessions[0].title,
+                    "start": start,
+                    "end": end,
+                });
+            });
+
+        });
+
+        //Go to the first event
+        this.pSchedule.gotoDate(this.defaultDate);
+
         return events;
+    }
+
+    handleEventClick(e: any) {
+        //e.calEvent = Selected event
+        //e.jsEvent = Browser click event
+        //e.view = Current view object
+
+        var self = this;
+
+        this.schedules.forEach(function (s: Schedule) {
+
+            if (s.sessionId === e.calEvent.id) {
+                self.onSelect(s);
+                self.gotoSession();
+            }
+        })
+    }
+
+    getType(o: any) {
+        return ({}).toString.call(o).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
     }
 
     onSelect(schedule: Schedule): void {
         this.selectedSchedule = schedule;
     }
 
-    gotoDetail(): void {
-        this.router.navigate(['/detail', this.selectedSchedule.id]);
+    gotoSession(): void {
+        this.router.navigate(['/sessions', {id: this.selectedSchedule.sessionId}]);
     }
 
     private static handleError(error: any): Promise<any> {

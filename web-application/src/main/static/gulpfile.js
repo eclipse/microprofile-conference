@@ -130,10 +130,11 @@ gulp.task('js-third-party', function () {
         './node_modules/respond.js/dest/respond.min.js',
         './node_modules/jquery/dist/jquery.min.js',
         './node_modules/jquery-easing/dist/jquery.easing.1.3.umd.min.js',
-        './node_modules/moment/min/moment.min.js',
+        './node_modules/moment/moment.js',
         './node_modules/bootstrap/dist/js/bootstrap.min.js',
         './node_modules/tether/dist/js/tether.min.js',
         './node_modules/fullcalendar/dist/fullcalendar.min.js',
+        './node_modules/chart.js/dist/Chart.bundle.min.js',
         // angular2
         './node_modules/@angular/core/bundles/core.umd.js',
         './node_modules/@angular/common/bundles/common.umd.js',
@@ -171,6 +172,10 @@ function buildTask(/*String*/src, /*String*/dest) {
 }
 
 gulp.task('js-bundles', function () {
+
+    var moment = gulp.src([
+        './node_modules/angular2-moment/**/*.js'
+    ], {base: './node_modules/angular2-moment/'}).pipe(gulp.dest(target + '/' + resources + '/assets/js/node_modules/angular2-moment'));
 
     var primeng = gulp.src([
         './node_modules/primeng/**/*.js'

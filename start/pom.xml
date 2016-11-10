@@ -29,7 +29,11 @@
 
     <artifactId>microservice-start</artifactId>
     <name>Conference :: Start</name>
-
+    
+    <properties>
+    	<skipDemoData>false</skipDemoData>
+    </properties>
+    
     <profiles>
         <profile>
             <id>windowsExtensions</id>
@@ -69,7 +73,7 @@
                                 </goals>
                                 <configuration>
                                     <executable>mvn${command.extension}</executable>
-                                    <workingDirectory>../microservice-speaker/microservice-speaker-web
+                                    <workingDirectory>../microservice-speaker
                                     </workingDirectory>
                                     <arguments>
                                         <argument>tomee:exec</argument>
@@ -86,11 +90,11 @@
                                 <configuration>
                                     <async>true</async>
                                     <executable>java</executable>
-                                    <workingDirectory>../microservice-speaker/microservice-speaker-web
+                                    <workingDirectory>../microservice-speaker
                                     </workingDirectory>
                                     <arguments>
                                         <argument>-jar</argument>
-                                        <argument>target/microservice-speaker-web-exec.jar</argument>
+                                        <argument>target/microservice-speaker-exec.jar</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -143,6 +147,9 @@
                                         <argument>-jar</argument>
                                         <argument>target/microprofile-vote.jar</argument>
                                     </arguments>
+                                    <environmentVariables>
+							  			<SKIP_DEMO_DATA>${skipDemoData}</SKIP_DEMO_DATA>
+							  		</environmentVariables> 
                                 </configuration>
                             </execution>
                         </executions>

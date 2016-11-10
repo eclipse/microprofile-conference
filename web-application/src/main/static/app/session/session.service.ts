@@ -48,4 +48,23 @@ export class SessionService {
         console.error('An error occurred', error); // TODO - Display safe error
         return Promise.reject(error.message || error);
     }
+
+    getSessionsById(ids: string[]): Promise<Session[]> {
+
+        if (undefined == this.endPoint) {
+            console.error("init must be called at least once");
+        }
+
+        return this.getSessions().then(sessions => this.setSessions(sessions).filter(session => this.isIn(session, ids)));
+    }
+
+    private isIn(session: Session, ids: string[]): boolean {
+        for (var id of ids) {
+            if (session.id == id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
