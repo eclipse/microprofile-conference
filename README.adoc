@@ -87,13 +87,13 @@ When building the service Payara Microprofile packages both the war file and the
 ```
 cd microservice-schedule
 mvn clean package
-java -jar target/microservice-schedule.jar [Options]
+java -jar target\microservice-schedule.jar --port 6060
 ```
 
 *Port Bindings*
-By default the microservice will bind to port 8080, if this is not available it will bind to the next available port e.g. 8081. To specify the port use --port as a command line option
+By default the microservice would bind to port 8080, if this is not available it will bind to the next available port e.g. 8081. Specifying the port using --port as a command line option overrides this.
 
-To verify that the schedule microservice is running, click on the following link: http://localhost:8080/microservice-schedule/schedule/all[http://localhost:8080/microservice-schedule/schedule/all]
+To verify that the schedule microservice is running, use the following link: http://localhost:6060/schedule/all
 
 To see a full set options run the jar with the --help command line option or see the link:https://payara.gitbooks.io/payara-server/content/documentation/payara-micro/payara-micro.html[Payara Micro Documentation] for a full list of options.
 
@@ -138,13 +138,13 @@ java -jar target/microservice-session-swarm.jar [-D<OPTION>]
 | 0
 |===
 
-For example, if you want to change the HTTP port to 9111, run the application like this:
+For example, if you want to change the HTTP port to 5050, run the application like this:
 
 ----
-java -jar target/microservice-session-swarm.jar -Dswarm.http.port=9111
+java -jar target/microservice-session-swarm.jar -Dswarm.http.port=5050
 ----
 
-Click on this link to verify that everything ran fine: http://localhost:9111/sessions[http://localhost:9111/sessions]
+Click on this link to verify that everything ran fine: http://localhost:5050/sessions
 
 For a full set of configuration options please see link:https://wildfly-swarm.gitbooks.io/wildfly-swarm-users-guide/content/[the Wildfly Swarm Userguide]
 
@@ -166,24 +166,22 @@ Provided using link:http://tomee.apache.org/[Apache TomEE 7.x]
 ----
 cd microservice-speaker
 
-cd microservice-speaker-web
+mvn clean package
 
-mvn clean package tomee:exec -DskipTests
-
-java -DadditionalSystemProperties="-Dport.http=9191 -Dport.ajp=9292 -Dport.shutdown=9393" -jar target/microservice-speaker-web-exec.jar
+java -jar target/microservice-speaker-exec.jar
 ----
 
 If you look at the output, you will find messages like the following:
 
 ----
-INFO - REST Application: http://localhost:9191/microservice-speaker-web/speaker               -> io.microprofile.showcase.speaker.rest.Application@68cda174
-INFO -      Service URI: http://localhost:9191/microservice-speaker-web/speaker/              -> Pojo io.microprofile.showcase.speaker.rest.ResourceSpeaker
-INFO -            DELETE http://localhost:9191/microservice-speaker-web/speaker/remove/{id}   ->      void remove(String)
+INFO - REST Application: http://localhost:4040/speaker               -> io.microprofile.showcase.speaker.rest.Application@68cda174
+INFO - Service URI: http://localhost:4040/speaker/              -> Pojo io.microprofile.showcase.speaker.rest.ResourceSpeaker
+INFO - DELETE http://localhost:4040/speaker/remove/{id}   ->      void remove(String)
 ----
 
 There you can see the URLs of the endpoints exposed by TomEE for your application.
 
-To verify that everything worked fine, you can try to access http://localhost:9191/microservice-speaker-web/speaker[http://localhost:9191/microservice-speaker-web/speaker]
+To verify that everything worked fine, you can try to access http://localhost:4040/speaker
 
 ==== Running on Liberty
 
@@ -192,7 +190,7 @@ Alternatively you can run this service on liberty by doing:
 ```
 cd microservice-speaker
 mvn -Pliberty package
-java -jar microservice-speaker-web/target/microservice-speaker.liberty.jar
+java -jar target/microservice-speaker.liberty.jar
 ```
 
 
@@ -202,11 +200,11 @@ Provided using link:https://developer.ibm.com/wasdev/[WebSphere Liberty]
 *Build and run the service*
 ```
 cd microservice-vote
-mvn clean install
+mvn package
 java -jar target/microprofile-vote.jar
 ```
 
-Access the app at link:http://localhost:7070/vote[http://localhost:7070/vote].
+Access the app at http://localhost:7070/vote
 
 *Port Bindings*
 By default the microservice will start on port 7070. To set it to a different port use the following Maven properties:

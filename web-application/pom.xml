@@ -102,7 +102,7 @@
                 <src.dir>src/main/local/java</src.dir>
             </properties>
             <build>
-                <finalName>ROOT</finalName>
+                <finalName>${warfile.name}</finalName>
                 <testResources>
                     <testResource>
                         <directory>src/test/local/java</directory>
@@ -148,7 +148,7 @@
                                     <directory>target/static-resources</directory>
                                 </resource>
                             </webResources>
-                            <warName>ROOT</warName>
+                            <warName>${warfile.name}</warName>
                         </configuration>
                     </plugin>
 
@@ -230,7 +230,7 @@
         </profile>
 
         <profile>
-            <id>start</id>
+            <id>ui</id>
             <build>
                 <plugins>
                     <plugin>

@@ -108,7 +108,7 @@
                                         <resource>
                                             <directory>${project.build.directory}</directory>
                                             <includes>
-                                                <include>ROOT.war</include>
+                                                <include>${warfile.name}.war</include>
                                             </includes>
                                         </resource>
                                     </resources>
@@ -142,7 +142,7 @@
                         </executions>
                         <configuration>
                             <serverName>speakerServer</serverName>
-                            <appArchive>${project.build.directory}/ROOT.war</appArchive>
+                            <appArchive>${project.build.directory}/${warfile.name}.war</appArchive>
                             <configFile>${basedir}/src/main/liberty/config/server.xml</configFile>
                         </configuration>
                     </plugin>
@@ -169,7 +169,7 @@
                 <artifactId>tomee-maven-plugin</artifactId>
                 <version>${version.tomee}</version>
                 <configuration>
-                    <warFile>${project.build.directory}/ROOT.war</warFile>
+                    <warFile>${project.build.directory}/${warfile.name}.war</warFile>
                     <tomeeClassifier>webprofile</tomeeClassifier>
                 </configuration>
                 <executions>

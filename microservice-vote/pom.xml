@@ -319,7 +319,7 @@
                             <resource>
                               <directory>${project.build.directory}</directory>
                               <includes>
-                                <include>ROOT.war</include>
+                                <include>${warfile.name}.war</include>
                               </includes>
                             </resource>
                           </resources>

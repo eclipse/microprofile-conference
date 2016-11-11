@@ -123,6 +123,8 @@
         <version.commons-lang3>3.4</version.commons-lang3>
         <version.collections>3.2.2</version.collections>
 
+        <!--Environment-->
+        <warfile.name>ROOT</warfile.name>
     </properties>
 
     <modules>
@@ -397,7 +399,7 @@
                             </manifestEntries>
                         </archive>
                         <!--<warName>${project.artifactId}</warName>-->
-                        <warName>ROOT</warName>
+                        <warName>${warfile.name}</warName>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -486,6 +488,13 @@
                 <module>microservice-vote</module>
                 <module>microservice-speaker</module>
                 <module>microservice-schedule</module>
+                <module>web-application</module>
+                <module>start</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>ui</id>
+            <modules>
                 <module>web-application</module>
                 <module>start</module>
             </modules>
