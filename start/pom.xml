@@ -32,6 +32,11 @@
 
     <properties>
         <skipDemoData>false</skipDemoData>
+        <speaker.qualifier.jar>-exec</speaker.qualifier.jar>
+        <session.qualifier.jar>-swarm</session.qualifier.jar>
+        <session.exec.arg>-Dswarm.http.port=5050</session.exec.arg>
+        <schedule.exec.arg1>--port</schedule.exec.arg1>
+        <schedule.exec.arg2>6060</schedule.exec.arg2>
     </properties>
 
     <profiles>
@@ -55,6 +60,16 @@
             </activation>
             <properties>
                 <command.extension></command.extension>
+            </properties>
+        </profile>
+        <profile>
+            <id>liberty</id>
+            <properties>
+                <speaker.qualifier.jar>${qualifier.jar}</speaker.qualifier.jar>
+                <session.qualifier.jar>${qualifier.jar}</session.qualifier.jar>
+                <session.exec.arg></session.exec.arg>
+                <schedule.exec.arg1></schedule.exec.arg1>
+                <schedule.exec.arg2></schedule.exec.arg2>
             </properties>
         </profile>
         <profile>
@@ -97,7 +112,7 @@
                                     </workingDirectory>
                                     <arguments>
                                         <argument>-jar</argument>
-                                        <argument>target/microservice-speaker-exec.jar</argument>
+                                        <argument>target/microservice-speaker${speaker.qualifier.jar}.jar</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -113,8 +128,8 @@
                                     <workingDirectory>../microservice-session</workingDirectory>
                                     <arguments>
                                         <argument>-jar</argument>
-                                        <argument>target/microservice-session-swarm.jar</argument>
-                                        <argument>-Dswarm.http.port=5050</argument>
+                                        <argument>target/microservice-session${session.qualifier.jar}.jar</argument>
+                                        <argument>${session.exec.arg}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -130,9 +145,9 @@
                                     <workingDirectory>../microservice-schedule</workingDirectory>
                                     <arguments>
                                         <argument>-jar</argument>
-                                        <argument>target/microservice-schedule.jar</argument>
-                                        <argument>--port</argument>
-                                        <argument>6060</argument>
+                                        <argument>target/microservice-schedule${qualifier.jar}.jar</argument>
+                                        <argument>${schedule.exec.arg1}</argument>
+                                        <argument>${schedule.exec.arg2}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -148,7 +163,7 @@
                                     <workingDirectory>../microservice-vote/</workingDirectory>
                                     <arguments>
                                         <argument>-jar</argument>
-                                        <argument>target/microprofile-vote.jar</argument>
+                                        <argument>target/microservice-vote${qualifier.jar}.jar</argument>
                                     </arguments>
                                     <environmentVariables>
                                         <SKIP_DEMO_DATA>${skipDemoData}</SKIP_DEMO_DATA>
