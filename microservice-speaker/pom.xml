@@ -134,7 +134,7 @@
                                     <goal>package-server</goal>
                                 </goals>
                                 <configuration>
-                                    <packageFile>${project.build.directory}/${project.artifactId}.liberty.jar
+                                    <packageFile>${project.build.directory}/${project.artifactId}${qualifier.jar}.jar
                                     </packageFile>
                                     <include>runnable</include>
                                 </configuration>

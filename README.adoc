@@ -58,6 +58,18 @@ Run just the UI:
 mvn package -Pui -pl :microservice-start
 ----
 
+=== Running on Liberty
+
+To run all the services on individual WebSphere Liberty servers add the 'liberty' profile to the command:
+
+----
+mvn clean package -P start,ui,liberty
+----
+
+----
+mvn package -P start,liberty -pl :microservice-start
+----
+
 == Development Build
 
 ----
@@ -104,7 +116,7 @@ Alternatively you can run this service on liberty by doing:
 ```
 cd microservice-schedule
 mvn -Pliberty package
-java -jar target/microservice-schedule.liberty.jar
+java -jar target/microservice-schedule-liberty.jar
 ```
 
 
@@ -155,7 +167,7 @@ Alternatively you can run this service on liberty by doing:
 ```
 cd microservice-session
 mvn -Pliberty package
-java -jar target/microservice-session.liberty.jar
+java -jar target/microservice-session-liberty.jar
 ```
 
 === microservice-speaker
@@ -190,7 +202,7 @@ Alternatively you can run this service on liberty by doing:
 ```
 cd microservice-speaker
 mvn -Pliberty package
-java -jar target/microservice-speaker.liberty.jar
+java -jar target/microservice-speaker-liberty.jar
 ```
 
 
@@ -201,7 +213,7 @@ Provided using link:https://developer.ibm.com/wasdev/[WebSphere Liberty]
 ```
 cd microservice-vote
 mvn package
-java -jar target/microprofile-vote.jar
+java -jar target/microservice-vote.jar
 ```
 
 Access the app at http://localhost:7070/vote
@@ -211,6 +223,8 @@ By default the microservice will start on port 7070. To set it to a different po
 ```
 -DtestServerHttpPort=9080 -DtestServerHttpsPort=9443
 ```
+
+Note: if you run the package command with the 'liberty' profile the jar file will be called microservice-vote-liberty.jar.
 
 === Web Application (UI)
 
