@@ -19,20 +19,14 @@ package io.microprofile.showcase.vote.model;
 public class Attendee {
 
     private String id;
-    private final String revision;
     private String name;
 
     public Attendee(String name) {
-        this(null, null, name);
+        this(null, name);
     }
 
     public Attendee(String id, String name) {
-        this(id, null, name);
-    }
-
-    public Attendee(String id, String revision, String name) {
         this.id = id;
-        this.revision = revision;
         this.name = name;
     }
 
@@ -42,10 +36,6 @@ public class Attendee {
 
     public void setID(String id) {
         this.id = id;
-    }
-
-    public String getRevision() {
-        return revision;
     }
 
     public String getName() {
@@ -89,7 +79,7 @@ public class Attendee {
 
     @Override
     public String toString() {
-        return "Attendee [id=" + id + ", revision=" + revision + ", name=" + name + "]";
+        return "Attendee [id=" + id + ", name=" + name + "]";
     }
 
 }

@@ -154,7 +154,7 @@ public class SessionVoteTest {
         Attendee jonathanDoe2 = sessionVote.registerAttendee(new Attendee("Jonathan Doe2"));
         String id2 = jonathanDoe2.getId();
 
-        SessionRating updatedRating = new SessionRating(originalRating.getId(), originalRating.getRevision(), "session2", id2, 7);
+        SessionRating updatedRating = new SessionRating(originalRating.getId(), "session2", id2, 7);
 
         // API method under test
         updatedRating = sessionVote.updateRating(updatedRating.getId(), updatedRating);

@@ -44,7 +44,15 @@
                 <h4>Votes</h4>
             </div>
             <div class="row p-a-1">
-                <p>TODO - Vote count and comments</p>
+              <div class="btn-group">
+                <button type="button" style="white-space: normal" class="btn btn-primary" (click)="rateSession(10)">Great!</button>
+                <button type="button" style="white-space: normal" class="btn btn-primary" (click)="rateSession(5)">Not bad</button>
+                <button type="button" style="white-space: normal" class="btn btn-primary" (click)="rateSession(1)">Needs some work</button>
+              </div>
+            </div>
+            <div class="row p-a-1">
+              <div *ngIf="voted==true">Thanks for voting!</div>
+              <div *ngIf="voted==false">Please vote for the session!</div>
             </div>
         </div>
 

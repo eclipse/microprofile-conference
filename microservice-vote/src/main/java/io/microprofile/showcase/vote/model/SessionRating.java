@@ -19,18 +19,16 @@ package io.microprofile.showcase.vote.model;
 public class SessionRating {
 
     private String id;
-    private String revision;
     private String session;
     private String attendeeId;
     private int rating;
 
     public SessionRating(String session, String attendeeId, int rating) {
-        this(null, null, session, attendeeId, rating);
+        this(null, session, attendeeId, rating);
     }
 
-    public SessionRating(String id, String revision, String session, String attendeeId, int rating) {
+    public SessionRating(String id, String session, String attendeeId, int rating) {
         this.id = id;
-        this.revision = revision;
         this.session = session;
         this.attendeeId = attendeeId;
         this.rating = rating;
@@ -42,10 +40,6 @@ public class SessionRating {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getRevision() {
-        return revision;
     }
 
     public String getSession() {
@@ -114,7 +108,7 @@ public class SessionRating {
 
     @Override
     public String toString() {
-        return "SessionRating [id=" + id + ", revision=" + revision + ", session=" + session + ", attendeeId="
+        return "SessionRating [id=" + id + ", session=" + session + ", attendeeId="
                 + attendeeId + ", rating=" + rating + "]";
     }
     

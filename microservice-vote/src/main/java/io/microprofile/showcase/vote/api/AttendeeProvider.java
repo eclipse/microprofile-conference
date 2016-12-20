@@ -99,17 +99,24 @@ public class AttendeeProvider implements MessageBodyReader<Attendee>, MessageBod
     }
 
     public static Attendee fromJSON(JsonObject attendeeJson) {
-        JsonString idJson = attendeeJson.getJsonString("id");
-        if (idJson == null) {
-            idJson = attendeeJson.getJsonString("_id");
-        }
-        JsonString revJson = attendeeJson.getJsonString("_rev");
-        JsonString nameJson = attendeeJson.getJsonString("name");
-        Attendee attendee = new Attendee(idJson != null ? idJson.getString() : null, revJson != null ? revJson.getString() : null, nameJson.getString());
+    	String id = getStringFromJson("id", attendeeJson);
+    	String name = getStringFromJson("name", attendeeJson);
+        Attendee attendee = new Attendee(id, name);
         return attendee;
     }
 
-    public static void toJSON(OutputStream os, Attendee attendee) {
+    private static String getStringFromJson(String key, JsonObject json) {
+    	String returnedString = null;
+		if (json.containsKey(key)) {
+			JsonString value = json.getJsonString(key);
+			if (value != null) {
+				returnedString = value.getString();
+			}
+		}
+		return returnedString;
+	}
+
+	public static void toJSON(OutputStream os, Attendee attendee) {
         JsonWriter jsonWriter = Json.createWriter(os);
         jsonWriter.writeObject(toJSON(attendee));
         jsonWriter.close();

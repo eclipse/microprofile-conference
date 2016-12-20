@@ -1,10 +1,10 @@
 {
   "globalDependencies": {
-    "angular-protractor": "registry:dt/angular-protractor#1.5.0+20160914235635",
+    "angular-protractor": "registry:dt/angular-protractor#1.5.0+20161101133457",
     "core-js": "registry:dt/core-js#0.0.0+20160914114559",
     "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
-    "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
-    "node": "registry:dt/node#6.0.0+20160915134512",
+    "jasmine": "registry:dt/jasmine#2.5.0+20161119044246",
+    "node": "registry:dt/node#6.0.0+20161212163245",
     "selenium-webdriver": "registry:dt/selenium-webdriver#2.53.1+20160914235635"
   }
 }
