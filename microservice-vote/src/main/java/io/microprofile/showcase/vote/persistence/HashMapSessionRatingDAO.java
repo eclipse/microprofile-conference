@@ -74,7 +74,7 @@ public class HashMapSessionRatingDAO implements SessionRatingDAO {
     public SessionRating rateSession(SessionRating sessionRating) {
 
         String ratingId = UUID.randomUUID().toString();
-        sessionRating = new SessionRating(ratingId, null, sessionRating.getSession(), sessionRating.getAttendeeId(), sessionRating.getRating());
+        sessionRating = new SessionRating(ratingId, sessionRating.getSession(), sessionRating.getAttendeeId(), sessionRating.getRating());
 
         String session = sessionRating.getSession();
         String attendeeId = sessionRating.getAttendeeId();

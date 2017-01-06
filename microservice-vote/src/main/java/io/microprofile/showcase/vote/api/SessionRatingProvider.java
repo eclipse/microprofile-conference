@@ -98,18 +98,33 @@ public class SessionRatingProvider implements MessageBodyReader<SessionRating>, 
     }
 
     public static SessionRating fromJSON(JsonObject sessionRatingJson) {
-        JsonString idJson = sessionRatingJson.getJsonString("id");
-        if (idJson == null) {
-            idJson = sessionRatingJson.getJsonString("_id");
-        }
-        JsonString revJson = sessionRatingJson.getJsonString("_rev");
-        JsonString sessionJson = sessionRatingJson.getJsonString("session");
-        JsonString attendeeIdJson = sessionRatingJson.getJsonString("attendeeId");
-        JsonNumber ratingJson = sessionRatingJson.getJsonNumber("rating");
-        SessionRating sessionRating = new SessionRating(idJson != null ? idJson.getString() : null, revJson != null ? revJson.getString() : null, sessionJson.getString(), attendeeIdJson.getString(), ratingJson.intValue());
+    	String id = getStringFromJson("id", sessionRatingJson);
+    	String session = getStringFromJson("session", sessionRatingJson);
+    	String attendeeId = getStringFromJson("attendeeId", sessionRatingJson);
+    	int rating = 0;
+    	if (sessionRatingJson.containsKey("rating")) {
+    		JsonNumber ratingJson = sessionRatingJson.getJsonNumber("rating");
+    		if (ratingJson != null) {
+    			rating = ratingJson.intValue();
+    		}
+    	}
+    	
+        SessionRating sessionRating = new SessionRating(id, session, attendeeId, rating);
         return sessionRating;
     }
 
+    
+    private static String getStringFromJson(String key, JsonObject json) {
+    	String returnedString = null;
+		if (json.containsKey(key)) {
+			JsonString value = json.getJsonString(key);
+			if (value != null) {
+				returnedString = value.getString();
+			}
+		}
+		return returnedString;
+	}
+    
     public static void toJSON(OutputStream os, SessionRating sessionRating) {
         JsonWriter jsonWriter = Json.createWriter(os);
         jsonWriter.writeObject(toJSON(sessionRating));

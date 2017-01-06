@@ -81,7 +81,7 @@ public class VoteClientTest {
         SessionRating sr7 = rcu.rateSessionAndCheck(new SessionRating("What is WebSphere Liberty?", attendee2.getId(), 10));
 
         // Update a session
-        SessionRating newSr5 = rcu.updateRating(new SessionRating(sr5.getId(), sr5.getRevision(), sr5.getSession(), sr5.getAttendeeId(), 6));
+        SessionRating newSr5 = rcu.updateRating(new SessionRating(sr5.getId(), sr5.getSession(), sr5.getAttendeeId(), 6));
         assertEquals("Unexpected rating value from updated SessionRating", 6, newSr5.getRating());
 
         // Check rating for a given session

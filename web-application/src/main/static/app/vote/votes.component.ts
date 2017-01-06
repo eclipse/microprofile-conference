@@ -3,8 +3,6 @@ import {Router} from "@angular/router";
 import {VoteService} from "./vote.service";
 import {Rating} from "./rating";
 import {UIChart} from "primeng/components/chart/chart";
-import {SessionService} from "../session/session.service";
-import {Session} from "../session/session";
 
 enableProdMode();
 
@@ -23,17 +21,13 @@ export class VotesComponent implements OnInit {
     @ViewChild('chart')
     private chart: UIChart;
 
-    constructor(private router: Router, private voteService: VoteService, private sessionService: SessionService) {
+    constructor(private router: Router, private voteService: VoteService) {
     }
 
     ngOnInit(): void {
         let _self = this;
         this.voteService.init(function () {
             _self.getVotes();
-        });
-
-        this.sessionService.init(function () {
-            //no-op
         });
 
         this.options = {
@@ -45,23 +39,6 @@ export class VotesComponent implements OnInit {
             }
         };
 
-        this.data = {
-            labels: ['A', 'B', 'C'],
-            datasets: [
-                {
-                    data: [300, 50, 100],
-                    backgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56"
-                    ],
-                    hoverBackgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56"
-                    ]
-                }]
-        };
     }
 
     getVotes(): void {
@@ -72,44 +49,49 @@ export class VotesComponent implements OnInit {
 
     setVotes(votes: Rating[]): void {
         this.votes = votes;
-        this.data = this.toData(this.votes);
+      this.data = this.toData(this.votes);
+      this.chart.data = this.data;
+      this.chart.refresh();
     }
 
     toData(votes: Rating[]): any {
 
-        var data = {
-            labels: ['A', 'B', 'C'],
+      var labelSet:any = ["Loved the sessions", "Satisfied", "Felt they needed work"];
+      var dataValues:any = [];
+      var negatives:number = 0;
+      var wasOk: number = 0;
+      var positives: number = 0;
+      votes.forEach(function (v: Rating) {
+        if (v.rating < 4) {
+          negatives++;
+        } else if (v.rating < 8) {
+          wasOk++;
+        } else {
+          positives++;
+        }
+      });
+
+      dataValues = [positives, wasOk, negatives];
+
+      var data = {
+            labels: labelSet,
             datasets: [
                 {
-                    data: [300, 50, 100],
+                    data: dataValues,
                     backgroundColor: [
-                        "#FF6384",
                         "#36A2EB",
-                        "#FFCE56"
+                        "#FFCE56",
+                        "#FF6384"
                     ],
                     hoverBackgroundColor: [
-                        "#FF6384",
                         "#36A2EB",
-                        "#FFCE56"
+                        "#FFCE56",
+                        "#FF6384"
                     ]
                 }]
         };
 
         var self = this;
-
-        votes.forEach(function (v: Rating) {
-
-            self.sessionService.getSessionsById([v.session]).then(function (sessions: Session[]) {
-
-                // events.push({
-                //     "id": sessions[0].id,
-                //     "title": sessions[0].title,
-                //     "start": start,
-                //     "end": end,
-                // });
-            });
-
-        });
 
         return data;
     }
