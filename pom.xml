@@ -125,6 +125,7 @@
 
         <!--Environment-->
         <warfile.name>ROOT</warfile.name>
+        <qualifier.jar></qualifier.jar>
     </properties>
 
     <modules>
@@ -498,6 +499,12 @@
                 <module>web-application</module>
                 <module>start</module>
             </modules>
+        </profile>
+        <profile>
+            <id>liberty</id>
+            <properties>
+                <qualifier.jar>-liberty</qualifier.jar>
+            </properties>
         </profile>
     </profiles>
 </project>

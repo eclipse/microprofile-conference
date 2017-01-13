@@ -38,9 +38,8 @@
         <warVersion>1.0.0-SNAPSHOT</warVersion>
         <!--This is set in the ibm-web-ext.xml file -->
         <warContext>vote</warContext>
-        <package.file>${project.build.directory}/${app.name}.jar</package.file>
+        <package.file>${project.build.directory}/${project.artifactId}${qualifier.jar}.jar</package.file>
         <packaging.type>runnable</packaging.type>
-        <app.name>microprofile-vote</app.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <testServerHttpPort>7070</testServerHttpPort>
@@ -66,7 +65,7 @@
             <id>createZip</id>
             <!-- Create a zip file containing app and server rather than a runnable jar -->
             <properties>
-                <package.file>${project.build.directory}/${app.name}.zip</package.file>
+                <package.file>${project.build.directory}/${project.artifactId}.zip</package.file>
                 <packaging.type>usr</packaging.type>
             </properties>
         </profile>

@@ -1,5 +1,4 @@
 export class Attendee {
-    id: number;
-    revision: string;
+    id: string;
     name: string;
 }

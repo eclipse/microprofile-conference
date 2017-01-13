@@ -5,5 +5,5 @@
     
     <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="4040" />
     
-    <webApplication location="microservice-speaker.war" contextRoot="/microservice-speaker"/>
+    <webApplication location="ROOT.war" contextRoot="/"/>
 </server>

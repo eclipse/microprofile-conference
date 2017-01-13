@@ -67,7 +67,7 @@ public class CouchAttendeeDAO implements AttendeeDAO {
 
         Attendee original = getAttendee(attendee.getId());
 
-        couch.request(attendee.getId(), RequestType.PUT, attendee, null, original.getRevision(), 201);
+        couch.request(attendee.getId(), RequestType.PUT, attendee, null, null, 201);
 
         attendee = getAttendee(attendee.getId());
 
@@ -107,7 +107,7 @@ public class CouchAttendeeDAO implements AttendeeDAO {
     public void deleteAttendee(String id) {
         Attendee attendee = getAttendee(id);
 
-        couch.request(id, RequestType.DELETE, null, null, attendee.getRevision(), 200);
+        couch.request(id, RequestType.DELETE, null, null, null, 200);
     }
 
     @Override
