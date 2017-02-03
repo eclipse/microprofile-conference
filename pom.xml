@@ -134,8 +134,8 @@
         <module>microservice-vote</module>
         <module>microservice-speaker</module>
         <module>microservice-schedule</module>
-        <module>start</module>
         <module>web-application</module>
+        <module>start</module>
     </modules>
 
     <dependencyManagement>
