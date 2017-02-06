@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Microprofile.io
+ * Copyright(c) 2016-2017 IBM, Red Hat, and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
