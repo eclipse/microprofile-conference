@@ -155,14 +155,14 @@
         <dependency>
             <groupId>net.wasdev.wlp.starters.microprofile</groupId>
             <artifactId>provided-pom</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.3</version>
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.wasdev.wlp.starters.microprofile</groupId>
             <artifactId>runtime-pom</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.3</version>
             <type>pom</type>
             <scope>runtime</scope>
         </dependency>
