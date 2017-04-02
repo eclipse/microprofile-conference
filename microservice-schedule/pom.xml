@@ -24,7 +24,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>microservice-schedule</artifactId>
+    <artifactId>ROOT</artifactId>
     <name>Conference :: Schedule</name>
     <packaging>war</packaging>
 
