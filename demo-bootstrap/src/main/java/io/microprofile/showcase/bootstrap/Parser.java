@@ -44,9 +44,7 @@ public class Parser {
             final JsonReaderFactory factory = Json.createReaderFactory(null);
             final JsonReader reader = factory.createReader(jsonResource.openStream());
 
-            final JsonObject root = reader.readObject();
-            final JsonObject sectionList = (JsonObject) ((JsonArray) root.get("sectionList")).get(0);
-            final JsonArray items = (JsonArray) sectionList.get("items");
+            final JsonArray items = reader.readArray();
 
             // parse session objects
             final List<Session> sessions = new LinkedList<>();
@@ -64,7 +62,7 @@ public class Parser {
             for (final Session session : sessions) {
 
                 // speakers
-                final JsonArray participants = session.getUnderlying().getJsonArray("participants");
+                /*final JsonArray participants = session.getUnderlying().getJsonArray("participants");
 
                 final Collection<Speaker> assignedSpeakers = participants.stream()
                         .map(item -> new Speaker((JsonObject) item))
@@ -92,9 +90,9 @@ public class Parser {
                         .collect(Collectors.toCollection(HashSet::new));
 
                 session.setSpeakers(ids);
-
+*/
                 // schedules
-                final JsonObject times = session.getUnderlying().getJsonArray("times").getJsonObject(0);
+                final JsonObject times = session.getUnderlying();
                 final Schedule schedule = new Schedule(times);
                 schedule.setId(String.valueOf(this.id.incrementAndGet()));
                 schedules.add(schedule);

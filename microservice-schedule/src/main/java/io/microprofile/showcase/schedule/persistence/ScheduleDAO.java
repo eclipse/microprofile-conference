@@ -86,6 +86,7 @@ public class ScheduleDAO {
                         venues.put(venueId, sched.getVenue());
 
                     } catch (final Exception e) {
+                        e.printStackTrace();
                         System.out.println("Failed to parse bootstrap data: " + e.getMessage());
                     }
 
