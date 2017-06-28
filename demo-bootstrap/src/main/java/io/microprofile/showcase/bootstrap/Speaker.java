@@ -25,12 +25,20 @@ public class Speaker extends JsonWrapper {
         super(underlying);
     }
 
+    public String getFirstName() {
+        return underlying.getString("first-name", "n/a");
+    }
+
+    public String getLastName() {
+        return underlying.getString("last-name", "n/a");
+    }
+
     public String getFullName() {
-        return underlying.getString("fullName", "n/a");
+        return getFirstName() + " " + getLastName();
     }
 
     public String getJobTitle() {
-        return underlying.getString("jobTitle", "n/a");
+        return underlying.getString("title", "n/a");
     }
 
     public String getCompany() {

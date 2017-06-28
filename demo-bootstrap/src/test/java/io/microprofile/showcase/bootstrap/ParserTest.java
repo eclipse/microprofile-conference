@@ -29,12 +29,15 @@ import org.junit.Test;
 public class ParserTest {
 
     @Test
-    public void testScheduleParser() {
-        URL resource = ParserTest.class.getClassLoader().getResource("schedule.json");
-        Assert.assertNotNull("Failed to load 'schedule.json'", resource);
+    public void testScheduleAndSpeakerParser() {
+        URL schedule = ParserTest.class.getClassLoader().getResource("schedule.json");
+        Assert.assertNotNull("Failed to load 'schedule.json'", schedule);
+
+        URL speaker = ParserTest.class.getClassLoader().getResource("speaker.json");
+        Assert.assertNotNull("Failed to load 'speaker.json'", speaker);
 
         Parser parser = new Parser();
-        BootstrapData data = parser.parse(resource);
+        BootstrapData data = parser.parse(schedule, speaker);
         Collection<Session> sessions = data.getSessions();
 
         Assert.assertEquals(100, sessions.size());
@@ -46,12 +49,12 @@ public class ParserTest {
         Assert.assertTrue("Expected specific session code in schedule", con5594.isPresent());
         Assert.assertEquals("et tristique pellentesque, tellus", con5594.get().getTitle());
 
-        Optional<Speaker> speaker = data.getSpeaker().stream()
+        Optional<Speaker> matchingSpeaker = data.getSpeaker().stream()
             .filter(sp -> sp.getId().equals("55"))
             .findFirst();
 
-        Assert.assertTrue(speaker.isPresent());
-        Assert.assertTrue(con5594.get().getSpeakers().contains(speaker.get().getId()));
+        Assert.assertTrue(matchingSpeaker.isPresent());
+        Assert.assertTrue(con5594.get().getSpeakers().contains(matchingSpeaker.get().getId()));
 
 
         Optional<Session> con4226 = sessions.stream()
@@ -59,14 +62,14 @@ public class ParserTest {
             .findAny();
         Assert.assertTrue(con4226.isPresent());
 
-        Optional<Schedule> schedule = data.getSchedules().stream()
+        Optional<Schedule> matchingSchedule = data.getSchedules().stream()
             .filter(sched -> sched.getId() == con4226.get().getSchedule())
             .findFirst();
-        Assert.assertTrue(schedule.isPresent());
-        Assert.assertEquals("Le Mans", schedule.get().getVenue());
-        Assert.assertEquals("2018-05-18", schedule.get().getDate());
-        Assert.assertEquals("11:33:29", schedule.get().getStartTime());
-        Assert.assertEquals("60.0", String.valueOf(schedule.get().getLength()));
+        Assert.assertTrue(matchingSchedule.isPresent());
+        Assert.assertEquals("Le Mans", matchingSchedule.get().getVenue());
+        Assert.assertEquals("2018-05-18", matchingSchedule.get().getDate());
+        Assert.assertEquals("11:33:29", matchingSchedule.get().getStartTime());
+        Assert.assertEquals("60.0", String.valueOf(matchingSchedule.get().getLength()));
 
         //Confirm no null elements
         for (final Session session : sessions) {

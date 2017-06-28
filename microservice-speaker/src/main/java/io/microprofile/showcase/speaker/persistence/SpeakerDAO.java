@@ -83,6 +83,8 @@ public class SpeakerDAO {
                     sp.setOrganization(bootstrap.getCompany());
                     sp.setBiography(bootstrap.getJobTitle());
 
+
+                    // http://loremflickr.com/320/240/nature
                     sp.setPicture("assets/images/unknown.jpg");
 
                     appendFeatured(featured, sp);
