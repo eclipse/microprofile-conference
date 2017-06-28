@@ -15,6 +15,9 @@
 package io.microprofile.showcase.bootstrap;
 
 import javax.json.JsonObject;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Heiko Braun
@@ -30,19 +33,21 @@ public class Schedule extends JsonWrapper {
     }
 
     public String getDate() {
-        return underlying.getString("date");
+        LocalDate date = LocalDate.parse(underlying.getString("date"), DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+        return date.format(DateTimeFormatter.ISO_DATE);
     }
 
     public String getStartTime() {
-        return underlying.getString("startTime");
+        Timestamp timestamp = Timestamp.valueOf(underlying.getString("start-time"));
+        return timestamp.toLocalDateTime().format(DateTimeFormatter.ISO_TIME);
     }
 
     public String getVenue() {
-        return underlying.getString("room");
+        return underlying.getString("venue");
     }
 
     public double getLength() {
-        return underlying.getJsonNumber("length").doubleValue();
+        return underlying.getJsonNumber("duration").doubleValue();
     }
 
     public String getSessionId() {

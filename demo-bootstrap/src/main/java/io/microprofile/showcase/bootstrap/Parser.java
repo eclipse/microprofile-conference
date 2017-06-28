@@ -22,10 +22,10 @@ import javax.json.JsonReaderFactory;
 import javax.json.JsonValue;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -38,15 +38,14 @@ public class Parser {
 
     private final Logger log = Logger.getLogger(Parser.class.getName());
     private final AtomicInteger id = new AtomicInteger(0);
+    private final AtomicInteger speakerId = new AtomicInteger(0);
 
-    public BootstrapData parse(final URL jsonResource) {
+    public BootstrapData parse(final URL scheduleResource, final URL speakerResource) {
         try {
             final JsonReaderFactory factory = Json.createReaderFactory(null);
-            final JsonReader reader = factory.createReader(jsonResource.openStream());
+            final JsonReader reader = factory.createReader(scheduleResource.openStream());
 
-            final JsonObject root = reader.readObject();
-            final JsonObject sectionList = (JsonObject) ((JsonArray) root.get("sectionList")).get(0);
-            final JsonArray items = (JsonArray) sectionList.get("items");
+            final JsonArray items = reader.readArray();
 
             // parse session objects
             final List<Session> sessions = new LinkedList<>();
@@ -58,43 +57,27 @@ public class Parser {
             }
 
             // parse and link speakers and schedules
-            final List<Speaker> speakers = new LinkedList<>();
+            final List<Speaker> speakers = parseSpeaker(speakerResource);
             final List<Schedule> schedules = new LinkedList<>();
 
             for (final Session session : sessions) {
 
-                // speakers
-                final JsonArray participants = session.getUnderlying().getJsonArray("participants");
+                String sessionSpeaker = String.valueOf(session.getUnderlying().getInt("speaker"));
 
-                final Collection<Speaker> assignedSpeakers = participants.stream()
-                        .map(item -> new Speaker((JsonObject) item))
-                        .collect(Collectors.toCollection(HashSet<Speaker>::new));
+                // speaker
+                Optional<Speaker> matchingSpeaker = speakers.stream()
+                    .filter(s -> s.getId().equals(sessionSpeaker))
+                    .findAny();
 
-                assignedSpeakers.forEach(a -> {
+                if(!matchingSpeaker.isPresent()) {
+                    throw new RuntimeException("Inconsistent data set: No speakret for Id "+ sessionSpeaker);
+                }
 
-                    boolean exists = false;
-                    for (final Speaker s : speakers) {
-                        if (s.getFullName().toLowerCase().equals(a.getFullName().toLowerCase())) {
-                            a.setId(s.getId());
-                            exists = true;
-                            break;
-                        }
-                    }
 
-                    if (!exists) {
-                        a.setId(String.valueOf(this.id.incrementAndGet()));
-                        speakers.add(a);
-                    }
-                });
-
-                final HashSet<String> ids = assignedSpeakers.stream()
-                        .map(JsonWrapper::getId)
-                        .collect(Collectors.toCollection(HashSet::new));
-
-                session.setSpeakers(ids);
+                session.setSpeakers(Collections.singletonList(matchingSpeaker.get().getId()));
 
                 // schedules
-                final JsonObject times = session.getUnderlying().getJsonArray("times").getJsonObject(0);
+                final JsonObject times = session.getUnderlying();
                 final Schedule schedule = new Schedule(times);
                 schedule.setId(String.valueOf(this.id.incrementAndGet()));
                 schedules.add(schedule);
@@ -113,4 +96,25 @@ public class Parser {
         }
     }
 
+    private final List<Speaker> parseSpeaker(URL speakerResource) {
+        try {
+            final JsonReaderFactory factory = Json.createReaderFactory(null);
+            final JsonReader reader = factory.createReader(speakerResource.openStream());
+
+            final JsonArray items = reader.readArray();
+
+            // parse session objects
+            final List<Speaker> speaker = new LinkedList<>();
+
+            for (final JsonValue item : items) {
+                final Speaker s = new Speaker((JsonObject) item);
+                s.setId(String.valueOf(this.speakerId.incrementAndGet()));
+                speaker.add(s);
+            }
+
+            return speaker;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse speaker.json");
+        }
+    }
 }
