@@ -42,28 +42,28 @@ public class ParserTest {
 
         Assert.assertEquals(100, sessions.size());
 
-        Optional<Session> con5594 = sessions.stream()
+        Optional<Session> sessionCode = sessions.stream()
             .filter(s -> s.getCode().equals("6E168E19-4B92-ECD8-01C6-6B4FC55C68FE"))
             .findAny();
 
-        Assert.assertTrue("Expected specific session code in schedule", con5594.isPresent());
-        Assert.assertEquals("et tristique pellentesque, tellus", con5594.get().getTitle());
+        Assert.assertTrue("Expected specific session code in schedule", sessionCode.isPresent());
+        Assert.assertEquals("et tristique pellentesque, tellus", sessionCode.get().getTitle());
 
         Optional<Speaker> matchingSpeaker = data.getSpeaker().stream()
             .filter(sp -> sp.getId().equals("55"))
             .findFirst();
 
         Assert.assertTrue(matchingSpeaker.isPresent());
-        Assert.assertTrue(con5594.get().getSpeakers().contains(matchingSpeaker.get().getId()));
+        Assert.assertTrue(sessionCode.get().getSpeakers().contains(matchingSpeaker.get().getId()));
 
 
-        Optional<Session> con4226 = sessions.stream()
+        Optional<Session> sessionCode2 = sessions.stream()
             .filter(s -> s.getCode().equals("890F4E4A-27EA-5C5D-8B40-1DAAB8E3FC05"))
             .findAny();
-        Assert.assertTrue(con4226.isPresent());
+        Assert.assertTrue(sessionCode2.isPresent());
 
         Optional<Schedule> matchingSchedule = data.getSchedules().stream()
-            .filter(sched -> sched.getId() == con4226.get().getSchedule())
+            .filter(sched -> sched.getId() == sessionCode2.get().getSchedule())
             .findFirst();
         Assert.assertTrue(matchingSchedule.isPresent());
         Assert.assertEquals("Le Mans", matchingSchedule.get().getVenue());
