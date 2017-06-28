@@ -22,10 +22,7 @@ import javax.json.JsonReaderFactory;
 import javax.json.JsonValue;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -61,36 +58,12 @@ public class Parser {
 
             for (final Session session : sessions) {
 
-                // speakers
-                /*final JsonArray participants = session.getUnderlying().getJsonArray("participants");
+                // speaker
+                Speaker speaker = new Speaker(session.getUnderlying());
+                speaker.setId(String.valueOf(session.getUnderlying().getInt("speaker")));
+                speakers.add(speaker);
+                session.setSpeakers(Collections.singletonList(speaker.getId()));
 
-                final Collection<Speaker> assignedSpeakers = participants.stream()
-                        .map(item -> new Speaker((JsonObject) item))
-                        .collect(Collectors.toCollection(HashSet<Speaker>::new));
-
-                assignedSpeakers.forEach(a -> {
-
-                    boolean exists = false;
-                    for (final Speaker s : speakers) {
-                        if (s.getFullName().toLowerCase().equals(a.getFullName().toLowerCase())) {
-                            a.setId(s.getId());
-                            exists = true;
-                            break;
-                        }
-                    }
-
-                    if (!exists) {
-                        a.setId(String.valueOf(this.id.incrementAndGet()));
-                        speakers.add(a);
-                    }
-                });
-
-                final HashSet<String> ids = assignedSpeakers.stream()
-                        .map(JsonWrapper::getId)
-                        .collect(Collectors.toCollection(HashSet::new));
-
-                session.setSpeakers(ids);
-*/
                 // schedules
                 final JsonObject times = session.getUnderlying();
                 final Schedule schedule = new Schedule(times);

@@ -26,7 +26,7 @@ public class Speaker extends JsonWrapper {
     }
 
     public String getFullName() {
-        return underlying.getString("fullName");
+        return underlying.getString("fullName", "n/a");
     }
 
     public String getJobTitle() {

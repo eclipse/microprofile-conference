@@ -46,12 +46,12 @@ public class ParserTest {
         Assert.assertTrue("Expected specific session code in schedule", con5594.isPresent());
         Assert.assertEquals("et tristique pellentesque, tellus", con5594.get().getTitle());
 
-        /*Optional<Speaker> speaker = data.getSpeaker().stream()
-            .filter(sp -> sp.getFullName().equals("Margaret Fero"))
+        Optional<Speaker> speaker = data.getSpeaker().stream()
+            .filter(sp -> sp.getId().equals("55"))
             .findFirst();
 
         Assert.assertTrue(speaker.isPresent());
-        Assert.assertTrue(con5594.get().getSpeakers().contains(speaker.get().getId()));*/
+        Assert.assertTrue(con5594.get().getSpeakers().contains(speaker.get().getId()));
 
 
         Optional<Session> con4226 = sessions.stream()
