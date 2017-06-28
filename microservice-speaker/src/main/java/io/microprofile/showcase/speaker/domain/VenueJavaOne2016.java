@@ -145,7 +145,7 @@ public class VenueJavaOne2016 extends Venue {
 
     private Set<Speaker> getSpeakersFile() throws IOException {
         final ObjectMapper om = new ObjectMapper();
-        final InputStream is = this.getClass().getResourceAsStream("/JavaOne2016.json");
+        final InputStream is = this.getClass().getResourceAsStream("/ConferenceData.json");
         return om.readValue(is, new TypeReference<Set<Speaker>>() {
         });
     }
