@@ -92,8 +92,8 @@ public class ResourceSpeakerTest {
     public void testSearch() {
 
         final Speaker search = new Speaker();
-        search.setNameFirst("Ar");
-        search.setNameLast("G");
+        search.setNameFirst("Oct");
+        search.setNameLast("O");
 
         final Set<Speaker> speakers = this.getWebTarget("speaker/search").request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.json(search))
@@ -102,16 +102,16 @@ public class ResourceSpeakerTest {
 
         Assert.assertFalse(speakers.isEmpty());
 
-        boolean foundArun = false;
+        boolean foundOctavia = false;
 
         for (final Speaker speaker : speakers) {
             this.log.info("Found: " + speaker.getNameFirst() + " " + speaker.getNameLast());
-            if ("Arun".equals(speaker.getNameFirst()) && "Gupta".equals(speaker.getNameLast())) {
-                foundArun = true;
+            if ("Octavia".equals(speaker.getNameFirst()) && "Olson".equals(speaker.getNameLast())) {
+                foundOctavia = true;
             }
         }
 
-        Assert.assertTrue(foundArun);
+        Assert.assertTrue(foundOctavia);
     }
 
     @Test
@@ -147,8 +147,8 @@ public class ResourceSpeakerTest {
     public void testUpdate() {
 
         final Speaker search = new Speaker();
-        search.setNameFirst("Charlie");
-        search.setNameLast("Hunt");
+        search.setNameFirst("Zena");
+        search.setNameLast("Armstrong");
 
         final Set<Speaker> speakers = this.getWebTarget("speaker/search").request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.json(search))
@@ -158,9 +158,9 @@ public class ResourceSpeakerTest {
         final Speaker found = speakers.iterator().next();
         final String id = found.getId();
 
-        Assert.assertEquals("Oracle", found.getOrganization());
+        Assert.assertEquals("Erat Nonummy Ultricies Incorporated", found.getOrganization());
 
-        found.setOrganization("Oracle Corporation");
+        found.setOrganization("Erat Corporation");
 
         this.getWebTarget("speaker/update").request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.json(found));
@@ -170,7 +170,7 @@ public class ResourceSpeakerTest {
                 .get()
                 .readEntity(Speaker.class);
 
-        Assert.assertEquals("Failed to update speaker", "Oracle Corporation", updated.getOrganization());
+        Assert.assertEquals("Failed to update speaker", "Erat Corporation", updated.getOrganization());
         this.log.info("Updated: " + updated.toString());
     }
 
@@ -178,8 +178,8 @@ public class ResourceSpeakerTest {
     @RunAsClient
     public void testRemove() {
         final Speaker search = new Speaker();
-        search.setNameFirst("Markus");
-        search.setNameLast("Eisele");
+        search.setNameFirst("Brent");
+        search.setNameLast("Collins");
 
         final Set<Speaker> speakers = this.getWebTarget("speaker/search").request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.json(search))
