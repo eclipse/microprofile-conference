@@ -43,7 +43,7 @@ public class VenueJavaOne2016Test {
     @Test
     public void readSpeakers() throws Exception {
         final ObjectMapper om = new ObjectMapper();
-        final InputStream is = this.getClass().getResourceAsStream("/speakers.json");
+        final InputStream is = this.getClass().getResourceAsStream("/ConferenceData.json");
         final Set<Speaker> speakers = om.readValue(is, new TypeReference<Set<Speaker>>() {
         });
 
