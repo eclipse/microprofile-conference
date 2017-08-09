@@ -193,6 +193,12 @@
             <artifactId>demo-bootstrap</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.wasdev.wlp.starters.ms-builder</groupId>
+            <artifactId>config</artifactId>
+            <version>0.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -206,6 +212,7 @@
                         <serverName>${wlpServerName}</serverName>
                         <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
                         <configFile>src/main/liberty/config/server.xml</configFile>
+                        <serverEnv>${basedir}/src/main/liberty/config/server.env</serverEnv>
                         <packageFile>${package.file}</packageFile>
                         <include>${packaging.type}</include>
                         <bootstrapProperties>
@@ -331,6 +338,22 @@
                             <goal>install-server</goal>
                         </goals>
                     </execution>
+                    <!-- Install the config feature into the liberty server -->
+               		<execution>
+           				<id>install-feature</id>
+           				<phase>prepare-package</phase>
+          				<goals>
+               				<goal>install-feature</goal>
+           				</goals>
+          				<configuration>
+             		  	  	<features>
+               		    		<acceptLicense>true</acceptLicense>
+                  	 			<feature>mpConfig-1.0</feature>
+              		 		</features>
+     						<installDirectory>${project.build.directory}/wlp</installDirectory>
+      						<serverName>${wlpServerName}</serverName>
+          				</configuration>
+       				</execution>
                     <execution>
                         <id>package-app</id>
                         <phase>package</phase>

@@ -436,12 +436,10 @@
                     <artifactId>liberty-maven-plugin</artifactId>
                     <version>${version.liberty.plugin}</version>
                     <configuration>
-                        <assemblyArtifact>
-                            <groupId>com.ibm.websphere.appserver.runtime</groupId>
-                            <artifactId>wlp-microProfile1</artifactId>
-                            <version>${version.liberty}</version>
-                            <type>zip</type>
-                        </assemblyArtifact>
+             			<install>
+                        	<type>webProfile7</type>
+                        	<version>2017.+</version>
+                   		</install>
                     </configuration>
                 </plugin>
             </plugins>
