@@ -191,13 +191,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- JAVA EE -->
-        <dependency>
-            <groupId>org.apache.tomee</groupId>
-            <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <!--3RD PARTY-->
         <dependency>
             <groupId>org.codehaus.swizzle</groupId>
