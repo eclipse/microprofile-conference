@@ -33,8 +33,7 @@ https://github.com/microprofile[All source code]
 == Technologies
 
 * Java
-* Micro Profile
-* JAX-RS 2.0 / JSON-P 1.0 / CDI 1.1
+* MicroProfile 1.0
 
 == Quickstart - Run all services and UI in separate runtimes
 
