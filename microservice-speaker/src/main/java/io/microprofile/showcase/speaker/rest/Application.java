@@ -15,9 +15,6 @@ package io.microprofile.showcase.speaker.rest;
 
 
 import javax.ws.rs.ApplicationPath;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Root REST application context
@@ -25,13 +22,4 @@ import java.util.Set;
 @ApplicationPath("/speaker")
 public class Application extends javax.ws.rs.core.Application {
 
-    /**
-     * The REST application resource classes
-     *
-     * @return Set of classes
-     */
-    @Override
-    public Set<Class<?>> getClasses() {
-        return new HashSet<>(Collections.singletonList(ResourceSpeaker.class));
-    }
 }
