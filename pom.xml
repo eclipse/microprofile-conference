@@ -111,6 +111,7 @@
         <version.tomee>7.0.1</version.tomee>
         <version.wildfly>10.0.0.Final</version.wildfly>
         <version.liberty>17.0.0.2</version.liberty>
+        <version.kumuluzee>2.4.1</version.kumuluzee>
 
         <!-- Dependencies -->
         <version.microprofile>1.0.0</version.microprofile>
@@ -132,6 +133,7 @@
         <module>microservice-vote</module>
         <module>microservice-speaker</module>
         <module>microservice-schedule</module>
+        <module>microservice-schedule-kumuluzee</module>
         <module>web-application</module>
         <module>start</module>
     </modules>
@@ -178,6 +180,15 @@
                 <groupId>fish.payara.extras</groupId>
                 <artifactId>payara-embedded-all</artifactId>
                 <version>4.1.1.163.0.1</version>
+            </dependency>
+
+            <!-- KumuluzEE -->
+            <dependency>
+                <groupId>com.kumuluz.ee</groupId>
+                <artifactId>kumuluzee-bom</artifactId>
+                <version>${version.kumuluzee}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
 

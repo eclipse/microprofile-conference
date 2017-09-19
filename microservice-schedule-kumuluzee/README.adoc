@@ -1,0 +1,34 @@
+= Microprofile Showcase Application
+
+== microservice-schedule-kumuluzee
+Provided using link:https://ee.kumuluz.com/[KumuluzEE 2.4.1]
+
+*Build and run the service*
+```
+cd microservice-schedule-kumuluzee
+mvn clean package
+java [-D<OPTION>] -jar target/microservice-schedule-kumuluzee.jar
+```
+
+*Address & Port Bindings*
+
+.Session Service Options
+|===
+|Flag |Description| Default
+
+| kumuluzee.server.http.address=<address>
+| HTTP bind interface
+| 0.0.0.0
+
+| kumuluzee.server.http.port=<port>
+| HTTP port
+| 8080
+|===
+
+For example, if you want to change the HTTP port to 8000, run the application like this:
+
+----
+java -Dkumuluzee.server.http.port=8000 -jar target/microservice-session-kumuluzee.jar
+----
+
+Click on this link to verify that everything ran fine: http://localhost:8000/schedule
