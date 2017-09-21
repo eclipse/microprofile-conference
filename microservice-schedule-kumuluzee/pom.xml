@@ -53,57 +53,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>verify</id>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <runOrder>alphabetical</runOrder>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.bazaarvoice.maven.plugins</groupId>
-                <artifactId>process-exec-maven-plugin</artifactId>
-                <version>${version.processexec.plugin}</version>
-                <executions>
-                    <execution>
-                        <id>start-kumuluzee</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                        <configuration>
-                            <name>KumuluzEE</name>
-                            <arguments>
-                                <argument>java</argument>
-                                <argument>-jar</argument>
-                                <argument>${project.artifactId}.jar</argument>
-                            </arguments>
-                            <healthcheckUrl>http://localhost:8080/schedule/all</healthcheckUrl>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>stop-kumuluzee</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop-all</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
@@ -121,6 +70,69 @@
     </dependencies>
 
     <profiles>
+        <profile>
+            <id>kumuluzee</id>
+            <activation>
+                <property>
+                    <name>!skipTests</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>integration-test</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>verify</id>
+                                <goals>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <runOrder>alphabetical</runOrder>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.bazaarvoice.maven.plugins</groupId>
+                        <artifactId>process-exec-maven-plugin</artifactId>
+                        <version>${version.processexec.plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>start-kumuluzee</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <name>KumuluzEE</name>
+                                    <arguments>
+                                        <argument>java</argument>
+                                        <argument>-jar</argument>
+                                        <argument>${project.artifactId}.jar</argument>
+                                    </arguments>
+                                    <healthcheckUrl>http://localhost:8080/schedule/all</healthcheckUrl>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-kumuluzee</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop-all</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
         <profile>
             <id>fabric8</id>
