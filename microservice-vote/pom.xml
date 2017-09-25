@@ -159,6 +159,12 @@
             <type>pom</type>
             <scope>runtime</scope>
         </dependency>
+		<dependency>
+		    <groupId>org.eclipse.microprofile.fault-tolerance</groupId>
+		    <artifactId>microprofile-fault-tolerance-api</artifactId>
+		    <version>1.0</version>
+		    <scope>provided</scope>
+		</dependency>
         <dependency>
            <groupId>javax.annotation</groupId>
            <artifactId>javax.annotation-api</artifactId>
@@ -194,11 +200,16 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.wasdev.wlp.starters.ms-builder</groupId>
-            <artifactId>config</artifactId>
-            <version>0.1</version>
+            <groupId>org.eclipse.microprofile.config</groupId>
+            <artifactId>microprofile-config-api</artifactId>
+            <version>1.0</version>
             <scope>provided</scope>
         </dependency>
+		<dependency>
+		    <groupId>org.eclipse.microprofile.fault-tolerance</groupId>
+		    <artifactId>microprofile-fault-tolerance-api</artifactId>
+		    <version>1.0</version>
+		</dependency>
     </dependencies>
 
     <build>

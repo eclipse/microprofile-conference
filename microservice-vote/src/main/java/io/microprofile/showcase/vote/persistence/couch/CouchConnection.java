@@ -16,6 +16,8 @@
 
 package io.microprofile.showcase.vote.persistence.couch;
 
+import java.time.temporal.ChronoUnit;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
@@ -24,6 +26,9 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 
 import io.microprofile.showcase.vote.api.AttendeeProvider;
 import io.microprofile.showcase.vote.api.SessionRatingProvider;
@@ -50,6 +55,8 @@ public class CouchConnection {
     boolean connected = false;
     private String url;
 
+    @Timeout(value = 3, unit = ChronoUnit.SECONDS)
+    @Retry(maxRetries = 3)
     public boolean connect(String dbName) {
         if (!connected && credentials != null) {
             this.dbName = dbName;
