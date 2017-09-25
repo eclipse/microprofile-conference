@@ -110,7 +110,7 @@
         <version.payara>4.1.1.163</version.payara>
         <version.tomee>7.0.1</version.tomee>
         <version.wildfly>10.0.0.Final</version.wildfly>
-        <version.liberty>17.0.0.2</version.liberty>
+        <version.liberty>2017.9.+</version.liberty>
 
         <!-- Dependencies -->
         <version.microprofile>1.0.0</version.microprofile>
@@ -436,12 +436,10 @@
                     <artifactId>liberty-maven-plugin</artifactId>
                     <version>${version.liberty.plugin}</version>
                     <configuration>
-                        <assemblyArtifact>
-                            <groupId>com.ibm.websphere.appserver.runtime</groupId>
-                            <artifactId>wlp-microProfile1</artifactId>
-                            <version>${version.liberty}</version>
-                            <type>zip</type>
-                        </assemblyArtifact>
+             			<install>
+                        	<type>webProfile7</type>
+                        	<version>${version.liberty}</version>
+                   		</install>
                     </configuration>
                 </plugin>
             </plugins>
