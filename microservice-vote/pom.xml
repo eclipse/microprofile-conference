@@ -199,6 +199,12 @@
             <version>0.1</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.config</groupId>
+            <artifactId>microprofile-config-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
