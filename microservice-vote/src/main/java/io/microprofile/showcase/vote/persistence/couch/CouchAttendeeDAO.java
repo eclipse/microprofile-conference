@@ -15,12 +15,15 @@
  */
 package io.microprofile.showcase.vote.persistence.couch;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+
+import org.eclipse.microprofile.faulttolerance.Timeout;
 
 import io.microprofile.showcase.vote.model.Attendee;
 import io.microprofile.showcase.vote.persistence.AttendeeDAO;
@@ -29,6 +32,7 @@ import io.microprofile.showcase.vote.persistence.couch.CouchConnection.RequestTy
 
 @ApplicationScoped
 @Persistent
+@Timeout(value = 5, unit = ChronoUnit.SECONDS)
 public class CouchAttendeeDAO implements AttendeeDAO {
 
     @Inject
@@ -75,6 +79,7 @@ public class CouchAttendeeDAO implements AttendeeDAO {
     }
 
     @Override
+    @Timeout(value = 10, unit = ChronoUnit.SECONDS)
     public Collection<Attendee> getAllAttendees() {
 
         AllDocs allDocs = couch.request("_design/attendees/_view/all", RequestType.GET, null, AllDocs.class, null, 200);

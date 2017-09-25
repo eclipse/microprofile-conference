@@ -16,15 +16,14 @@
 
 package io.microprofile.showcase.vote.persistence.couch;
 
-import javax.enterprise.context.Dependent;
-
-@Dependent
 public class Credentials {
 
     private String username;
     private String password;
     private String url;
-
+    
+    public Credentials() {}
+    
     public Credentials(String username, String password, String url) {
         this.url = url;
         this.username = username;

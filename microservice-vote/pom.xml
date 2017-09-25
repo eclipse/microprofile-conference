@@ -159,6 +159,12 @@
             <type>pom</type>
             <scope>runtime</scope>
         </dependency>
+		<dependency>
+		    <groupId>org.eclipse.microprofile.fault-tolerance</groupId>
+		    <artifactId>microprofile-fault-tolerance-api</artifactId>
+		    <version>1.0</version>
+		    <scope>provided</scope>
+		</dependency>
         <dependency>
            <groupId>javax.annotation</groupId>
            <artifactId>javax.annotation-api</artifactId>
@@ -193,6 +199,17 @@
             <artifactId>demo-bootstrap</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.config</groupId>
+            <artifactId>microprofile-config-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+		<dependency>
+		    <groupId>org.eclipse.microprofile.fault-tolerance</groupId>
+		    <artifactId>microprofile-fault-tolerance-api</artifactId>
+		    <version>1.0</version>
+		</dependency>
     </dependencies>
 
     <build>
@@ -206,6 +223,7 @@
                         <serverName>${wlpServerName}</serverName>
                         <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
                         <configFile>src/main/liberty/config/server.xml</configFile>
+                        <serverEnv>${basedir}/src/main/liberty/config/server.env</serverEnv>
                         <packageFile>${package.file}</packageFile>
                         <include>${packaging.type}</include>
                         <bootstrapProperties>
@@ -331,6 +349,22 @@
                             <goal>install-server</goal>
                         </goals>
                     </execution>
+                    <!-- Install the config feature into the liberty server -->
+               		<execution>
+           				<id>install-feature</id>
+           				<phase>prepare-package</phase>
+          				<goals>
+               				<goal>install-feature</goal>
+           				</goals>
+          				<configuration>
+             		  	  	<features>
+               		    		<acceptLicense>true</acceptLicense>
+                  	 			<feature>mpConfig-1.0</feature>
+              		 		</features>
+     						<installDirectory>${project.build.directory}/wlp</installDirectory>
+      						<serverName>${wlpServerName}</serverName>
+          				</configuration>
+       				</execution>
                     <execution>
                         <id>package-app</id>
                         <phase>package</phase>

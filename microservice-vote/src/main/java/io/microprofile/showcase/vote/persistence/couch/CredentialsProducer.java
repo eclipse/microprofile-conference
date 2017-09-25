@@ -16,62 +16,41 @@
 
 package io.microprofile.showcase.vote.persistence.couch;
 
-import java.io.StringReader;
+import java.util.Optional;
 
+import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonString;
+import javax.inject.Inject;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class CredentialsProducer {
+    
+	@Resource(lookup="cloudant/url")
+    protected String resourceUrl;
 
+    @Resource(lookup="cloudant/username")
+    protected String resourceUsername;
+
+    @Resource(lookup="cloudant/password")
+    protected String resourcePassword;
+    
+	@Inject
+    @ConfigProperty(name="VCAP_SERVICES")  
+    Optional <Credentials> cred;
+	
     @Produces
     public Credentials newCredentials() {
-        Credentials credentials = null;
-        String vcap = System.getenv("VCAP_SERVICES");
-        if (vcap != null) {
-            credentials = parseVcap(vcap);
-        } else {
-            credentials = useEnv();
-        }
-
+        Credentials credentials = cred.orElse(null);
+        if (credentials == null) {
+        	if ( (("${env.CLOUDANT_URL}").equals(resourceUrl)) && (("${env.CLOUDANT_USERNAME}").equals(resourceUsername)) 
+        			&& ( ("${env.CLOUDANT_PASSWORD}").equals(resourcePassword) ) )
+        		credentials = null;
+        	else
+        		credentials = new Credentials(resourceUsername, resourcePassword, resourceUrl);
+        } 
         return credentials;
     }
-
-    private Credentials parseVcap(String vcapServices) {
-
-        JsonObject vcapServicesJson = Json.createReader(new StringReader(vcapServices)).readObject();
-        JsonArray cloudantObjectArray = vcapServicesJson.getJsonArray("cloudantNoSQLDB");
-        if (cloudantObjectArray == null) {
-            return useEnv();
-        }
-        JsonObject cloudantObject = cloudantObjectArray.getJsonObject(0);
-        JsonObject cloudantCredentials = cloudantObject.getJsonObject("credentials");
-        JsonString cloudantUsername = cloudantCredentials.getJsonString("username");
-
-        JsonString cloudantPassword = cloudantCredentials.getJsonString("password");
-        JsonString cloudantUrl = cloudantCredentials.getJsonString("url");
-
-        String username = cloudantUsername.getString();
-        String password = cloudantPassword.getString();
-        String url = cloudantUrl.getString();
-
-        return new Credentials(username, password, url);
-    }
-
-    private Credentials useEnv() {
-
-        String username = System.getenv("dbUsername");
-        String password = System.getenv("dbPassword");
-        String url = System.getenv("dbUrl");
-
-        if (username != null && password != null && url != null) {
-            return new Credentials(username, password, url);
-        } else
-            return null;
-    }
-
 }
