@@ -17,10 +17,19 @@ package io.microprofile.showcase.vote.persistence.couch;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+
+import org.eclipse.microprofile.faulttolerance.Asynchronous;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 
 import io.microprofile.showcase.vote.model.Attendee;
 import io.microprofile.showcase.vote.persistence.AttendeeDAO;
@@ -29,6 +38,7 @@ import io.microprofile.showcase.vote.persistence.couch.CouchConnection.RequestTy
 
 @ApplicationScoped
 @Persistent
+@Timeout(1000)
 public class CouchAttendeeDAO implements AttendeeDAO {
 
     @Inject
@@ -69,20 +79,33 @@ public class CouchAttendeeDAO implements AttendeeDAO {
     }
 
     @Override
+    @Timeout(5000)
     public Collection<Attendee> getAllAttendees() {
-
         AllDocs allDocs = couch.request("_design/attendees/_view/all", RequestType.GET, null, AllDocs.class, null, 200);
 
-        Collection<Attendee> attendees = new ArrayList<Attendee>();
-        for (String id : allDocs.getIds()) {
-            Attendee attendee = getAttendee(id);
-            attendees.add(attendee);
-        }
+        // Request a future for each Attendee
+        List<Future<Attendee>> futureAttendees = new ArrayList<>();
+        allDocs.getIds().forEach(id -> futureAttendees.add(getAttendeeAsync(id)));
 
+        // Once all requests have been made, block for results to build list
+        Collection<Attendee> attendees = new ArrayList<>();
+        futureAttendees.forEach(futureAttendee -> {
+			try {
+				attendees.add(futureAttendee.get());
+			} catch (InterruptedException | ExecutionException ignore) {
+			}
+		});
         return attendees;
+    }
+    
+    @Asynchronous
+    @Bulkhead(3)
+    private Future<Attendee> getAttendeeAsync(String id) {
+    	return CompletableFuture.completedFuture(getAttendee(id));
     }
 
     @Override
+    @Timeout(5000)
     public void clearAllAttendees() {
         AllDocs allDocs = couch.request("_design/attendees/_view/all", RequestType.GET, null, AllDocs.class, null, 200);
 
