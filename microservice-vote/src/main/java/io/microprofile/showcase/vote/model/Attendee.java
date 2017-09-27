@@ -16,8 +16,21 @@
 
 package io.microprofile.showcase.vote.model;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Objects;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
+import javax.json.JsonString;
+import javax.json.JsonWriter;
+
 public class Attendee {
 
+    private final String _id;  // internal field for CouchDB
+    private final String _rev; // internal field for CouchDB
     private String id;
     private String name;
 
@@ -26,8 +39,14 @@ public class Attendee {
     }
 
     public Attendee(String id, String name) {
+        this(id, name, null, null);
+    }
+    
+    private Attendee(String id, String name, String _rev, String _id) {
         this.id = id;
         this.name = name;
+        this._rev = _rev;
+        this._id = _id;
     }
 
     public String getId() {
@@ -45,7 +64,11 @@ public class Attendee {
     public void setName(String name) {
         this.name = name;
     }
-
+    
+    public String getRev() {
+    	return _rev;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -64,22 +87,70 @@ public class Attendee {
         if (getClass() != obj.getClass())
             return false;
         Attendee other = (Attendee) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
+        if(!Objects.equals(this.id, other.id))
+        	return false;
+        if(!Objects.equals(this.name, other.name))
+        	return false;
         return true;
     }
 
     @Override
     public String toString() {
         return "Attendee [id=" + id + ", name=" + name + "]";
+    }
+    
+    public String toDebug() {
+    	return "Attendee [id=" + id + ", name=" + name + ", _rev=" + _rev + ", _id=" + _id + "]";
+    }
+    
+    public static Attendee fromJSON(InputStream is) {
+    	try(JsonReader rdr = Json.createReader(is)) {
+            JsonObject attendeeJson = rdr.readObject();
+            Attendee attendee = fromJSON(attendeeJson);
+            return attendee;
+    	}
+    }
+
+    public static Attendee fromJSON(JsonObject attendeeJson) {
+    	String id = getStringFromJson("id", attendeeJson);
+    	String name = getStringFromJson("name", attendeeJson);
+    	String _rev = getStringFromJson("_rev", attendeeJson);
+    	String _id = getStringFromJson("_id", attendeeJson);
+        return new Attendee(id, name, _rev, _id);
+    }
+
+    private static String getStringFromJson(String key, JsonObject json) {
+    	String returnedString = null;
+		if (json.containsKey(key)) {
+			JsonString value = json.getJsonString(key);
+			if (value != null) {
+				returnedString = value.getString();
+			}
+		}
+		return returnedString;
+	}
+
+	public static void toJSON(OutputStream os, Attendee attendee) {
+        JsonWriter jsonWriter = Json.createWriter(os);
+        jsonWriter.writeObject(toJSON(attendee));
+        jsonWriter.close();
+    }
+
+    public static JsonObject toJSON(Attendee attendee) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+
+        if (attendee.getId() != null)
+            builder = builder.add("id", attendee.getId());
+        builder = builder.add("name", attendee.getName());
+        if(attendee._rev != null)
+        	builder = builder.add("_rev", attendee._rev);
+        if(attendee._id != null)
+        	builder = builder.add("_id", attendee._id);
+        return builder.build();
+    }
+
+    public static String toJSONString(Attendee attendee) {
+        return toJSON(attendee).toString();
     }
 
 }

@@ -16,8 +16,21 @@
 
 package io.microprofile.showcase.vote.model;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.json.Json;
+import javax.json.JsonNumber;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
+import javax.json.JsonString;
+import javax.json.JsonWriter;
+
 public class SessionRating {
 
+    private final String _id;  // internal field for CouchDB
+    private final String _rev; // internal field for CouchDB
     private String id;
     private String session;
     private String attendeeId;
@@ -28,10 +41,16 @@ public class SessionRating {
     }
 
     public SessionRating(String id, String session, String attendeeId, int rating) {
+    	this(id, session, attendeeId, rating, null, null);
+    }
+    
+    private SessionRating(String id, String session, String atteendeeId, int rating, String _id, String _rev) {
         this.id = id;
         this.session = session;
-        this.attendeeId = attendeeId;
+        this.attendeeId = atteendeeId;
         this.rating = rating;
+        this._id = _id;
+        this._rev = _rev;
     }
 
     public String getId() {
@@ -64,6 +83,10 @@ public class SessionRating {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+    
+    public String getRev() {
+    	return this._rev;
     }
 
     @Override
@@ -110,6 +133,76 @@ public class SessionRating {
     public String toString() {
         return "SessionRating [id=" + id + ", session=" + session + ", attendeeId="
                 + attendeeId + ", rating=" + rating + "]";
+    }
+    
+    public String toDebug() {
+    	return "SessionRating [id=" + id + ", session=" + session + ", attendeeId="
+                + attendeeId + ", rating=" + rating +  ", _rev=" + _rev + ", _id=" + _id + "]";
+    }
+    
+    public static SessionRating fromJSON(InputStream is) {
+    	try(JsonReader rdr = Json.createReader(is)) {
+            JsonObject sessionRatingJson = rdr.readObject();
+            SessionRating sessionRating = fromJSON(sessionRatingJson);
+            return sessionRating;
+    	}
+    }
+
+    public static SessionRating fromJSON(JsonObject sessionRatingJson) {
+    	String id = getStringFromJson("id", sessionRatingJson);
+    	String session = getStringFromJson("session", sessionRatingJson);
+    	String attendeeId = getStringFromJson("attendeeId", sessionRatingJson);
+    	String _rev = getStringFromJson("_rev", sessionRatingJson);
+    	String _id = getStringFromJson("_id", sessionRatingJson);
+    	int rating = 0;
+    	if (sessionRatingJson.containsKey("rating")) {
+    		JsonNumber ratingJson = sessionRatingJson.getJsonNumber("rating");
+    		if (ratingJson != null) {
+    			rating = ratingJson.intValue();
+    		}
+    	}
+    	
+        SessionRating sessionRating = new SessionRating(id, session, attendeeId, rating, _id, _rev);
+        return sessionRating;
+    }
+
+    
+    private static String getStringFromJson(String key, JsonObject json) {
+    	String returnedString = null;
+		if (json.containsKey(key)) {
+			JsonString value = json.getJsonString(key);
+			if (value != null) {
+				returnedString = value.getString();
+			}
+		}
+		return returnedString;
+	}
+    
+    public static void toJSON(OutputStream os, SessionRating sessionRating) {
+        JsonWriter jsonWriter = Json.createWriter(os);
+        jsonWriter.writeObject(toJSON(sessionRating));
+        jsonWriter.close();
+    }
+
+    public static JsonObject toJSON(SessionRating sessionRating) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+
+        if (sessionRating.id != null)
+            builder = builder.add("id", sessionRating.id);
+        if(sessionRating._rev != null)
+        	builder = builder.add("_rev", sessionRating._rev);
+        if(sessionRating._id != null)
+        	builder = builder.add("_id", sessionRating._id);
+        if(sessionRating.session != null)
+        	builder = builder.add("session", sessionRating.session);
+        if(sessionRating.attendeeId != null)
+        	builder = builder.add("attendeeId", sessionRating.attendeeId);
+        builder = builder.add("rating", sessionRating.getRating());
+        return builder.build();
+    }
+
+    public static String toJSONString(SessionRating sessionRating) {
+        return toJSON(sessionRating).toString();
     }
     
 }

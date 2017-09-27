@@ -78,7 +78,7 @@ public class SessionRatingListProvider implements MessageBodyReader<List<Session
                 JsonObject sessionRatingJson = arr.getJsonObject(i);//rdr.readObject();
                 if (isDebugEnabled())
                     System.out.println(sessionRatingJson);
-                SessionRating attendee = SessionRatingProvider.fromJSON(sessionRatingJson);
+                SessionRating attendee = SessionRating.fromJSON(sessionRatingJson);
                 ratings.add(attendee);
             }
             return ratings;
@@ -120,7 +120,7 @@ public class SessionRatingListProvider implements MessageBodyReader<List<Session
         JsonWriter writer = Json.createWriter(new TeeOutputStream(os, System.out));
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
         for (SessionRating sessionRating : sessionRatings) {
-            JsonObject sessionRatingJson = SessionRatingProvider.toJSON(sessionRating);
+            JsonObject sessionRatingJson = SessionRating.toJSON(sessionRating);
             arrayBuilder.add(sessionRatingJson);
         }
         writer.writeArray(arrayBuilder.build());
