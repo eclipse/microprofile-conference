@@ -14,7 +14,9 @@
 
 package io.microprofile.showcase.bootstrap;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,12 +31,23 @@ import javax.enterprise.inject.Produces;
 public class BootstrapDataProducer {
 
     @Produces
-    public BootstrapData load() {
-        final URL schedule = Thread.currentThread().getContextClassLoader().getResource("schedule.json");
-        assert schedule !=null : "Failed to load 'schedule.json'";
+    public BootstrapData load() throws IOException {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL schedule = loader.getResource("schedule.json");
+        if (schedule == null) {
+            schedule = BootstrapDataProducer.class.getResource("/schedule.json");
+            if (schedule == null) {
+                throw new IllegalStateException("Failed to load 'schedule.json'");
+            }
+        }
 
-        final URL speaker = Thread.currentThread().getContextClassLoader().getResource("speaker.json");
-        assert speaker !=null : "Failed to load 'speaker.json'";
+        URL speaker = loader.getResource("speaker.json");
+        if (speaker == null) {
+            speaker = BootstrapDataProducer.class.getResource("/speaker.json");
+            if (speaker == null) {
+                throw new IllegalStateException("Failed to load 'speaker.json'");
+            }
+        }
 
         final Parser parser = new Parser();
         final BootstrapData data = parser.parse(schedule, speaker);
