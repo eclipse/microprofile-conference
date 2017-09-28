@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright(c) 2016-2017 IBM, Red Hat, and others.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~      http://www.apache.org/licenses/LICENSE-2.0
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
+~ Copyright(c) 2016-2017 IBM, Red Hat, and others.
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~      http://www.apache.org/licenses/LICENSE-2.0
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -107,13 +107,14 @@
 
         <!-- App servers -->
         <version.wildfly-swarm>2017.2.0</version.wildfly-swarm>
-        <version.payara>4.1.1.163</version.payara>
+        <version.payara>4.1.2.173</version.payara>
+        <version.payara.embedded>4.1.2.173.0.1</version.payara.embedded>
         <version.tomee>7.0.1</version.tomee>
         <version.wildfly>10.0.0.Final</version.wildfly>
         <version.liberty>2017.9.+</version.liberty>
 
         <!-- Dependencies -->
-        <version.microprofile>1.0.0</version.microprofile>
+        <version.microprofile>1.1.0</version.microprofile>
         <version.resteasy>3.0.19.Final</version.resteasy>
         <version.swagger>1.5.10</version.swagger>
         <version.swizzle-stream>1.6.2</version.swizzle-stream>
@@ -140,8 +141,8 @@
         <dependencies>
             <!-- MicroProfile -->
             <dependency>
-                <groupId>io.microprofile</groupId>
-                <artifactId>microprofile</artifactId>
+                <groupId>org.eclipse.microprofile</groupId>
+                <artifactId>microprofile-bom</artifactId>                
                 <version>${version.microprofile}</version>
                 <type>pom</type>
                 <scope>provided</scope>
@@ -177,7 +178,7 @@
             <dependency>
                 <groupId>fish.payara.extras</groupId>
                 <artifactId>payara-embedded-all</artifactId>
-                <version>4.1.1.163.0.1</version>
+                <version>${version.payara.embedded}</version>
             </dependency>
 
 
@@ -277,8 +278,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.microprofile</groupId>
-            <artifactId>microprofile</artifactId>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile-bom</artifactId>            
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
