@@ -43,7 +43,7 @@ export class SchedulesComponent implements OnInit {
         });
         this.sessionService.init(function () {
             //no-op
-            console.log("Loaded sessions");
+            console.log("Loaded schedules");
         });
 
         this.header = {
@@ -73,6 +73,7 @@ export class SchedulesComponent implements OnInit {
 
     setSchedules(schedules: Schedule[]): void {
         this.schedules = schedules;
+        console.log("schedules.length: %d", this.schedules.length);
         this.events = this.toEvents(this.schedules);
     }
 
@@ -87,8 +88,10 @@ export class SchedulesComponent implements OnInit {
             //date,duration,venue,venueId,startTime,id,sessionId
             //dayOfWeek,month,dayOfMonth,dayOfYear,era,year,monthValue,chronology,leapYear
 
-            let d = new Date(s.date.monthValue + '/' + s.date.dayOfMonth + '/' + s.date.year);
-            let start = momentConstructor(d.toISOString().slice(0, 10)).add(s.startTime.hour, 'hours');
+            console.log(s);
+            var datetime = s.date + " " + s.startTime;
+            let d = new Date(datetime);
+            let start = momentConstructor(d.toISOString());
             let end = start.add(1, 'hours');
 
             if (self.defaultDate.isAfter(start)) {
@@ -107,8 +110,9 @@ export class SchedulesComponent implements OnInit {
 
         });
 
+        console.log("First event date: %s", self.defaultDate.toISOString());
         //Go to the first event
-        this.pSchedule.gotoDate(this.defaultDate);
+        this.pSchedule.gotoDate(this.defaultDate.toISOString());
 
         return events;
     }

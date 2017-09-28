@@ -1,10 +1,10 @@
 //This is the same model our service emits
 export class Schedule {
-    date: any;
+    date: string;
     duration: string;
     venue: string;
     venueId: string;
-    startTime: any;
+    startTime: string;
     id: string;
     sessionId: string;
 }
