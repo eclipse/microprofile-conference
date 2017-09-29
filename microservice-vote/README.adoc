@@ -1,7 +1,42 @@
 = microservice-vote
 Provided using link:https://developer.ibm.com/wasdev/[WebSphere Liberty]
 
-*Build and run the service*
+== How it works
+
+The vote microservice stores feedback from the sessions and displays how well all sessions were liked in a pie chart.  If the vote service is is running in a Cloud Foundry environment, or manually configured (via server.xml) to connect to a CouchDB database, the votes will be persisted.  Otherwise, the vote data will simply be stored in-memory.  
+
+=== Endpoints
+
+----
+GET    /vote/   # Returns description of service
+GET    /vote/attendee       # Create new attendee
+POST   /vote/attendee       # Create new attendee
+GET    /vote/attendee/{id}  # Get attendee by ID
+POST   /vote/attendee/{id}  # Update existing attendee by ID
+DELETE /vote/attendee/{id}  # Remove attendee by ID
+POST   /vote/rate           # Get a list of all session ratings
+GET    /vote/rate           # Get list of all session ratings
+PUT    /vote/rate/{id}      # Update session rating
+GET    /vote/rate/{id}      # Get session rating by ID
+DELETE /vote/rate/{id}      # Delete session rating by ID
+GET    /vote/ratingsBySession         # Get all session votes by session ID
+GET    /vote/averageRatingBySession   # Get average session rating by session ID
+GET    /vote/ratingsByAttendee        # Get all votes made by attendee ID
+----
+
+=== Usage of technologies
+
+* *JAX-RS* is used to to define the endpoints for the application, and performs JSON databinding on incoming and outgoing JSON data so that the rest of the code can utilize the data as POJOs.
+* *CDI* is used to instantiate data access objects (DAO's) and manage invocation of lifecycle operations such as `@PostConstricut`
+* *JSON-P* is used to implement custom JAX-RS MessageBodyReader/Writer classes for binding between JSON and POJO
+* *MicroProfile Config* is used to inject an instance of `io.microprofile.showcase.vote.persistence.couch.Credentials` when the microservice is running in Cloud Foundry
+* *MicroProfile Fault-Tolerance* is used in the CouchAttendeeDAO and CouchSessionRatingDAO to:
+** impose timeouts on various operations using `@Timeout`
+** automatically retry failed operations using `@Retry`
+** limit the maximum resources allocated to parallel operations using `@Bulkhead`
+* *CouchDB* is a NoSQL database.  It's not part of MicroProfile, but is used here to persist vote information
+
+== Build and run the service
 ```
 cd microservice-vote
 mvn package
@@ -10,7 +45,7 @@ java -jar target/microservice-vote.jar
 
 Access the app at http://localhost:7070/vote
 
-*Port Bindings*
+=== Port Bindings
 By default the microservice will start on port 7070. To set it to a different port use the following Maven properties:
 ```
 -DtestServerHttpPort=9080 -DtestServerHttpsPort=9443
