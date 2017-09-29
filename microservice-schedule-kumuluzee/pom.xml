@@ -35,6 +35,9 @@
         <icon>http://microprofile.io/app/images/logo.png</icon>
 
         <version.processexec.plugin>0.8</version.processexec.plugin>
+
+        <version.kumuluzee.health>1.0.0-SNAPSHOT</version.kumuluzee.health>
+        <version.kumuluzee.metrics>1.0.0-SNAPSHOT</version.kumuluzee.metrics>
     </properties>
 
     <build>
@@ -66,6 +69,21 @@
         <dependency>
             <groupId>com.kumuluz.ee</groupId>
             <artifactId>kumuluzee-microProfile-1.0</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.kumuluz.ee.health</groupId>
+            <artifactId>kumuluzee-health</artifactId>
+            <version>${version.kumuluzee.health}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kumuluz.ee.metrics</groupId>
+            <artifactId>kumuluzee-metrics-core</artifactId>
+            <version>${version.kumuluzee.metrics}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kumuluz.ee.metrics</groupId>
+            <artifactId>kumuluzee-metrics-prometheus</artifactId>
+            <version>${version.kumuluzee.metrics}</version>
         </dependency>
     </dependencies>
 

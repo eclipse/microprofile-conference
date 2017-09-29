@@ -25,10 +25,10 @@ java [-D<OPTION>] -jar target/microservice-schedule-kumuluzee.jar
 | 8080
 |===
 
-For example, if you want to change the HTTP port to 8000, run the application like this:
+For example, if you want to change the HTTP port to 6060, run the application like this:
 
 ----
-java -Dkumuluzee.server.http.port=8000 -jar target/microservice-session-kumuluzee.jar
+java -Dkumuluzee.server.http.port=6060 -jar target/microservice-schedule-kumuluzee.jar
 ----
 
-Click on this link to verify that everything ran fine: http://localhost:8000/schedule
+Click on this link to verify that everything ran fine: http://localhost:6060/schedule/all

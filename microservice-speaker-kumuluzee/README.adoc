@@ -1,0 +1,65 @@
+= Microservice Speaker
+
+== microservice-speaker-kumuluzee
+Provided using link:https://ee.kumuluz.com/[KumuluzEE 2.4.1]
+
+The endpoints are:
+
+----
+/speaker //<1>
+/speaker/add //<2>
+/speaker/remove/{id} //<3>
+/speaker/update //<4>
+/speaker/retrieve/{id} //<5>
+/speaker/search //<6>
+----
+
+<1> List all
+<2> Add a Speaker
+<3> Remove a Speaker by id
+<4> Update an existing Speaker
+<5> Retrieve a known speaker
+<6> Search for a speaker
+
+[source,json]
+----
+{
+  "id" : "UUID",
+  "nameFirst" : "John",
+  "nameLast" : "Doe",
+  "organization" : "Pearly gates",
+  "biography" : "A nobody",
+  "picture" : "http://link/to/some.jpg",
+  "twitterHandle" : "@JohnDoe"
+}
+----
+
+*Build and run the service*
+```
+cd microservice-speaker-kumuluzee
+mvn clean package
+java [-D<OPTION>] -jar target/microservice-speaker-kumuluzee.jar
+```
+
+*Address & Port Bindings*
+
+.Session Service Options
+|===
+|Flag |Description| Default
+
+| kumuluzee.server.http.address=<address>
+| HTTP bind interface
+| 0.0.0.0
+
+| kumuluzee.server.http.port=<port>
+| HTTP port
+| 8080
+|===
+
+For example, if you want to change the HTTP port to 4040, run the application like this:
+
+----
+java -Dkumuluzee.server.http.port=4040 -jar target/microservice-speaker-kumuluzee.jar
+----
+
+Click on this link to verify that everything ran fine: http://localhost:4040/speaker

@@ -132,6 +132,7 @@
         <module>microservice-session</module>
         <module>microservice-vote</module>
         <module>microservice-speaker</module>
+        <module>microservice-speaker-kumuluzee</module>
         <module>microservice-schedule</module>
         <module>microservice-schedule-kumuluzee</module>
         <module>web-application</module>

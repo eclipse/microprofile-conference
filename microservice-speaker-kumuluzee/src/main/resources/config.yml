@@ -1,0 +1,17 @@
+kumuluzee:
+  name: speaker-service
+  version: 1.0.0
+  env:
+    name: dev
+
+  health:
+    checks:
+      disk-space-health-check:
+        threshold: 100000000
+
+  metrics:
+    jvm:
+      enabled: true
+    web-instrumentation:
+      - name: speaker-endpoint
+        url-pattern: /speaker/*
