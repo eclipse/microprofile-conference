@@ -111,7 +111,7 @@
         <version.tomee>7.0.1</version.tomee>
         <version.wildfly>10.0.0.Final</version.wildfly>
         <version.liberty>17.0.0.2</version.liberty>
-        <version.kumuluzee>2.4.1</version.kumuluzee>
+        <version.kumuluzee>2.5.0-SNAPSHOT</version.kumuluzee>
 
         <!-- Dependencies -->
         <version.microprofile>1.0.0</version.microprofile>

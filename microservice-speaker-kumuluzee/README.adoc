@@ -63,3 +63,45 @@ java -Dkumuluzee.server.http.port=4040 -jar target/microservice-speaker-kumuluze
 ----
 
 Click on this link to verify that everything ran fine: http://localhost:4040/speaker
+
+=== Health Checks
+
+Microservice includes two health checks:
+
+- DiskHealthCheck: Checks, if there is more than 100MB disk space available
+- SelfHealthCheck: Checks, if the `/speaker` endpoint is accessible
+
+You can view the status of the health checks by visiting this link: http://localhost:4040/health
+
+Health Checks are provided using link:https://github.com/kumuluz/kumuluzee-health[KumuluzEE Health],
+the KumuluzEE implementation of the
+link:https://github.com/eclipse/microprofile-health[MicroProfile Health Specification].
+
+=== Configuration
+
+Microservice uses link:https://github.com/kumuluz/kumuluzee-config-mp[KumuluzEE Config MicroProfile],
+the KumuluzEE implementation of the
+link:https://microprofile.io/project/eclipse/microprofile-config[MicroProfile Configuration Specification].
+
+KumuluzEE Config Microprofile enables access to the configuration values from multiple configuration
+sources like system properties, environment variables and configuration files, as well as configuration servers
+like etcd and Consul.
+
+This microservice uses configuration file `config.yml` to configure the HTTP method of
+SelfHealthCheck.
+
+```
+@Inject
+@ConfigProperty(name = "health.health-check-http-method", defaultValue = "GET")
+String healthCheckHttpMethod;
+```
+
+=== Metrics
+
+Microservice collects metrics from the JVM and requests, that pass through the `/speaker/*` endpoints.
+Metrics are exposed in two formats:
+
+- JSON: Available on this link: http://localhost:4040/metrics
+- Prometheus: Available on this link: http://localhost:4040/prometheus
+
+Metrics are provided using link:https://github.com/kumuluz/kumuluzee-metrics[KumuluzEE Metrics].

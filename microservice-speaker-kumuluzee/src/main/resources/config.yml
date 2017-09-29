@@ -15,3 +15,7 @@ kumuluzee:
     web-instrumentation:
       - name: speaker-endpoint
         url-pattern: /speaker/*
+
+
+health:
+  health-check-http-method: HEAD

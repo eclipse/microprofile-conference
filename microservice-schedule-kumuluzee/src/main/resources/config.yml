@@ -15,3 +15,7 @@ kumuluzee:
     web-instrumentation:
       - name: schedule-endpoint
         url-pattern: /schedule/*
+
+
+health:
+  health-check-http-method: HEAD
