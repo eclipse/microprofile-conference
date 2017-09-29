@@ -24,7 +24,7 @@
  dependencies for use at compile time if not using app accelerator dependencies. -->
 
     <featureManager>
-        <feature>mpConfig-1.0</feature>
+        <feature>mpConfig-1.1</feature>
     </featureManager>
 
     <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}" id="defaultHttpEndpoint"/>

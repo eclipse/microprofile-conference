@@ -111,7 +111,7 @@
         <version.payara.embedded>4.1.2.173.0.1</version.payara.embedded>
         <version.tomee>7.0.1</version.tomee>
         <version.wildfly>10.0.0.Final</version.wildfly>
-        <version.liberty>2017.9.+</version.liberty>
+        <version.liberty>2017.9.0_1</version.liberty>
 
         <!-- Dependencies -->
         <version.microprofile>1.1.0</version.microprofile>

@@ -196,7 +196,7 @@
         <dependency>
             <groupId>org.eclipse.microprofile.config</groupId>
             <artifactId>microprofile-config-api</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -348,7 +348,7 @@
           				<configuration>
              		  	  	<features>
                		    		<acceptLicense>true</acceptLicense>
-                  	 			<feature>mpConfig-1.0</feature>
+                  	 			<feature>mpConfig-1.1</feature>
               		 		</features>
      						<installDirectory>${project.build.directory}/wlp</installDirectory>
       						<serverName>${wlpServerName}</serverName>
