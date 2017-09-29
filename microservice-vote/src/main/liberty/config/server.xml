@@ -26,6 +26,7 @@
     <featureManager>
         <feature>mpConfig-1.1</feature>
         <feature>mpFaultTolerance-1.0</feature>
+        <feature>mpMetrics-1.0</feature>
     </featureManager>
 
     <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}" id="defaultHttpEndpoint"/>
@@ -33,6 +34,9 @@
     <jndiEntry jndiName="cloudant/url" value="${env.CLOUDANT_URL}"/>
     <jndiEntry jndiName="cloudant/username" value="${env.CLOUDANT_USERNAME}"/>
     <jndiEntry jndiName="cloudant/password" value="${env.CLOUDANT_PASSWORD}"/>
+    
+    <quickStartSecurity userName="confAdmin" userPassword="microprofile"/>
+	<keyStore id="defaultKeyStore" password="mpKeystore"/>
 
 	<!-- Automatically expand WAR files and EAR files -->
 	<applicationManager autoExpand="true"/>

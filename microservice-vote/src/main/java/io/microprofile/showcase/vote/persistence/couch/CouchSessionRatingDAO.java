@@ -30,6 +30,8 @@ import org.eclipse.microprofile.faulttolerance.Asynchronous;
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 
+import org.eclipse.microprofile.metrics.annotation.Timed;
+
 import io.microprofile.showcase.vote.model.Attendee;
 import io.microprofile.showcase.vote.model.SessionRating;
 import io.microprofile.showcase.vote.persistence.Persistent;
