@@ -114,7 +114,7 @@
         <version.liberty>2017.9.0_1</version.liberty>
 
         <!-- Dependencies -->
-        <version.microprofile>1.1.0</version.microprofile>
+        <version.microprofile>1.2</version.microprofile>
         <version.resteasy>3.0.19.Final</version.resteasy>
         <version.swagger>1.5.10</version.swagger>
         <version.swizzle-stream>1.6.2</version.swizzle-stream>
@@ -142,7 +142,7 @@
             <!-- MicroProfile -->
             <dependency>
                 <groupId>org.eclipse.microprofile</groupId>
-                <artifactId>microprofile-bom</artifactId>                
+                <artifactId>microprofile</artifactId>                
                 <version>${version.microprofile}</version>
                 <type>pom</type>
                 <scope>provided</scope>
@@ -279,7 +279,7 @@
     <dependencies>
         <dependency>
             <groupId>org.eclipse.microprofile</groupId>
-            <artifactId>microprofile-bom</artifactId>            
+            <artifactId>microprofile</artifactId>            
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
