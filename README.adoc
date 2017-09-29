@@ -46,10 +46,23 @@ Build, package and run all microservices and the UI:
 mvn clean package -P start,ui
 ----
 
+or use profile that includes microservices implemented with kumuluzee:
+
+----
+mvn clean package -P start-kumuluzee,ui
+----
+
 Run just the microservices:
 
 ----
 mvn package -Pstart -pl :microservice-start
+----
+
+
+or use profile that includes microservices implemented with kumuluzee:
+
+----
+mvn package -Pstart-kumuluzee -pl :microservice-start
 ----
 
 Run just the UI:

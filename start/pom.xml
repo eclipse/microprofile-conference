@@ -35,6 +35,8 @@
         <session.exec.arg>-Dswarm.http.port=5050</session.exec.arg>
         <schedule.exec.arg1>--port</schedule.exec.arg1>
         <schedule.exec.arg2>6060</schedule.exec.arg2>
+        <schedule-kumuluzee.exec.arg>-Dkumuluzee.server.http.port=6060</schedule-kumuluzee.exec.arg>
+        <speaker-kumuluzee.exec.arg>-Dkumuluzee.server.http.port=4040</speaker-kumuluzee.exec.arg>
     </properties>
 
     <profiles>
@@ -81,22 +83,6 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <executions>
-                            <execution>
-                                <id>speaker-buildexec</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>mvn${command.extension}</executable>
-                                    <workingDirectory>../microservice-speaker
-                                    </workingDirectory>
-                                    <arguments>
-                                        <argument>tomee:exec</argument>
-                                        <argument>-Dtomee-plugin.http=4040</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
                             <execution>
                                 <id>speaker</id>
                                 <phase>package</phase>
@@ -146,6 +132,95 @@
                                         <argument>target/microservice-schedule${qualifier.jar}.jar</argument>
                                         <argument>${schedule.exec.arg1}</argument>
                                         <argument>${schedule.exec.arg2}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>vote</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>java</executable>
+                                    <workingDirectory>../microservice-vote/</workingDirectory>
+                                    <arguments>
+                                        <argument>-jar</argument>
+                                        <argument>target/microservice-vote${qualifier.jar}.jar</argument>
+                                    </arguments>
+                                    <environmentVariables>
+                                        <SKIP_DEMO_DATA>${skipDemoData}</SKIP_DEMO_DATA>
+                                    </environmentVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>start-kumuluzee</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>speaker-kumuluzee</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>java</executable>
+                                    <workingDirectory>../microservice-speaker-kumuluzee
+                                    </workingDirectory>
+                                    <arguments>
+                                        <argument>${speaker-kumuluzee.exec.arg}</argument>
+                                        <argument>-jar</argument>
+                                        <argument>target/microservice-speaker-kumuluzee.jar</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>session</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>java</executable>
+                                    <workingDirectory>../microservice-session</workingDirectory>
+                                    <arguments>
+                                        <argument>-jar</argument>
+                                        <argument>target/microservice-session${session.qualifier.jar}.jar</argument>
+                                        <argument>${session.exec.arg}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>schedule-kumuluzee</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>java</executable>
+                                    <workingDirectory>../microservice-schedule-kumuluzee</workingDirectory>
+                                    <arguments>
+                                        <argument>${schedule-kumuluzee.exec.arg}</argument>
+                                        <argument>-jar</argument>
+                                        <argument>target/microservice-schedule-kumuluzee.jar</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

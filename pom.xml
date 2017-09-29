@@ -474,6 +474,18 @@
             </modules>
         </profile>
         <profile>
+        <id>start-kumuluzee</id>
+        <modules>
+            <module>demo-bootstrap</module>
+            <module>microservice-session</module>
+            <module>microservice-vote</module>
+            <module>microservice-speaker-kumuluzee</module>
+            <module>microservice-schedule-kumuluzee</module>
+            <module>web-application</module>
+            <module>start</module>
+        </modules>
+    </profile>
+        <profile>
             <id>ui</id>
             <modules>
                 <module>web-application</module>
