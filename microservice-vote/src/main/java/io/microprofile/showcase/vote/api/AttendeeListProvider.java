@@ -78,7 +78,7 @@ public class AttendeeListProvider implements MessageBodyReader<List<Attendee>>, 
                 JsonObject attendeeJson = arr.getJsonObject(i);//rdr.readObject();
                 if (isDebugEnabled())
                     System.out.println(attendeeJson);
-                Attendee attendee = AttendeeProvider.fromJSON(attendeeJson);
+                Attendee attendee = Attendee.fromJSON(attendeeJson);
                 attendees.add(attendee);
             }
             return attendees;
@@ -120,7 +120,7 @@ public class AttendeeListProvider implements MessageBodyReader<List<Attendee>>, 
         JsonWriter writer = Json.createWriter(new TeeOutputStream(os, System.out));
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
         for (Attendee attendee : Attendees) {
-            JsonObject attendeeJson = AttendeeProvider.toJSON(attendee);
+            JsonObject attendeeJson = Attendee.toJSON(attendee);
             arrayBuilder.add(attendeeJson);
         }
         writer.writeArray(arrayBuilder.build());

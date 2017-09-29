@@ -24,12 +24,8 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
-import javax.json.JsonString;
-import javax.json.JsonWriter;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -58,7 +54,7 @@ public class AttendeeProvider implements MessageBodyReader<Attendee>, MessageBod
     @Override
     public Attendee readFrom(Class<Attendee> clazz, Type type, Annotation[] annotations, MediaType mediaType,
                              MultivaluedMap<String, String> map, InputStream is) throws IOException, WebApplicationException {
-        return fromJSON(is);
+        return Attendee.fromJSON(is);
     }
 
     @Override
@@ -79,60 +75,6 @@ public class AttendeeProvider implements MessageBodyReader<Attendee>, MessageBod
     @Override
     public void writeTo(Attendee attendee, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
                         MultivaluedMap<String, Object> map, OutputStream os) throws IOException, WebApplicationException {
-        toJSON(os, attendee);
-    }
-
-    public static Attendee fromJSON(InputStream is) {
-        JsonReader rdr = null;
-        try {
-            rdr = Json.createReader(is);
-            JsonObject attendeeJson = rdr.readObject();
-            Attendee attendee = fromJSON(attendeeJson);
-            return attendee;
-        } finally {
-            if (rdr != null) {
-                rdr.close();
-            }
-
-        }
-
-    }
-
-    public static Attendee fromJSON(JsonObject attendeeJson) {
-    	String id = getStringFromJson("id", attendeeJson);
-    	String name = getStringFromJson("name", attendeeJson);
-        Attendee attendee = new Attendee(id, name);
-        return attendee;
-    }
-
-    private static String getStringFromJson(String key, JsonObject json) {
-    	String returnedString = null;
-		if (json.containsKey(key)) {
-			JsonString value = json.getJsonString(key);
-			if (value != null) {
-				returnedString = value.getString();
-			}
-		}
-		return returnedString;
-	}
-
-	public static void toJSON(OutputStream os, Attendee attendee) {
-        JsonWriter jsonWriter = Json.createWriter(os);
-        jsonWriter.writeObject(toJSON(attendee));
-        jsonWriter.close();
-    }
-
-    public static JsonObject toJSON(Attendee attendee) {
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-
-        if (attendee.getId() != null)
-            builder = builder.add("id", attendee.getId());
-        builder = builder.add("name", attendee.getName());
-        JsonObject jsonObject = builder.build();
-        return jsonObject;
-    }
-
-    public static String toJSONString(Attendee attendee) {
-        return toJSON(attendee).toString();
+    	Attendee.toJSON(os, attendee);
     }
 }

@@ -58,7 +58,7 @@ public class SessionRatingProvider implements MessageBodyReader<SessionRating>, 
     @Override
     public SessionRating readFrom(Class<SessionRating> clazz, Type type, Annotation[] annotations, MediaType mediaType,
                                   MultivaluedMap<String, String> map, InputStream is) throws IOException, WebApplicationException {
-        return fromJSON(is);
+        return SessionRating.fromJSON(is);
     }
 
     @Override
@@ -79,71 +79,6 @@ public class SessionRatingProvider implements MessageBodyReader<SessionRating>, 
     @Override
     public void writeTo(SessionRating sessionRating, Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType,
                         MultivaluedMap<String, Object> map, OutputStream os) throws IOException, WebApplicationException {
-        toJSON(os, sessionRating);
-    }
-
-    public static SessionRating fromJSON(InputStream is) {
-        JsonReader rdr = null;
-        try {
-            rdr = Json.createReader(is);
-            JsonObject sessionRatingJson = rdr.readObject();
-            SessionRating sessionRating = fromJSON(sessionRatingJson);
-            return sessionRating;
-        } finally {
-            if (rdr != null) {
-                rdr.close();
-            }
-        }
-
-    }
-
-    public static SessionRating fromJSON(JsonObject sessionRatingJson) {
-    	String id = getStringFromJson("id", sessionRatingJson);
-    	String session = getStringFromJson("session", sessionRatingJson);
-    	String attendeeId = getStringFromJson("attendeeId", sessionRatingJson);
-    	int rating = 0;
-    	if (sessionRatingJson.containsKey("rating")) {
-    		JsonNumber ratingJson = sessionRatingJson.getJsonNumber("rating");
-    		if (ratingJson != null) {
-    			rating = ratingJson.intValue();
-    		}
-    	}
-    	
-        SessionRating sessionRating = new SessionRating(id, session, attendeeId, rating);
-        return sessionRating;
-    }
-
-    
-    private static String getStringFromJson(String key, JsonObject json) {
-    	String returnedString = null;
-		if (json.containsKey(key)) {
-			JsonString value = json.getJsonString(key);
-			if (value != null) {
-				returnedString = value.getString();
-			}
-		}
-		return returnedString;
-	}
-    
-    public static void toJSON(OutputStream os, SessionRating sessionRating) {
-        JsonWriter jsonWriter = Json.createWriter(os);
-        jsonWriter.writeObject(toJSON(sessionRating));
-        jsonWriter.close();
-    }
-
-    public static JsonObject toJSON(SessionRating sessionRating) {
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-
-        if (sessionRating.getId() != null)
-            builder = builder.add("id", sessionRating.getId());
-        builder = builder.add("session", sessionRating.getSession());
-        builder = builder.add("attendeeId", sessionRating.getAttendeeId());
-        builder = builder.add("rating", sessionRating.getRating());
-        JsonObject jsonObject = builder.build();
-        return jsonObject;
-    }
-
-    public static String toJSONString(SessionRating sessionRating) {
-        return toJSON(sessionRating).toString();
+    	SessionRating.toJSON(os, sessionRating);
     }
 }

@@ -17,11 +17,20 @@ package io.microprofile.showcase.vote.persistence.couch;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.faulttolerance.Asynchronous;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.Timeout;
+
+import io.microprofile.showcase.vote.model.Attendee;
 import io.microprofile.showcase.vote.model.SessionRating;
 import io.microprofile.showcase.vote.persistence.Persistent;
 import io.microprofile.showcase.vote.persistence.SessionRatingDAO;
@@ -29,6 +38,7 @@ import io.microprofile.showcase.vote.persistence.couch.CouchConnection.RequestTy
 
 @ApplicationScoped
 @Persistent
+@Timeout(1000)
 public class CouchSessionRatingDAO implements SessionRatingDAO {
 
     @Inject
@@ -75,26 +85,26 @@ public class CouchSessionRatingDAO implements SessionRatingDAO {
 
     @Override
     public SessionRating updateRating(SessionRating newRating) {
-        SessionRating original = getSessionRating(newRating.getId());
-
         couch.request(newRating.getId(), RequestType.PUT, newRating, null, null, 201);
-
-        newRating = getSessionRating(newRating.getId());
-        return newRating;
+        return getSessionRating(newRating.getId());
     }
 
     @Override
     public void deleteRating(String id) {
-
         SessionRating original = getSessionRating(id);
-
-        couch.request(id, RequestType.DELETE, null, null, null, 200);
+        couch.request(id, RequestType.DELETE, original, null, original.getRev(), 200);
     }
 
     @Override
     public SessionRating getRating(String id) {
         SessionRating sessionRating = couch.request(id, RequestType.GET, null, SessionRating.class, null, 200, true);
         return sessionRating;
+    }
+    
+    @Asynchronous
+    @Bulkhead(3)
+    private Future<SessionRating> getRatingAsync(String id) {
+    	return CompletableFuture.completedFuture(getRating(id));
     }
 
     @Override
@@ -111,16 +121,24 @@ public class CouchSessionRatingDAO implements SessionRatingDAO {
 
         AllDocs allDocs = couch.request("_design/ratings/_view/" + query, "key", "\"" + value + "\"", RequestType.GET, null, AllDocs.class, null, 200);
 
-        Collection<SessionRating> ratings = new ArrayList<SessionRating>();
-        for (String id : allDocs.getIds()) {
-            SessionRating rating = getSessionRating(id);
-            ratings.add(rating);
-        }
+        // Request a future for each Attendee
+        List<Future<SessionRating>> futureRatings = new ArrayList<>();
+        allDocs.getIds().forEach(id -> futureRatings.add(getRatingAsync(id)));
+
+        // Once all requests have been made, block for results to build list
+        Collection<SessionRating> ratings = new ArrayList<>();
+        futureRatings.forEach(futureRating -> {
+			try {
+				ratings.add(futureRating.get());
+			} catch (InterruptedException | ExecutionException ignore) {
+			}
+		});
 
         return ratings;
     }
 
     @Override
+    @Timeout(5000)
     public Collection<SessionRating> getAllRatings() {
 
         AllDocs allDocs = couch.request("_design/ratings/_view/all", RequestType.GET, null, AllDocs.class, null, 200);
@@ -135,19 +153,10 @@ public class CouchSessionRatingDAO implements SessionRatingDAO {
     }
 
     @Override
+    @Timeout(5000)
     public void clearAllRatings() {
         AllDocs allDocs = couch.request("_design/ratings/_view/all", RequestType.GET, null, AllDocs.class, null, 200);
-
-        for (String id : allDocs.getIds()) {
-            deleteSessionRating(id);
-        }
-
+        for (String id : allDocs.getIds())
+            deleteRating(id);
     }
-
-    private void deleteSessionRating(String id) {
-        SessionRating sessionRating = getSessionRating(id);
-
-        couch.request(id, RequestType.DELETE, null, null, null, 200);
-    }
-
 }

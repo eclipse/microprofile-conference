@@ -1,0 +1,19 @@
+= microservice-vote
+Provided using link:https://developer.ibm.com/wasdev/[WebSphere Liberty]
+
+*Build and run the service*
+```
+cd microservice-vote
+mvn package
+java -jar target/microservice-vote.jar
+```
+
+Access the app at http://localhost:7070/vote
+
+*Port Bindings*
+By default the microservice will start on port 7070. To set it to a different port use the following Maven properties:
+```
+-DtestServerHttpPort=9080 -DtestServerHttpsPort=9443
+```
+
+Note: if you run the package command with the 'liberty' profile the jar file will be called microservice-vote-liberty.jar.
