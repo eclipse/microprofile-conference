@@ -11,14 +11,14 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<div class="container p-a-1 rounded" style="background: rgba(175, 67, 38, 0.4)">
+<div class="container p-a-1" style="background: white">
     <div *ngIf="speaker">
 
         <div class="row">
 
             <div class="col-xs">
                 <div class="row">
-                    <div class="col-xs rounded p-a-1 m-x-1" style="background: rgba(28, 167, 175, 0.4)">
+                    <div class="col-xs p-a-1 m-x-1" style="font-family:HelveticaNeue-Light;font-size:26px;color:#00aa5e;letter-spacing:0;line-height:33px;text-align:left">
                         <h4>
                             {{speaker.nameFirst}} {{speaker.nameLast}}
                             <small class="text-muted">&nbsp;{{speaker.twitterHandle}}</small>
@@ -26,17 +26,16 @@
                     </div>
                 </div>
                 <div class="row p-a-1">
-                    <div class="col-xs-4">
+                    <div class="col-xs-4" style="font-family:HelveticaNeue;font-size:14px;color:#6f7878;letter-spacing:0;line-height:22px;text-align:center;">
                         <img src="{{speaker.picture}}" class="img-circle"
-                             alt="{{speaker.nameFirst}} {{speaker.nameLast}}" width="200" height="200">
+                             alt="{{speaker.nameFirst}} {{speaker.nameLast}}" width="200" height="200"><br />
+                             <small class="text-muted">&nbsp;{{speaker.twitterHandle}}</small><br />
+                             {{speaker.organization}}
                     </div>
                     <div class="col-xs-8 p-y-1">
-                        <textarea class="form-control rounded" id="bio" rows="9"
+                        <textarea class="form-control" id="bio" rows="9" style="background: white;"
                                   readonly>{{speaker.biography}}</textarea>
                     </div>
-                </div>
-                <div class="row p-x-1 p-b-1">
-                    <div class="col-xs">Company: {{speaker.organization}}</div>
                 </div>
             </div>
         </div>

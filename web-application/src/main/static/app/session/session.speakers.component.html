@@ -15,8 +15,7 @@
 <div class="p-a-1">
     <div class="row p-a-1">
         <div *ngFor="let speaker of speakers" class="col-xs" style="cursor:hand;cursor:pointer">
-            <div (click)="onSelect(speaker)" class="row rounded"
-                 style="background: rgba(175, 95, 39, 0.4)">
+            <div (click)="onSelect(speaker)" class="row">
                 <div class="col-xs">
                     <img src="{{speaker.picture}}" class="img-circle"
                          alt="{{speaker.nameFirst}} {{speaker.nameLast}}" width="80" height="80">

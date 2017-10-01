@@ -11,20 +11,20 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<div class="container p-a-1 rounded" style="background: rgba(175, 67, 38, 0.4)">
+<div class="container p-a-1 rounded" style="background: white">
     <div *ngIf="session">
 
         <div class="row">
 
             <div class="col-xs">
                 <div *ngIf="undefined == speaker" class="row">
-                    <div class="col-xs rounded p-a-1 m-x-1" style="background: rgba(28, 167, 175, 0.4)">
+                    <div class="col-xs p-a-1 m-x-1">
                         <h4>{{session.title}}</h4>
                     </div>
                 </div>
                 <div class="row m-t-1">
                     <div class="col-xs">
-                        <textarea class="form-control rounded" id="abstract" rows="9"
+                        <textarea class="form-control" id="abstract" rows="9" style="background: white;"
                                   readonly>{{session.abstract}}</textarea>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="container p-a-1 rounded" style="background: rgba(138, 94, 175, 0.4)">
+        <div class="container p-a-1">
             <div class="row p-a-1">
                 <h4>Votes</h4>
             </div>
