@@ -22,14 +22,18 @@ import java.util.concurrent.ConcurrentMap;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.eclipse.microprofile.health.Health;
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import io.microprofile.showcase.vote.model.Attendee;
 
 @ApplicationScoped
 @NonPersistent
+@Health
 @Timed(displayName="Data Layer Times", description="The time it takes this DAO method to complete, as a histogram.")
-public class HashMapAttendeeDAO implements AttendeeDAO {
+public class HashMapAttendeeDAO implements AttendeeDAO, HealthCheck {
 
     private ConcurrentMap<String, Attendee> attendees = new ConcurrentHashMap<String, Attendee>();
 
@@ -69,8 +73,12 @@ public class HashMapAttendeeDAO implements AttendeeDAO {
 
     @Override
     public boolean isAccessible() {
-        // TODO Auto-generated method stub
         return true;
     }
+
+	@Override
+	public HealthCheckResponse call() {
+		return HealthCheckResponse.named("HashMap").up().build();
+	}
 
 }

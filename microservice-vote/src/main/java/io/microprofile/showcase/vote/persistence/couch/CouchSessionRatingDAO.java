@@ -29,6 +29,10 @@ import javax.inject.Inject;
 import org.eclipse.microprofile.faulttolerance.Asynchronous;
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.health.Health;
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
@@ -41,7 +45,8 @@ import io.microprofile.showcase.vote.persistence.couch.CouchConnection.RequestTy
 @ApplicationScoped
 @Persistent
 @Timeout(1000)
-public class CouchSessionRatingDAO implements SessionRatingDAO {
+@Health
+public class CouchSessionRatingDAO implements SessionRatingDAO, HealthCheck {
 
     @Inject
     CouchConnection couch;
@@ -161,4 +166,10 @@ public class CouchSessionRatingDAO implements SessionRatingDAO {
         for (String id : allDocs.getIds())
             deleteRating(id);
     }
+
+	@Override
+	public HealthCheckResponse call() {
+		HealthCheckResponseBuilder b = HealthCheckResponse.named(CouchSessionRatingDAO.class.getSimpleName());
+		return connected  ? b.up().build()  : b.down().build();
+	}
 }

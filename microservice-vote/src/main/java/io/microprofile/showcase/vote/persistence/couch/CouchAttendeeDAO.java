@@ -30,6 +30,10 @@ import org.eclipse.microprofile.faulttolerance.Asynchronous;
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.health.Health;
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
@@ -41,7 +45,8 @@ import io.microprofile.showcase.vote.persistence.couch.CouchConnection.RequestTy
 @ApplicationScoped
 @Persistent
 @Timeout(1000)
-public class CouchAttendeeDAO implements AttendeeDAO {
+@Health
+public class CouchAttendeeDAO implements AttendeeDAO, HealthCheck {
 
     @Inject
     CouchConnection couch;
@@ -132,5 +137,11 @@ public class CouchAttendeeDAO implements AttendeeDAO {
     public boolean isAccessible() {
         return connected;
     }
+
+	@Override
+	public HealthCheckResponse call() {
+		HealthCheckResponseBuilder b = HealthCheckResponse.named(CouchAttendeeDAO.class.getSimpleName());
+		return connected  ? b.up().build()  : b.down().build();
+	}
 
 }
