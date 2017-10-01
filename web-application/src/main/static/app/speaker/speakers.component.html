@@ -12,7 +12,7 @@
   ~ limitations under the License.
   -->
 
-<div class="container p-a-1 rounded" style="background: rgba(20, 173, 175, 0.4)">
+<div class="container p-a-1 rounded" style="background: white">
     <div class="row">
         <div class="col-xs">
             <h4>{{title}}
@@ -26,8 +26,8 @@
     </div>
 
     <div class="row p-a-1">
-        <div class="col-xs-3 rounded" style="background: rgba(29, 175, 86, 0.4)">
-            <ul class="list-group rounded" style="overflow: scroll; overflow-y: auto; overflow-x: hidden; min-height: 520px; max-height: 520px">
+        <div class="col-xs-3">
+            <ul class="list-group" style="overflow: scroll; overflow-y: auto; overflow-x: hidden; min-height: 520px; max-height: 520px">
                 <li class="list-group-item list-group-item-action milky" style="cursor:hand;cursor:pointer"
                     *ngFor="let speaker of (speakers | speakerFilter: search)"
                     [class.selected]="speaker === selectedSpeaker"
@@ -36,7 +36,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-xs-9 p-a-1 rounded" style="background: rgba(120, 175, 166, 0.4)">
+        <div class="col-xs-9 p-a-1">
             <speaker [speaker]="selectedSpeaker"></speaker>
         </div>
     </div>

@@ -27,6 +27,7 @@
         <feature>mpConfig-1.1</feature>
         <feature>mpFaultTolerance-1.0</feature>
         <feature>mpMetrics-1.0</feature>
+        <feature>mpHealth-1.0</feature>
     </featureManager>
 
     <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}" id="defaultHttpEndpoint"/>

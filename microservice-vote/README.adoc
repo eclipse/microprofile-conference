@@ -8,6 +8,7 @@ The vote microservice stores feedback from the sessions and displays how well al
 === Endpoints
 
 ----
+GET    /health/ # Provide health check of service
 GET    /vote/   # Returns description of service
 GET    /vote/attendee       # Create new attendee
 POST   /vote/attendee       # Create new attendee
@@ -34,6 +35,10 @@ GET    /vote/ratingsByAttendee        # Get all votes made by attendee ID
 ** impose timeouts on various operations using `@Timeout`
 ** automatically retry failed operations using `@Retry`
 ** limit the maximum resources allocated to parallel operations using `@Bulkhead`
+* *MicroProfile Health* is used to provide an UP/DOWN health check of the service.  The following health checks are implemented:
+** HashMapDAO to determine if the in-memory storage is accessible (which is always) and gives an example of an UP status
+** CouchAttendeeDAO to determine if it can connect to the CouchDB backend
+** CouchSessionDAO to determine if it can connect to the CouchDB backend
 * *CouchDB* is a NoSQL database.  It's not part of MicroProfile, but is used here to persist vote information
 * *MicroProfile Metrics* is used to gather metrics about the time it takes the HashMapDAO objects to complete their operations, and to keep a count of the amount of times each REST endpoint is requested
 ** The metrics are available to view at https://localhost:9443/metrics. Sending a request that accepts `application/json` will receive a JSON response, otherwise a Prometheus-formatted response will be sent
