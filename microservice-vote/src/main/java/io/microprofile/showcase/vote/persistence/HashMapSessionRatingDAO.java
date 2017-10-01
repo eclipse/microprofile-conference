@@ -31,11 +31,14 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.metrics.annotation.Timed;
+
 import io.microprofile.showcase.bootstrap.BootstrapData;
 import io.microprofile.showcase.vote.model.SessionRating;
 
 @ApplicationScoped
 @NonPersistent
+@Timed(displayName="Data Layer Times", description="The time it takes this DAO method to complete, as a histogram.")
 public class HashMapSessionRatingDAO implements SessionRatingDAO {
 
     private ConcurrentMap<String, SessionRating> allRatings = new ConcurrentHashMap<String, SessionRating>();

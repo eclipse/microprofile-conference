@@ -36,6 +36,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.eclipse.microprofile.metrics.annotation.Counted;
+
 import io.microprofile.showcase.vote.model.Attendee;
 import io.microprofile.showcase.vote.model.SessionRating;
 import io.microprofile.showcase.vote.persistence.AttendeeDAO;
@@ -47,6 +49,7 @@ import io.microprofile.showcase.vote.utils.Log;
 @ApplicationScoped
 @Path("/")
 @Log
+@Counted(monotonic=true, displayName="Endpoint hit count", description="The amount of times this endpoint has been requested since starting the server.")
 public class SessionVote {
 
     private @Inject @NonPersistent AttendeeDAO hashMapAttendeeDAO;

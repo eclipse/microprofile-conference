@@ -22,10 +22,13 @@ import java.util.concurrent.ConcurrentMap;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.eclipse.microprofile.metrics.annotation.Timed;
+
 import io.microprofile.showcase.vote.model.Attendee;
 
 @ApplicationScoped
 @NonPersistent
+@Timed(displayName="Data Layer Times", description="The time it takes this DAO method to complete, as a histogram.")
 public class HashMapAttendeeDAO implements AttendeeDAO {
 
     private ConcurrentMap<String, Attendee> attendees = new ConcurrentHashMap<String, Attendee>();
