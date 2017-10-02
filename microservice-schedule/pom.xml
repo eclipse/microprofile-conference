@@ -230,6 +230,7 @@
                            <serverName>scheduleServer</serverName>
                            <appArchive>${project.build.directory}/${warfile.name}.war</appArchive>
                            <configFile>${basedir}/src/main/liberty/config/server.xml</configFile>
+                           <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
                        </configuration>
                    </plugin>
                 </plugins>

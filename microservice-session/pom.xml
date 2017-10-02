@@ -146,8 +146,9 @@
                        </executions>
                        <configuration>
                            <serverName>sessionServer</serverName>
+                           <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
+                           <configFile>src/main/liberty/config/server.xml</configFile>
                            <appArchive>${project.build.directory}/${warfile.name}.war</appArchive>
-                           <configFile>${basedir}/src/main/liberty/config/server.xml</configFile>
                        </configuration>
                    </plugin>
                 </plugins>
