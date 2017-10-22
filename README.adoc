@@ -62,7 +62,9 @@ You will find a PDF and HTML version of the documentation under `docs/target/gen
 
 == Development Tests
 
+----
 mvn clean test
+----
 
 == Run Individual Services
 
