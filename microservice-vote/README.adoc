@@ -42,6 +42,8 @@ GET    /vote/ratingsByAttendee        # Get all votes made by attendee ID
 * *CouchDB* is a NoSQL database.  It's not part of MicroProfile, but is used here to persist vote information
 * *MicroProfile Metrics* is used to gather metrics about the time it takes the HashMapDAO objects to complete their operations, and to keep a count of the amount of times each REST endpoint is requested
 ** The metrics are available to view at https://localhost:9443/metrics. Sending a request that accepts `application/json` will receive a JSON response, otherwise a Prometheus-formatted response will be sent
+** Metrics requires the username "*confAdmin*" and the password "*microprofile*". These can be configured in the `<quickStartSecurity>` tag of the _src/main/liberty/config/server.xml_
+** A sample prometheus config (`sample-prometheus-config.yml`) is provided to use with the vote service. This can be used as-is with a locally running instance of the Vote service; metrics will be scraped every 5 seconds. To use this config, replace the default `prometheus.yml` file in any prometheus installation, or copy the job config into your own file.
 
 == Build and run the service
 ```

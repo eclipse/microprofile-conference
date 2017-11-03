@@ -1,0 +1,22 @@
+# my global config
+global:
+  scrape_interval:     5s # Set the scrape interval to every 5 seconds. Default is every 1 minute.
+  evaluation_interval: 5s # Evaluate rules every 5 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's the Vote microservice, running on OpenLiberty
+scrape_configs:
+  - job_name: 'microprofile-conference-vote'
+    tls_config:
+      # We need to ignore self-signed certificate errors or the endpoint won't be scraped
+      insecure_skip_verify: true 
+    basic_auth:
+      # These credentials are set in OpenLiberty's server.xml
+      username: confAdmin
+      password: microprofile
+    # The default scheme is http, so without this the endpoint will be marked DOWN
+    scheme: https
+
+    static_configs:
+      - targets: ['localhost:9443']
