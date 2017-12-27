@@ -93,7 +93,7 @@
         <version.surefire.plugin>2.19.1</version.surefire.plugin>
         <version.war.plugin>2.6</version.war.plugin>
         <version.fabric8.plugin>3.1.83</version.fabric8.plugin>
-        <version.liberty.plugin>2.0</version.liberty.plugin>
+        <version.liberty.plugin>2.1</version.liberty.plugin>
 
         <!-- Test -->
         <version.arquillian>1.1.11.Final</version.arquillian>
@@ -111,7 +111,7 @@
         <version.payara.embedded>4.1.2.173.0.1</version.payara.embedded>
         <version.tomee>7.0.1</version.tomee>
         <version.wildfly>10.0.0.Final</version.wildfly>
-        <version.liberty>2017.9.0_1</version.liberty>
+        <version.liberty>17.0.0_04</version.liberty>
 
         <!-- Dependencies -->
         <version.microprofile>1.2</version.microprofile>
@@ -438,7 +438,7 @@
                     <version>${version.liberty.plugin}</version>
                     <configuration>
              			<install>
-                        	<type>webProfile7</type>
+                        	<type>microProfile1</type>
                         	<version>${version.liberty}</version>
                    		</install>
                     </configuration>
