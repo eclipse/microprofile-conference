@@ -1,3 +1,5 @@
+image:https://badges.gitter.im/eclipse/microprofile-samples.svg[link="https://gitter.im/eclipse/microprofile-samples"]
+
 = Microprofile Showcase Application
 
 == General information
