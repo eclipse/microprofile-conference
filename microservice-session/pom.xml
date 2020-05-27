@@ -37,9 +37,17 @@
 
         <plugins>
             <plugin>
-                <groupId>io.thorntail</groupId>
-                <artifactId>thorntail-maven-plugin</artifactId>
-            </plugin>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-maven-plugin</artifactId>
+                <version>${version.quarkus}</version>
+                <executions>
+                  <execution>
+                    <goals>
+                      <goal>build</goal>
+                    </goals>
+                  </execution>
+                </executions>
+              </plugin>
         </plugins>
     </build>
 
@@ -49,7 +57,6 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
-
             <build>
                 <plugins>
                     <plugin>
@@ -80,7 +87,6 @@
                                 <goals>
                                     <goal>resource</goal>
                                     <goal>build</goal>
-                                    <!--<goal>deploy</goal>-->
                                 </goals>
                             </execution>
                         </executions>
@@ -151,7 +157,6 @@
             </build>
         </profile>
     </profiles>
-
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -159,7 +164,7 @@
             <version>2.8.2</version>
             <scope>provided</scope>
         </dependency>
-
+        
         <dependency>
             <groupId>io.microprofile.showcase</groupId>
             <artifactId>demo-bootstrap</artifactId>
@@ -167,8 +172,8 @@
         </dependency>
 
         <dependency>
-            <groupId>io.thorntail</groupId>
-            <artifactId>microprofile</artifactId>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy-jsonb</artifactId>
         </dependency>
     </dependencies>
 </project>
