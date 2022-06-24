@@ -115,7 +115,7 @@
 
         <!-- Dependencies -->
         <version.microprofile>1.2</version.microprofile>
-        <version.resteasy>3.0.19.Final</version.resteasy>
+        <version.resteasy>3.14.0.Final</version.resteasy>
         <version.swagger>1.5.10</version.swagger>
         <version.swizzle-stream>1.6.2</version.swizzle-stream>
         <version.commons-io>2.5</version.commons-io>
